@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +23,10 @@ use App\Http\Controllers\Api\AuthController;
 Route::controller(AuthController::class)->group(function () {
     Route::post('auth/login', 'login')->name('login');
     Route::post('auth/register', 'register')->name('register');
+});
+
+Route::controller(CategoryController::class)->group(function () {
+    Route::get('categories', 'index')->name('categories');
+    Route::get('categories/select', 'forSelect')->name('categories.select');
+    Route::post('categories/store', 'store')->name('categories.store');
 });
