@@ -83,9 +83,8 @@ export default {
             <img
               src="@/assets/images/logo.png"
               alt=""
-              height="17"
+              height="50"
             />
-            Hardware
           </span>
         </router-link>
         <!-- Light Logo-->
@@ -97,16 +96,15 @@ export default {
             <img
               src="@/assets/images/logo.png"
               alt=""
-              height="22"
+              height="30"
             />
           </span>
           <span class="logo-lg">
             <img
               src="@/assets/images/logo.png"
               alt=""
-              height="17"
+              height="50"
             />
-            Hardware
           </span>
         </router-link>
         <button
