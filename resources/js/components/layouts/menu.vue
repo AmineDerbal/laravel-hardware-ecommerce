@@ -96,7 +96,7 @@ export default {
             </li>
             <li class="nav-item">
               <router-link
-                to="/categories/new"
+                to="/categories/create"
                 class="nav-link custom-abc"
                 data-key="categories"
                 >Add Category</router-link
