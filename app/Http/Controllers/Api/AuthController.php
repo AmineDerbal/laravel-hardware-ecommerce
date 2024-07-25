@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
@@ -49,12 +50,19 @@ class AuthController extends Controller
             'password' => 'required|string|min:5',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        User::create([
+           'name' => $request->name,
+           'email' => $request->email,
+           'password' => Hash::make($request->password),
         ]);
 
         return response()->json(['message' => 'User created successfully'], 201);
+    }
+
+    public function logout()
+    {
+
+        return response()->json(['message' => 'Successfully logged out'])->withCookie(Cookie::forget('access_token'));
+
     }
 }
