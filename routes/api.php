@@ -23,10 +23,13 @@ use App\Http\Controllers\Api\CategoryController;
 Route::controller(AuthController::class)->group(function () {
     Route::post('auth/login', 'login')->name('login');
     Route::post('auth/register', 'register')->name('register');
+    Route::post('auth/logout', 'logout')->name('logout');
 });
 
-Route::controller(CategoryController::class)->group(function () {
-    Route::get('categories', 'index')->name('categories');
-    Route::get('categories/select', 'forSelect')->name('categories.select');
-    Route::post('categories/store', 'store')->name('categories.store');
+Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])->group(function () {
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('categories', 'index')->name('categories');
+        Route::get('categories/select', 'forSelect')->name('categories.select');
+        Route::post('categories/store', 'store')->name('categories.store');
+    });
 });
