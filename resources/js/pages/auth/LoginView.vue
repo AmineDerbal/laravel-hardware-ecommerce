@@ -1,5 +1,5 @@
 <script>
-import useUserStore from '@/state/userStore';
+import { useUserStore } from '@/state';
 import { useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
 
