@@ -16,6 +16,22 @@ export default {
       parent_id: null,
     });
 
+    const capitalizeFirstLetter = (str) => {
+      if (!str) return '';
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    };
+
+    const submitForm = async () => {
+      category.value.name = capitalizeFirstLetter(category.value.name);
+      await store.createCategory(category.value);
+      if (!store.errors) {
+        category.value = {
+          name: null,
+          parent_id: null,
+        };
+      }
+    };
+
     onBeforeMount(async () => {
       await store.getSelectCategories();
     });
@@ -25,6 +41,7 @@ export default {
       errors,
       selectChoicesCategories,
       isLoading,
+      submitForm,
     };
   },
 };
@@ -32,13 +49,20 @@ export default {
 
 <template>
   <LayoutView>
-    <BForm class="needs-validation">
+    <LoaderView v-if="isLoading" />
+    <BForm
+      class="needs-validation"
+      v-else
+    >
       <BCardHeader>
         <h5 class="card-title mb-2">Fill Category Details</h5>
       </BCardHeader>
       <BCardBody class="mt-3">
         <BRow>
-          <BCol lg="6">
+          <BCol
+            lg="6"
+            class="mx-auto"
+          >
             <div class="mb-3">
               <label
                 for="firstNameinput"
@@ -54,13 +78,49 @@ export default {
               />
               <span
                 class="text-danger"
-                v-if="errors.name"
+                v-if="errors.name && errors.name[0]"
                 >{{ errors.name[0] }}</span
               >
             </div>
           </BCol>
-
-          <BCol lg="12">
+        </BRow>
+        <BRow>
+          <BCol
+            lg="6"
+            class="mx-auto"
+          >
+            <label
+              for="firstNameinput"
+              class="form-label"
+              >parent categorie</label
+            >
+            <BFormSelect
+              v-model="category.parent_id"
+              class="mb-3"
+              aria-label="Default select example"
+            >
+              <BFormSelectOption :value="null"
+                >Select Categorie</BFormSelectOption
+              >
+              <BFormSelectOption
+                v-for="category in selectChoicesCategories"
+                :key="category.id"
+                :value="category.id"
+                >{{ category.name }}</BFormSelectOption
+              >
+            </BFormSelect>
+            <span
+              class="text-danger"
+              v-if="errors.parent_id"
+              >{{ errors.parent_id[0] }}</span
+            >
+          </BCol>
+        </BRow>
+        <Brow>
+          <BCol
+            lg="6"
+            class="mx-auto"
+          >
             <div class="text-end">
               <BButton
                 type="submit"
@@ -72,7 +132,7 @@ export default {
               </BButton>
             </div>
           </BCol>
-        </BRow>
+        </Brow>
       </BCardBody>
     </BForm>
   </LayoutView>
