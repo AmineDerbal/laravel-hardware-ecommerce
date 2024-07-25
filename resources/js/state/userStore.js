@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
-import { configureAxios } from '../utils/axiosUtils';
+import axios from '../utils/axiosUtils';
 
 const useUserStore = defineStore({
   id: 'user',
@@ -24,16 +23,17 @@ const useUserStore = defineStore({
       this.hasError = false;
       this.errors = {};
       try {
-        configureAxios();
         const response = await axios.post('/api/auth/login', {
           email,
           password,
         });
+        const { user } = response.data;
 
-        this.user.name = response.data.user.name;
-        this.user.email = response.data.user.email;
-        this.user.role = response.data.user.role;
-        this.user.isAuthenticated = true;
+        this.user = {
+          ...this.user,
+          ...user,
+          isAuthenticated: true,
+        };
         return response.data;
       } catch (error) {
         this.hasError = true;
@@ -41,6 +41,20 @@ const useUserStore = defineStore({
         return;
       } finally {
         this.isLoading = false;
+      }
+    },
+    async logoutUser() {
+      try {
+        const response = await axios.post('/api/auth/logout');
+        this.user = {
+          name: null,
+          email: null,
+          role: null,
+          isAuthenticated: false,
+        };
+        return response.data;
+      } catch (error) {
+        console.log(error);
       }
     },
   },
