@@ -1,4 +1,4 @@
-import { HomeView, LoginView } from '../pages';
+import { HomeView, LoginView, CategoryList, CategoryCreate } from '../pages';
 
 const routes = [
   {
@@ -14,6 +14,25 @@ const routes = [
     meta: {
       requireAuth: true,
     },
+  },
+  {
+    path: '/categories',
+    meta: {
+      requireAuth: true,
+    },
+
+    children: [
+      {
+        path: '',
+        name: 'category-list',
+        component: CategoryList,
+      },
+      {
+        path: 'create',
+        name: 'category-create',
+        component: CategoryCreate,
+      },
+    ],
   },
 ];
 
