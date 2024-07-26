@@ -13,7 +13,6 @@ const configureAxios = () => {
     },
     async (error) => {
       if (error.response) {
-        console.log(error.response);
         const statusCode = error.response.status;
         if (statusCode === 401) {
           const userStore = useUserStore();
