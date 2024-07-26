@@ -43,11 +43,12 @@ const useCategoryStore = defineStore({
           parent_id,
         });
         this.categories.push(response.data);
-        window.location.reload();
+        return response;
       } catch (error) {
         this.hasError = true;
+        console.log('error', error);
         this.errors = error.response.data.errors;
-        return;
+        return error.response;
       } finally {
         this.isLoading = false;
       }
