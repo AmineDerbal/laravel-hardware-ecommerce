@@ -33,7 +33,8 @@ class CategoryController extends Controller
             return response()->json(['message' => 'Error creating category'], 500);
         }
 
-        return response()->json($category);
+        return response()->json([
+            'message' => 'Category created successfully',]);
 
     }
 
