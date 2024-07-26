@@ -1,5 +1,7 @@
 <script>
 import { onBeforeMount, computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
 import { LayoutView, LoaderView } from '@/components';
 import { useCategoryStore } from '@/state';
 
@@ -7,6 +9,8 @@ export default {
   components: { LayoutView, LoaderView },
 
   setup() {
+    const toast = useToast();
+    const router = useRouter();
     const store = useCategoryStore();
     const errors = computed(() => store.errors);
     const selectChoicesCategories = computed(() => store.selectCategories);
@@ -23,12 +27,13 @@ export default {
 
     const submitForm = async () => {
       category.value.name = capitalizeFirstLetter(category.value.name);
-      await store.createCategory(category.value);
-      if (!store.errors) {
-        category.value = {
-          name: null,
-          parent_id: null,
-        };
+      const response = await store.createCategory(category.value);
+      if (response.status === 200 || response.status === 201) {
+        toast.success(response.data.message, { timeout: 2000 });
+
+        router.push({ name: 'category-list' });
+      } else {
+        toast.error('Failed to create category');
       }
     };
 
