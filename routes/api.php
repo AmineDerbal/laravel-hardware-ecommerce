@@ -30,6 +30,7 @@ Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])-
     Route::controller(CategoryController::class)->group(function () {
         Route::get('categories', 'index')->name('categories');
         Route::get('categories/select', 'forSelect')->name('categories.select');
+        Route::get('categories/header', 'forHeader')->name('categories.header');
         Route::post('categories/store', 'store')->name('categories.store');
     });
 });
