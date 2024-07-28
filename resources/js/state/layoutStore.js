@@ -13,10 +13,10 @@ const useLayoutStore = defineStore({
 
   actions: {
     changeThemeMode(themeMode) {
-      this.Layout.themeMode = themeMode;
+      this.layout.themeMode = themeMode;
     },
     changeSidebarTheme(sidebarTheme) {
-      this.Layout.sidebarTheme = sidebarTheme;
+      this.layout.sidebarTheme = sidebarTheme;
     },
   },
 });
