@@ -15,14 +15,27 @@ const useCategoryStore = defineStore({
   },
 
   actions: {
+    async getCategories() {
+      this.isLoading = true;
+      this.hasError = false;
+      try {
+        const response = await axios.get('/api/categories');
+        this.categories = response.data;
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return response;
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async getSelectCategories() {
       this.isLoading = true;
       this.hasError = false;
       this.errors = {};
       try {
-        console.log('start');
         const response = await axios.get('/api/categories/select');
-        console.log(response.data);
+
         this.selectCategories = response.data;
       } catch (error) {
         this.hasError = true;
