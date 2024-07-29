@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Http\Requests\Categories\StoreCategoryRequest;
+use App\Http\Resources\Category\AllCategoriesResource;
 
 class CategoryController extends Controller
 {
@@ -12,7 +13,7 @@ class CategoryController extends Controller
     {
         $categories = Category::with('parent')->get();
 
-        return response()->json($categories);
+        return response()->json(AllCategoriesResource::collection($categories));
     }
 
     public function forSelect()
