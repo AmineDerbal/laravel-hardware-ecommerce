@@ -1,14 +1,13 @@
 <script>
-import { computed, onBeforeMount, ref, h, watch } from 'vue';
+import { computed, onBeforeMount, ref, h } from 'vue';
+
 import {
-  useVueTable,
-  FlexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  getFilteredRowModel,
-} from '@tanstack/vue-table';
-import { LayoutView, LoaderView, DeleteButton, EditButton } from '@/components';
+  LayoutView,
+  LoaderView,
+  DeleteButton,
+  EditButton,
+  Table,
+} from '@/components';
 import { useCategoryStore } from '@/state';
 
 export default {
@@ -17,7 +16,7 @@ export default {
     LoaderView,
     DeleteButton,
     EditButton,
-    FlexRender,
+    Table,
   },
 
   setup() {
@@ -25,15 +24,11 @@ export default {
     const categories = ref([]);
     const isLoading = computed(() => store.isLoading);
     const hasError = computed(() => store.hasError);
-    const sorting = ref([]);
-    const filter = ref('');
-    const table = ref(null);
-    // Define columns with custom cell renderers
+
     const columns = [
       {
         accessorKey: 'id',
         header: 'ID',
-        enableSorting: false,
       },
       {
         accessorKey: 'name',
@@ -42,6 +37,11 @@ export default {
       {
         accessorKey: 'parent',
         header: 'Parent Category',
+        cell: ({ row }) => {
+          const parent = row.original.parent;
+          const value = parent ? parent.name : 'NULL';
+          return value;
+        },
       },
       {
         accessorKey: 'actions',
@@ -58,40 +58,17 @@ export default {
         enableSorting: false,
       },
     ];
+    // Create a custom global filter
+    const customGlobalFilter = (row, columnId, filterValue) => {
+      const originalRow = row.original;
+      const cellValue = row.getValue(columnId)?.toString().toLowerCase() || '';
+      const parentName = originalRow.parent?.name?.toLowerCase() || 'null';
 
-    const initalizeTable = (data) => {
-      console.log(data);
-      table.value = useVueTable({
-        data: data,
-        columns: columns,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        state: {
-          get sorting() {
-            return sorting.value;
-          },
-          get globalFilter() {
-            return filter.value;
-          },
-        },
-        onSortingChange: (updaterOrValue) => {
-          sorting.value =
-            typeof updaterOrValue === 'function'
-              ? updaterOrValue(sorting.value)
-              : updaterOrValue;
-        },
-      });
-      console.log(table.value.getRowModel());
+      return (
+        cellValue.includes(filterValue.toLowerCase()) ||
+        parentName.includes(filterValue.toLowerCase())
+      );
     };
-
-    watch(
-      categories,
-      (newCategories) => {
-        initalizeTable(newCategories);
-      },
-      { immediate: true },
-    );
 
     // Fetch categories on mount
     onBeforeMount(async () => {
@@ -102,7 +79,13 @@ export default {
       }
     });
 
-    return { categories, isLoading, hasError, columns, table }; // Make sure to return columns
+    return {
+      categories,
+      isLoading,
+      hasError,
+      columns,
+      customGlobalFilter,
+    };
   },
 };
 </script>
@@ -118,53 +101,21 @@ export default {
       id="category-list"
       v-else
     >
-      <BCol lg="12">
-        <div class="table-responsive table-card mb-1">
-          <table
-            class="table table-nowrap align-middle"
-            id="orderTable"
-          >
-            <thead class="text-muted table-light">
-              <tr
-                class="text-uppercase"
-                v-for="headerGroup in table.getHeaderGroups()"
-                :key="headerGroup.id"
-              >
-                <th
-                  v-for="header in headerGroup.headers"
-                  :key="header.id"
-                  :class="{
-                    'cursor-pointer select-none': header.column.getCanSort(),
-                  }"
-                  @click="header.column.getToggleSortingHandler()?.($event)"
-                >
-                  <FlexRender
-                    :render="header.column.columnDef.header"
-                    :props="header.getContext()"
-                  />
-                  {{ { asc: ' ↑', desc: '↓' }[header.column.getIsSorted()] }}
-                </th>
-              </tr>
-            </thead>
-            <tbody class="list form-check-all">
-              <tr
-                v-for="row in table.getRowModel().rows"
-                :key="row.id"
-              >
-                <td
-                  v-for="cell in row.getVisibleCells()"
-                  :key="cell.id"
-                >
-                  <FlexRender
-                    :render="cell.column.columnDef.cell"
-                    :props="cell.getContext()"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <BCol sm="auto">
+        <div>
+          <BLink
+            href="/categories/create"
+            class="btn btn-primary"
+            ><i class="ri-add-line align-bottom me-1"></i>Add Category
+          </BLink>
         </div>
       </BCol>
+      <Table
+        :data="categories"
+        :columns="columns"
+        :customGlobalFilter="customGlobalFilter"
+        v-if="categories.length > 0"
+      />
     </BRow>
   </LayoutView>
 </template>
