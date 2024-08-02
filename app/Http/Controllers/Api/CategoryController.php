@@ -17,6 +17,14 @@ class CategoryController extends Controller
         return response()->json(AllCategoriesResource::collection($categories));
     }
 
+    public function show($id)
+    {
+        $category = Category::with('parent')->findOrFail($id);
+        return response()->json(new AllCategoriesResource($category));
+
+
+    }
+
     public function forSelect()
     {
 
