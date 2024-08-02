@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Http\Requests\Categories\StoreCategoryRequest;
+use App\Http\Requests\Categories\EditCategoryRequest;
 use App\Http\Resources\Category\AllCategoriesResource;
 
 class CategoryController extends Controller
@@ -44,6 +45,20 @@ class CategoryController extends Controller
 
         return response()->json([
             'message' => 'Category created successfully',]);
+
+    }
+
+    public function update(EditCategoryRequest $request)
+    {
+        $category = Category::findOrFail($request->id);
+        $data = $request->validated();
+
+        $category->update($data);
+
+        return response()->json([
+            'message' => 'Category updated successfully',
+            'data' => $category
+        ]);
 
     }
 
