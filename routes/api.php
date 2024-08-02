@@ -32,5 +32,6 @@ Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])-
         Route::get('categories/select', 'forSelect')->name('categories.select');
         Route::get('categories/header', 'forHeader')->name('categories.header');
         Route::post('categories/store', 'store')->name('categories.store');
+        Route::put('categories/update', 'update')->name('categories.update');
     });
 });
