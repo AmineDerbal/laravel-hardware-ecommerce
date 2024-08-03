@@ -6,6 +6,11 @@ const useCategoryStore = defineStore({
   state: () => ({
     categories: [],
     selectCategories: [],
+    category: {
+      id: null,
+      name: null,
+      parent_id: null,
+    },
     errors: {},
     isLoading: false,
     hasError: false,
@@ -35,8 +40,14 @@ const useCategoryStore = defineStore({
       this.errors = {};
       try {
         const response = await axios.get('/api/categories/select');
-
         this.selectCategories = response.data;
+        if (this.category.id) {
+          this.selectCategories = this.selectCategories.filter(
+            (category) => category.id !== this.category.id,
+          );
+        }
+
+        return response;
       } catch (error) {
         this.hasError = true;
         this.errors = error.response.data.errors;
@@ -46,20 +57,36 @@ const useCategoryStore = defineStore({
       }
     },
 
-    async createCategory({ name, parent_id }) {
+    async getCategory(id) {
+      this.isLoading = true;
+      this.hasError = false;
+      try {
+        const response = await axios.get(`/api/categories/${id}`);
+        this.category = response.data;
+      } catch (error) {
+        this.hasError = true;
+        return;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async createCategory(category) {
       this.isLoading = true;
       this.hasError = false;
       this.errors = {};
       try {
-        const response = await axios.post('/api/categories/store', {
-          name,
-          parent_id,
-        });
-        this.categories.push(response.data);
+        let response;
+        if (category.id !== null) {
+          response = await axios.put('/api/categories/update', category);
+        } else {
+          response = await axios.post('/api/categories/store', category);
+          this.categories.push(response.data);
+        }
+
         return response;
       } catch (error) {
         this.hasError = true;
-        console.log('error', error);
         this.errors = error.response.data.errors;
         return error.response;
       } finally {
