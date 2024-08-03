@@ -81,7 +81,7 @@ const useCategoryStore = defineStore({
           response = await axios.put('/api/categories/update', category);
         } else {
           response = await axios.post('/api/categories/store', category);
-          this.categories.push(response.data);
+          return response;
         }
 
         return response;
@@ -89,6 +89,20 @@ const useCategoryStore = defineStore({
         this.hasError = true;
         this.errors = error.response.data.errors;
         return error.response;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async deleteCategory(id) {
+      this.isLoading = true;
+      this.hasError = false;
+      try {
+        const response = await axios.delete(`/api/categories/${id}`);
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return;
       } finally {
         this.isLoading = false;
       }
