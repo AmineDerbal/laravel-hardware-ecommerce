@@ -1,6 +1,37 @@
-<script>
-import { computed, onBeforeMount, ref, h } from 'vue';
+<template>
+  <LayoutView>
+    <LoaderView v-if="isLoading" />
+    <div v-if="hasError">
+      <h1>An Error has occurred</h1>
+    </div>
+    <BRow
+      class="gy-2 mb-2"
+      id="category-list"
+      v-else
+    >
+      <BCol sm="auto">
+        <div>
+          <BLink
+            href="/categories/create"
+            class="btn btn-primary"
+            ><i class="ri-add-line align-bottom me-1"></i>Add Category
+          </BLink>
+        </div>
+      </BCol>
+      <Table
+        :data="categories"
+        :columns="columns"
+        :customGlobalFilter="customGlobalFilter"
+        :key="categories"
+        v-if="categories.length > 0"
+      />
+    </BRow>
+  </LayoutView>
+</template>
 
+<script>
+import { computed, onBeforeMount, h } from 'vue';
+import { useToast } from 'vue-toastification';
 import {
   LayoutView,
   LoaderView,
@@ -21,9 +52,24 @@ export default {
 
   setup() {
     const store = useCategoryStore();
-    const categories = ref([]);
+    const toast = useToast();
+    const categories = computed(() => store.categories);
     const isLoading = computed(() => store.isLoading);
     const hasError = computed(() => store.hasError);
+
+    const getCategories = async () => {
+      await store.getCategories();
+    };
+
+    const handleDelete = async (id) => {
+      const response = await store.deleteCategory(id);
+      if (response.status === 200 || response.status === 201) {
+        await getCategories();
+        toast.success(response.data.message, { timeout: 2000 });
+      } else {
+        toast.error('Failed to delete the category');
+      }
+    };
 
     const columns = [
       {
@@ -49,7 +95,11 @@ export default {
         cell: ({ row }) => {
           const { id } = row.original;
           const editButton = h(EditButton, { id: id, item: 'category' });
-          const deleteButton = h(DeleteButton, { id: id, item: 'category' });
+          const deleteButton = h(DeleteButton, {
+            id: id,
+            item: 'category',
+            handleDelete: handleDelete,
+          });
           return h('ul', { class: 'list-inline hstack gap-2 mb-0' }, [
             editButton,
             deleteButton,
@@ -72,11 +122,7 @@ export default {
 
     // Fetch categories on mount
     onBeforeMount(async () => {
-      const response = await store.getCategories();
-
-      if (response.status === 200 || response.status === 201) {
-        categories.value = response.data;
-      }
+      await getCategories();
     });
 
     return {
@@ -89,33 +135,3 @@ export default {
   },
 };
 </script>
-
-<template>
-  <LayoutView>
-    <LoaderView v-if="isLoading" />
-    <div v-if="hasError">
-      <h1>An Error has occurred</h1>
-    </div>
-    <BRow
-      class="gy-2 mb-2"
-      id="category-list"
-      v-else
-    >
-      <BCol sm="auto">
-        <div>
-          <BLink
-            href="/categories/create"
-            class="btn btn-primary"
-            ><i class="ri-add-line align-bottom me-1"></i>Add Category
-          </BLink>
-        </div>
-      </BCol>
-      <Table
-        :data="categories"
-        :columns="columns"
-        :customGlobalFilter="customGlobalFilter"
-        v-if="categories.length > 0"
-      />
-    </BRow>
-  </LayoutView>
-</template>
