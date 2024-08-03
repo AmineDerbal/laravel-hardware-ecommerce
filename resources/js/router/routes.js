@@ -1,4 +1,10 @@
-import { HomeView, LoginView, CategoryList, CategoryCreate } from '../pages';
+import {
+  HomeView,
+  LoginView,
+  CategoryList,
+  CategoryCreate,
+  CategoryEdit,
+} from '../pages';
 
 const routes = [
   {
@@ -31,6 +37,11 @@ const routes = [
         path: 'create',
         name: 'category-create',
         component: CategoryCreate,
+      },
+      {
+        path: 'edit/:id',
+        name: 'category-edit',
+        component: CategoryEdit,
       },
     ],
   },
