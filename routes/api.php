@@ -29,9 +29,9 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])->group(function () {
     Route::controller(CategoryController::class)->group(function () {
         Route::get('categories', 'index')->name('categories');
-        Route::get('categories/{id}', 'show')->name('categories.show');
         Route::get('categories/select', 'forSelect')->name('categories.select');
         Route::get('categories/header', 'forHeader')->name('categories.header');
+        Route::get('categories/{id}', 'show')->name('categories.show');
         Route::post('categories/store', 'store')->name('categories.store');
         Route::put('categories/update', 'update')->name('categories.update');
     });
