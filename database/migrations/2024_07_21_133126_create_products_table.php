@@ -15,6 +15,8 @@ return new class () extends Migration {
             $table->string('name');
             $table->string('description');
             $table->float('price');
+            $table->integer('stock');
+            $table->string('thumbnail');
             $table->foreignId('category_id')->constrained();
             $table->timestamps();
         });
