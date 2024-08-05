@@ -66,6 +66,14 @@ export default {
                 >All Products</router-link
               >
             </li>
+            <li class="nav-item">
+              <router-link
+                to="/products/create"
+                class="nav-link custom-abc"
+                data-key="products"
+                >Add Product</router-link
+              >
+            </li>
           </ul>
         </div>
       </li>
