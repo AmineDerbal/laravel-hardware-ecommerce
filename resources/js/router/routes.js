@@ -4,6 +4,8 @@ import {
   CategoryList,
   CategoryCreate,
   CategoryEdit,
+  ProductList,
+  ProductCreate,
 } from '../pages';
 
 const routes = [
@@ -20,6 +22,25 @@ const routes = [
     meta: {
       requireAuth: true,
     },
+  },
+
+  {
+    path: '/products',
+    meta: {
+      requireAuth: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'product-list',
+        component: ProductList,
+      },
+      {
+        path: 'create',
+        name: 'product-create',
+        component: ProductCreate,
+      },
+    ],
   },
   {
     path: '/categories',
