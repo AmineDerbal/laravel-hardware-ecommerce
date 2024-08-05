@@ -23,7 +23,7 @@
         :columns="columns"
         :customGlobalFilter="customGlobalFilter"
         :key="categories"
-        v-if="categories.length > 0"
+        v-if="categories.length > 0 && !isLoading && !hasError"
       />
     </BRow>
   </LayoutView>
