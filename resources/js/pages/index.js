@@ -1,7 +1,17 @@
-import LoginView from './auth/LoginView.vue';
-import HomeView from './home/HomeView.vue';
-import CategoryList from './category/CategoryList.vue';
-import CategoryCreate from './category/CategoryCreate.vue';
-import CategoryEdit from './category/CategoryEdit.vue';
+const LoginView = () => import('./auth/LoginView.vue');
+const HomeView = () => import('./home/HomeView.vue');
+const CategoryList = () => import('./category/CategoryList.vue');
+const CategoryCreate = () => import('./category/CategoryCreate.vue');
+const CategoryEdit = () => import('./category/CategoryEdit.vue');
+const ProductList = () => import('./product/ProductList.vue');
+const ProductCreate = () => import('./product/ProductCreate.vue');
 
-export { LoginView, HomeView, CategoryList, CategoryCreate, CategoryEdit };
+export {
+  LoginView,
+  HomeView,
+  CategoryList,
+  CategoryCreate,
+  CategoryEdit,
+  ProductList,
+  ProductCreate,
+};
