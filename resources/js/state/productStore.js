@@ -12,6 +12,7 @@ const useProductStore = defineStore({
       price: null,
       stock: null,
       thumbnail: null,
+      images: [],
       category_id: null,
     },
     errors: {},
