@@ -11,7 +11,7 @@ const useProductStore = defineStore({
       description: null,
       price: null,
       stock: null,
-      thumbnail: null,
+      thumbnail: {},
       images: [],
       category_id: null,
     },
@@ -21,6 +21,28 @@ const useProductStore = defineStore({
   }),
   persist: {
     paths: ['products'],
+  },
+
+  actions: {
+    async addProduct() {
+      this.isLoading = true;
+      this.hasError = false;
+      this.errors = {};
+      try {
+        const response = await axios.post('/api/products/store', this.product, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        this.errors = error.response.data.errors;
+        return error.response;
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
 });
 
