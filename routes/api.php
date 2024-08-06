@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,5 +36,9 @@ Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])-
         Route::post('categories/store', 'store')->name('categories.store');
         Route::put('categories/update', 'update')->name('categories.update');
         Route::delete('categories/{id}', 'destroy')->name('categories.destroy');
+    });
+
+    Route::controller(ProductController::class)->group(function () {
+        Route::post('products/store', 'store')->name('products.store');
     });
 });
