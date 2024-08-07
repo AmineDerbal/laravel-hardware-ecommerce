@@ -73,8 +73,8 @@ export default {
 
     const columns = [
       {
-        accessorKey: 'id',
-        header: 'ID',
+        accessorKey: 'code',
+        header: 'Code',
       },
       {
         accessorKey: 'name',
