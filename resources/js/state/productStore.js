@@ -24,6 +24,19 @@ const useProductStore = defineStore({
   },
 
   actions: {
+    clearProduct() {
+      this.product = {
+        id: null,
+        name: null,
+        description: null,
+        price: null,
+        stock: null,
+        thumbnail: {},
+        images: [],
+        category_id: null,
+      };
+    },
+
     async addProduct() {
       this.isLoading = true;
       this.hasError = false;
@@ -34,6 +47,7 @@ const useProductStore = defineStore({
             'Content-Type': 'multipart/form-data',
           },
         });
+
         return response;
       } catch (error) {
         this.hasError = true;
