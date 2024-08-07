@@ -45,6 +45,8 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
 
+        $data['code'] = idGenerate('categories', 'CAT-');
+
         $category = Category::create($data);
 
         if(!$category) {

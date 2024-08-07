@@ -17,6 +17,7 @@ class AllCategoriesResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'code' => $this->code,
             'parent_id' => $this->parent_id,
             'parent' => new CategoryParentResource($this->parent),
         ];
