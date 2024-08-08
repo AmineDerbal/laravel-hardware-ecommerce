@@ -6,9 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Http\Requests\products\StoreRequest;
+use App\Http\Resources\Products\AllProductsResource;
 
 class ProductController extends Controller
 {
+    public function index()
+    {
+
+        $products = Product::with('category')->get();
+
+        return response()->json(AllProductsResource::collection($products));
+
+
+    }
     public function store(StoreRequest $request)
     {
 
