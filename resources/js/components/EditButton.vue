@@ -23,7 +23,7 @@ export default {
       :to="{ name: `${item}-edit`, params: { id } }"
       class="text-primary d-inline-block"
     >
-      <i class="ri-eye-fill fs-16"></i>
+      <i class="ri-pencil-fill fs-16"></i>
     </router-link>
   </li>
 </template>
