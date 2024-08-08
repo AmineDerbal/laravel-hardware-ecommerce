@@ -41,5 +41,6 @@ Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])-
     Route::controller(ProductController::class)->group(function () {
         Route::get('products', 'index')->name('products');
         Route::post('products/store', 'store')->name('products.store');
+        Route::delete('products/{id}', 'destroy')->name('products.destroy');
     });
 });
