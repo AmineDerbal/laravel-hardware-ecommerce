@@ -10,10 +10,11 @@ if(!function_exists('uploadImage')) {
 
         checkFolderExists($path);
         $manager = new ImageManager(new Driver());
-        $name = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
+        $name = hexdec(uniqid()).'.png';
         $image_path = 'uploads/products/'.$name;
+        $manager->read($image)->scale(width:800, height:600)->encodeByExtension('png')->save($image_path);
 
-        return $image = $manager->read($image)->save($image_path) ? $image_path : null;
+        return  $image_path;
 
     }
 
