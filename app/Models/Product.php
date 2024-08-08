@@ -27,4 +27,10 @@ class Product extends Model
         return asset($this->image);
     }
 
+    public function category()
+    {
+
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
 }
