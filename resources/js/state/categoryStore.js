@@ -87,7 +87,9 @@ const useCategoryStore = defineStore({
         return response;
       } catch (error) {
         this.hasError = true;
-        this.errors = error.response.data.errors;
+        if (error.response.status === 422) {
+          this.errors = error.response.data.errors;
+        }
         return error.response;
       } finally {
         this.isLoading = false;
