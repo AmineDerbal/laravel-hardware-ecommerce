@@ -37,6 +37,22 @@ const useProductStore = defineStore({
       };
     },
 
+    async getProducts() {
+      this.isLoading = true;
+      this.hasError = false;
+      this.errors = {};
+      try {
+        const response = await axios.get('/api/products');
+        this.products = response.data;
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return error.response;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
     async addProduct() {
       this.isLoading = true;
       this.hasError = false;
@@ -51,7 +67,9 @@ const useProductStore = defineStore({
         return response;
       } catch (error) {
         this.hasError = true;
-        this.errors = error.response.data.errors;
+        if (error.response.status === 422) {
+          this.errors = error.response.data.errors;
+        }
         return error.response;
       } finally {
         this.isLoading = false;
