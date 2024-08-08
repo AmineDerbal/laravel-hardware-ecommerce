@@ -75,6 +75,20 @@ const useProductStore = defineStore({
         this.isLoading = false;
       }
     },
+
+    async deleteProduct(id) {
+      this.isLoading = true;
+      this.hasError = false;
+      try {
+        const response = await axios.delete(`/api/products/${id}`);
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return;
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
 });
 
