@@ -19,8 +19,27 @@ class Product extends Model
         'category_id',
     ];
 
-    protected $appends = [
-        'image_url'];
+    protected $appends = ['image_url'];
+
+    public static function booted()
+    {
+
+        static::deleting(function ($product) {
+
+
+            if(file_exists($product->image)) {
+                unlink($product->image);
+            }
+
+
+
+            foreach($product->images as $image) {
+                if(file_exists($image->image)) {
+                    unlink($image->image);
+                }
+            }
+        });
+    }
 
     public function getImageUrlAttribute()
     {
@@ -31,6 +50,12 @@ class Product extends Model
     {
 
         return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function images()
+    {
+
+        return $this->hasMany(ProductImage::class, 'product_id');
     }
 
 }
