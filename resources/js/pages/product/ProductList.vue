@@ -72,12 +72,12 @@ export default {
       },
       {
         header: 'image',
-
         cell: ({ row }) => {
           const image = row.original.image_url;
           return h('img', {
             src: image,
-            style: 'width: 50px; height: 50px; object-fit: cover',
+            style: 'width: 75px; height: 75px; ',
+            class: 'object-fit-cover rounded',
           });
         },
         enableSorting: false,
@@ -96,8 +96,11 @@ export default {
         },
       },
       {
-        accessorKey: 'price',
         header: 'Price',
+        cell: ({ row }) => {
+          const { price } = row.original;
+          return h('span', {}, `${price} $`);
+        },
       },
       {
         accessorKey: 'stock',
