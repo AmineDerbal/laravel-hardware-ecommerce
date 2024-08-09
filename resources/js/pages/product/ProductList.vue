@@ -14,7 +14,7 @@
           <BLink
             href="/products/create"
             class="btn btn-primary"
-            ><i class="ri-add-line align-bottom me-1"></i>Add Category
+            ><i class="ri-add-line align-bottom me-1"></i>Add Product
           </BLink>
         </div>
       </BCol>
