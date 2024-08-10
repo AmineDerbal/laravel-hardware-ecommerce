@@ -10,9 +10,9 @@
       v-else
     >
       <BCol sm="auto">
-        <div>
+        <div v-if="!isLoading">
           <BLink
-            href="/categories/create"
+            :to="{ name: 'category-create' }"
             class="btn btn-primary"
             ><i class="ri-add-line align-bottom me-1"></i>Add Category
           </BLink>
@@ -98,7 +98,7 @@ export default {
           const deleteButton = h(DeleteButton, {
             id: id,
             item: 'category',
-            handleDelete: handleDelete,
+            handleDelete,
           });
           return h('ul', { class: 'list-inline hstack gap-2 mb-0' }, [
             editButton,
