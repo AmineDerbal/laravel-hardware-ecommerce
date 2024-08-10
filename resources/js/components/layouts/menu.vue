@@ -60,7 +60,7 @@ export default {
           <ul class="nav nav-sm flex-column">
             <li class="nav-item">
               <router-link
-                to="/products"
+                :to="{ name: 'product-list' }"
                 class="nav-link custom-abc"
                 data-key="products"
                 >All Products</router-link
@@ -68,7 +68,7 @@ export default {
             </li>
             <li class="nav-item">
               <router-link
-                to="/products/create"
+                :to="{ name: 'product-create' }"
                 class="nav-link custom-abc"
                 data-key="products"
                 >Add Product</router-link
@@ -96,7 +96,7 @@ export default {
           <ul class="nav nav-sm flex-column">
             <li class="nav-item">
               <router-link
-                to="/categories"
+                :to="{ name: 'category-list' }"
                 class="nav-link custom-abc"
                 data-key="categories"
                 >All Categories</router-link
@@ -104,7 +104,7 @@ export default {
             </li>
             <li class="nav-item">
               <router-link
-                to="/categories/create"
+                :to="{ name: 'category-create' }"
                 class="nav-link custom-abc"
                 data-key="categories"
                 >Add Category</router-link
