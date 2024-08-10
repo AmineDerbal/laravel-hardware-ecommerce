@@ -1,18 +1,3 @@
-<script>
-export default {
-  props: {
-    id: {
-      type: Number,
-      required: true,
-    },
-    item: {
-      type: String,
-      required: true,
-    },
-  },
-};
-</script>
-
 <template>
   <li
     class="list-inline-item"
@@ -27,3 +12,18 @@ export default {
     </router-link>
   </li>
 </template>
+
+<script>
+export default {
+  props: {
+    id: {
+      type: Number,
+      required: true,
+    },
+    item: {
+      type: String,
+      required: true,
+    },
+  },
+};
+</script>
