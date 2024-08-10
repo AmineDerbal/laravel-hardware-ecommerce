@@ -41,6 +41,10 @@ const routes = [
         component: ProductCreate,
       },
       {
+        path: 'show/:id',
+        name: 'product-show',
+      },
+      {
         path: 'edit/:id',
         name: 'product-edit',
       },
