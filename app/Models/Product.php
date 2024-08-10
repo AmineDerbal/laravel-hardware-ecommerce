@@ -26,17 +26,11 @@ class Product extends Model
 
         static::deleting(function ($product) {
 
-
-            if(file_exists($product->image)) {
-                unlink($product->image);
-            }
-
-
+            deleteImage($product->image);
 
             foreach($product->images as $image) {
-                if(file_exists($image->image)) {
-                    unlink($image->image);
-                }
+
+                deleteImage($image->image);
             }
         });
     }
