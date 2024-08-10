@@ -17,5 +17,13 @@ if(!function_exists('uploadImage')) {
         return  $image_path;
 
     }
+}
 
+if(!function_exists('deleteImage')) {
+    function deleteImage(string $path): void
+    {
+        if(file_exists($path)) {
+            unlink($path);
+        }
+    }
 }
