@@ -10,9 +10,9 @@
       v-else
     >
       <BCol sm="auto">
-        <div>
+        <div v-if="!isLoading">
           <BLink
-            href="/products/create"
+            :to="{ name: 'product-create' }"
             class="btn btn-primary"
             ><i class="ri-add-line align-bottom me-1"></i>Add Product
           </BLink>
@@ -40,9 +40,17 @@ import {
   EditButton,
   Table,
 } from '@/components';
+import ShowButton from '@/components/Buttons/ShowButton.vue';
 
 export default {
-  components: { LayoutView, LoaderView, DeleteButton, EditButton, Table },
+  components: {
+    LayoutView,
+    LoaderView,
+    DeleteButton,
+    EditButton,
+    ShowButton,
+    Table,
+  },
 
   setup() {
     const store = useProductStore();
@@ -111,6 +119,7 @@ export default {
         enableSorting: false,
         cell: ({ row }) => {
           const { id } = row.original;
+          const showButton = h(ShowButton, { id: id, item: 'product' });
           const editButton = h(EditButton, { id: id, item: 'product' });
           const deleteButton = h(DeleteButton, {
             id: id,
@@ -118,6 +127,7 @@ export default {
             handleDelete,
           });
           return h('ul', { class: 'list-inline hstack gap-2 mb-0' }, [
+            showButton,
             editButton,
             deleteButton,
           ]);
