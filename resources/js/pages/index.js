@@ -5,6 +5,7 @@ const CategoryCreate = () => import('./category/CategoryCreate.vue');
 const CategoryEdit = () => import('./category/CategoryEdit.vue');
 const ProductList = () => import('./product/ProductList.vue');
 const ProductCreate = () => import('./product/ProductCreate.vue');
+const ProductShow = () => import('./product/ProductShow.vue');
 
 export {
   LoginView,
@@ -14,4 +15,5 @@ export {
   CategoryEdit,
   ProductList,
   ProductCreate,
+  ProductShow,
 };
