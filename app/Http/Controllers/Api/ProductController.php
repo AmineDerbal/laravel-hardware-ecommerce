@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Http\Requests\products\StoreRequest;
 use App\Http\Resources\Products\AllProductsResource;
+use App\Http\Resources\Products\ProductResource;
 
 class ProductController extends Controller
 {
@@ -17,6 +18,15 @@ class ProductController extends Controller
 
         return response()->json(AllProductsResource::collection($products));
 
+
+    }
+
+    public function show($id)
+    {
+
+        $product = Product::with('category', 'images')->findOrFail($id);
+
+        return response()->json(new ProductResource($product));
 
     }
     public function store(StoreRequest $request)
