@@ -6,6 +6,7 @@ import {
   CategoryEdit,
   ProductList,
   ProductCreate,
+  ProductShow,
 } from '../pages';
 
 const routes = [
@@ -43,6 +44,7 @@ const routes = [
       {
         path: 'show/:id',
         name: 'product-show',
+        component: ProductShow,
       },
       {
         path: 'edit/:id',
