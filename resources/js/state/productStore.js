@@ -15,6 +15,7 @@ const useProductStore = defineStore({
       images: [],
       category_id: null,
     },
+    showProduct: {},
     errors: {},
     isLoading: false,
     hasError: false,
@@ -44,6 +45,22 @@ const useProductStore = defineStore({
       try {
         const response = await axios.get('/api/products');
         this.products = response.data;
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return error.response;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async getProduct(id) {
+      this.isLoading = true;
+      this.hasError = false;
+      this.errors = {};
+      try {
+        const response = await axios.get(`/api/products/${id}`);
+        this.showProduct = response.data;
         return response;
       } catch (error) {
         this.hasError = true;
