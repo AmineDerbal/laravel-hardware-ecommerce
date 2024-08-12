@@ -94,7 +94,7 @@ export default {
   setup() {
     const store = useProductStore();
     const route = useRoute();
-    const product = computed(() => store.showProduct);
+    const product = computed(() => store.product);
     const isLoading = computed(() => store.isLoading);
     const hasError = computed(() => store.hasError);
 
