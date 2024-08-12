@@ -9,6 +9,7 @@
         :submitForm="submitForm"
         :selectCategories="selectCategories"
         :isEditing="true"
+        :updateThumbnailImage="updateThumbnailImage"
         :key="product"
         v-else
       />
@@ -47,10 +48,20 @@ export default {
 
       if (response.status === 200 || response.status === 201) {
         toast.success(response.data.message, { timeout: 2000 });
-        store.clearProduct();
         router.push({ name: 'product-list' });
       } else {
-        toast.error('Failed to create product');
+        toast.error(response.data.message);
+      }
+    };
+
+    const updateThumbnailImage = async () => {
+      const response = await store.updateThumbnailImage();
+
+      if (response.status === 200 || response.status === 201) {
+        toast.success(response.data.message, { timeout: 2000 });
+        router.push({ name: 'product-list' });
+      } else {
+        toast.error(response.data.message);
       }
     };
 
@@ -68,6 +79,7 @@ export default {
       errors,
       selectCategories,
       submitForm,
+      updateThumbnailImage,
     };
   },
 };

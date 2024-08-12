@@ -97,6 +97,33 @@ const useProductStore = defineStore({
       }
     },
 
+    async updateThumbnailImage() {
+      this.isLoading = true;
+      this.hasError = false;
+      this.errors = {};
+      try {
+        const { id, thumbnail } = this.product;
+        const response = await axios.post(
+          `/api/products/update/thumbnail`,
+          { id, thumbnail },
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        if (error.response.status === 422) {
+          this.errors = error.response.data.errors;
+        }
+        return error.response;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
     async deleteProduct(id) {
       this.isLoading = true;
       this.hasError = false;
