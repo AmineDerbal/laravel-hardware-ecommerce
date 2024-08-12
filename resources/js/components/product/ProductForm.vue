@@ -1,7 +1,9 @@
 <template>
-  <BForm class="needs-validation">
+  <BForm class="needs-validation bg-light px-4 py-3">
     <BCardHeader>
-      <h5 class="card-title mb-2">Fill Product Details</h5>
+      <h5 class="card-title mb-2">
+        {{ isEditing ? 'Update' : 'Fill' }} Product Details
+      </h5>
     </BCardHeader>
     <BCardBody class="mt-3">
       <BRow>
@@ -11,7 +13,7 @@
               for="nameInput"
               class="form-label"
             >
-              name <span class="text-danger">*</span>
+              Name <span class="text-danger">{{ !isEditing ? '*' : '' }}</span>
             </label>
             <BFormInput
               type="text"
@@ -32,7 +34,10 @@
             <label
               for="categoryInput"
               class="form-label"
-              >Category <span class="text-danger">*</span></label
+              >Category
+              <span class="text-danger">{{
+                !isEditing ? '*' : ''
+              }}</span></label
             >
 
             <BFormSelect
@@ -64,7 +69,10 @@
             <label
               for="priceInput"
               class="form-label"
-              >price <span class="text-danger">*</span></label
+              >Price
+              <span class="text-danger">{{
+                !isEditing ? '*' : ''
+              }}</span></label
             >
             <BFormInput
               type="number"
@@ -86,7 +94,10 @@
             <label
               for="stockInput"
               class="form-label"
-              >stock <span class="text-danger">*</span></label
+              >Stock
+              <span class="text-danger">{{
+                !isEditing ? '*' : ''
+              }}</span></label
             >
             <BFormInput
               type="number"
@@ -103,7 +114,7 @@
           </div>
         </BCol>
       </BRow>
-      <BRow>
+      <BRow v-if="!isEditing">
         <BCol lg="6">
           <div class="mb-3">
             <label
@@ -172,8 +183,8 @@
             <label
               for="descriptionInput"
               class="form-label"
-              >description <span class="text-danger">*</span></label
-            >
+              >description
+            </label>
             <BFormTextarea
               id="descriptionInput"
               v-model="product.description"
@@ -207,9 +218,65 @@
       </BRow>
     </BCardBody>
   </BForm>
+  <BForm
+    class="needs-validation bg-light px-4 py-3 mt-3"
+    v-if="isEditing"
+  >
+    <BCardHeader>
+      <h5 class="card-title mb-2">Update Thumbnail Image</h5>
+    </BCardHeader>
+    <BCardBody class="mt-3">
+      <BRow>
+        <BCol lg="6">
+          <div class="mb-3">
+            <label
+              for="thumbnailInput"
+              class="form-label"
+              >thumbnail Image
+            </label>
+            <input
+              type="file"
+              class="form-control"
+              id="thumbnailInput"
+              @change="handleFileChange($event)"
+              accept="image/*"
+            />
+            <img
+              v-if="thumbnailImage || product.image_url"
+              :src="thumbnailImage || product.image_url"
+              class="img-fluid w-25 mt-2"
+              alt=""
+            />
+            <span
+              class="text-danger"
+              v-if="errors.thumbnail && errors.thumbnail[0]"
+              >{{ errors.thumbnail[0] }}</span
+            >
+          </div>
+        </BCol>
+      </BRow>
+      <BRow class="mt-3">
+        <BCol
+          lg="12"
+          class="mx-auto"
+        >
+          <div class="text-end">
+            <BButton
+              type="submit"
+              class="btn-animation waves-effect waves-light"
+              :variant="'primary'"
+            >
+              Save Changes
+            </BButton>
+          </div>
+        </BCol>
+      </BRow>
+    </BCardBody>
+  </BForm>
 </template>
 
 <script>
+import { BCol } from 'bootstrap-vue-next';
 import { ref } from 'vue';
 import { useToast } from 'vue-toastification';
 
@@ -230,6 +297,11 @@ export default {
     submitForm: {
       type: Function,
       required: true,
+    },
+    isEditing: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
 
