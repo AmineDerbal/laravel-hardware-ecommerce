@@ -264,6 +264,7 @@
             <BButton
               type="submit"
               class="btn-animation waves-effect waves-light"
+              @click="updateThumbnailImage"
               :variant="'primary'"
             >
               Save Changes
@@ -300,8 +301,9 @@ export default {
     },
     isEditing: {
       type: Boolean,
-      required: false,
-      default: false,
+    },
+    updateThumbnailImage: {
+      type: Function,
     },
   },
 
@@ -309,6 +311,11 @@ export default {
     submitForm() {
       this.$emit('update:product', this.product);
       this.submitForm();
+    },
+
+    updateThumbnailImage() {
+      this.$emit('update:product', this.product);
+      this.updateThumbnailImage();
     },
   },
 
