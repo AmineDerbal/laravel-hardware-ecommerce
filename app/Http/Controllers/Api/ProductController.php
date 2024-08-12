@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Http\Requests\products\StoreRequest;
+use App\Http\Requests\products\EditRequest;
+use App\Http\Requests\products\UpdateThumbNailImageRequest;
 use App\Http\Resources\Products\AllProductsResource;
 use App\Http\Resources\Products\ProductResource;
 
@@ -79,6 +81,49 @@ class ProductController extends Controller
             'message' => 'Product Added successfully'
         ]);
 
+    }
+
+    public function update(EditRequest $request)
+    {
+
+        $product = Product::findOrFail($request->id);
+        $data = $request->validated();
+
+        $product->update($data);
+
+        return response()->json(['message' => 'Product updated successfully']);
+
+    }
+
+    public function updateThumbnailImage(UpdateThumbNailImageRequest $request)
+    {
+        $product = Product::findOrFail($request->id);
+        $data = $request->validated();
+
+        $image = $request->file('thumbnail');
+        $path = public_path('uploads/products');
+
+        try {
+            $image_path = uploadImage($image, $path);
+            if(!$image_path) {
+                return response()->json(['message' => 'Error in image path'], 500);
+            }
+            deleteImage($product->image);
+
+            $data['image'] = $image_path;
+
+            $product->update($data);
+
+
+        } catch (\Throwable $th) {
+
+            return response()->json(['message' => 'Error creating product'], 500);
+        }
+
+
+        return response()->json([
+            'message' => 'Thumbnail image updated successfully'
+        ]);
     }
 
     public function destroy($id)
