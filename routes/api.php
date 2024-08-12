@@ -42,6 +42,8 @@ Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])-
         Route::get('products', 'index')->name('products');
         Route::get('products/{id}', 'show')->name('products.show');
         Route::post('products/store', 'store')->name('products.store');
+        Route::post('products/update/thumbnail', 'UpdatePropertyThambnail')->name('products.upload');
+        Route::put('products/update', 'update')->name('products.update');
         Route::delete('products/{id}', 'destroy')->name('products.destroy');
     });
 });
