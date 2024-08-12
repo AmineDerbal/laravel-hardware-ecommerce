@@ -12,10 +12,10 @@ const useProductStore = defineStore({
       price: null,
       stock: null,
       thumbnail: {},
+      image_url: null,
       images: [],
       category_id: null,
     },
-    showProduct: {},
     errors: {},
     isLoading: false,
     hasError: false,
@@ -33,6 +33,7 @@ const useProductStore = defineStore({
         price: null,
         stock: null,
         thumbnail: {},
+        image_url: null,
         images: [],
         category_id: null,
       };
@@ -60,7 +61,7 @@ const useProductStore = defineStore({
       this.errors = {};
       try {
         const response = await axios.get(`/api/products/${id}`);
-        this.showProduct = response.data;
+        this.product = response.data;
         return response;
       } catch (error) {
         this.hasError = true;
@@ -74,12 +75,15 @@ const useProductStore = defineStore({
       this.isLoading = true;
       this.hasError = false;
       this.errors = {};
+      let response;
       try {
-        const response = await axios.post('/api/products/store', this.product, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        response = this.product.id
+          ? await axios.put(`/api/products/update`, this.product)
+          : await axios.post('/api/products/store', this.product, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
 
         return response;
       } catch (error) {
