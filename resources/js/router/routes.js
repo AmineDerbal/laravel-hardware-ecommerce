@@ -7,6 +7,7 @@ import {
   ProductList,
   ProductCreate,
   ProductShow,
+  ProductEdit,
 } from '../pages';
 
 const routes = [
@@ -49,6 +50,7 @@ const routes = [
       {
         path: 'edit/:id',
         name: 'product-edit',
+        component: ProductEdit,
       },
     ],
   },
