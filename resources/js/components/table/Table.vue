@@ -91,8 +91,6 @@ export default {
 
     const handlePageChange = (page) => {
       if (page === '...') return;
-      console.log(page);
-      console.log(currentPage.value);
       currentPage.value = page;
       table.setPageIndex(page - 1);
     };
