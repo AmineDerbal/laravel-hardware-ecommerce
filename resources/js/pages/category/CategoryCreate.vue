@@ -52,6 +52,7 @@ export default {
     };
 
     onBeforeMount(async () => {
+      store.clearCategory();
       await store.getSelectCategories();
     });
 
