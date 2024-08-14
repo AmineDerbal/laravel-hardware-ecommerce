@@ -62,6 +62,7 @@ const useProductStore = defineStore({
       try {
         const response = await axios.get(`/api/products/${id}`);
         this.product = response.data;
+        this.product.category_id = this.product.category.id;
         return response;
       } catch (error) {
         this.hasError = true;
@@ -129,6 +130,57 @@ const useProductStore = defineStore({
       this.hasError = false;
       try {
         const response = await axios.delete(`/api/products/${id}`);
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async addNewImage(data) {
+      this.isLoading = true;
+      this.hasError = false;
+
+      try {
+        const response = await axios.post(`/api/products/store/images`, data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return error.response;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async updateImage(data) {
+      this.isLoading = true;
+      this.hasError = false;
+      try {
+        const response = await axios.post(`/api/products/update/images`, data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return error.response;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async deleteImage(id) {
+      this.isLoading = true;
+      this.hasError = false;
+      try {
+        const response = await axios.delete(`/api/products/images/${id}`);
         return response;
       } catch (error) {
         this.hasError = true;
