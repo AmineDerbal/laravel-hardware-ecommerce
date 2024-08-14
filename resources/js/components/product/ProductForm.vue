@@ -218,66 +218,176 @@
       </BRow>
     </BCardBody>
   </BForm>
-  <BForm
-    class="needs-validation bg-light px-4 py-3 mt-3"
-    v-if="isEditing"
-  >
-    <BCardHeader>
-      <h5 class="card-title mb-2">Update Thumbnail Image</h5>
-    </BCardHeader>
-    <BCardBody class="mt-3">
-      <BRow>
-        <BCol lg="6">
-          <div class="mb-3">
-            <label
-              for="thumbnailInput"
-              class="form-label"
-              >thumbnail Image
-            </label>
-            <input
-              type="file"
-              class="form-control"
-              id="thumbnailInput"
-              @change="handleFileChange($event)"
-              accept="image/*"
-            />
-            <img
-              v-if="thumbnailImage || product.image_url"
-              :src="thumbnailImage || product.image_url"
-              class="img-fluid w-25 mt-2"
-              alt=""
-            />
-            <span
-              class="text-danger"
-              v-if="errors.thumbnail && errors.thumbnail[0]"
-              >{{ errors.thumbnail[0] }}</span
-            >
-          </div>
-        </BCol>
-      </BRow>
-      <BRow class="mt-3">
-        <BCol
-          lg="12"
-          class="mx-auto"
-        >
-          <div class="text-end">
-            <BButton
-              type="submit"
-              class="btn-animation waves-effect waves-light"
-              @click="updateThumbnailImage"
-              :variant="'primary'"
-            >
-              Save Changes
-            </BButton>
-          </div>
-        </BCol>
-      </BRow>
-    </BCardBody>
-  </BForm>
+  <div v-if="isEditing">
+    <BForm class="needs-validation bg-light px-4 py-3 mt-3">
+      <BCardHeader>
+        <h5 class="card-title mb-2">Update Thumbnail Image</h5>
+      </BCardHeader>
+      <BCardBody class="mt-3">
+        <BRow>
+          <BCol lg="6">
+            <div class="mb-3">
+              <label
+                for="thumbnailInput"
+                class="form-label"
+                >thumbnail Image
+              </label>
+              <input
+                type="file"
+                class="form-control"
+                id="thumbnailInput"
+                @change="handleFileChange($event)"
+                accept="image/*"
+              />
+              <img
+                v-if="thumbnailImage || product.image_url"
+                :src="thumbnailImage || product.image_url"
+                class="img-fluid w-25 mt-2"
+                alt=""
+              />
+              <span
+                class="text-danger"
+                v-if="errors.thumbnail && errors.thumbnail[0]"
+                >{{ errors.thumbnail[0] }}</span
+              >
+            </div>
+          </BCol>
+        </BRow>
+        <BRow class="mt-3">
+          <BCol
+            lg="12"
+            class="mx-auto"
+          >
+            <div class="text-end">
+              <BButton
+                type="submit"
+                class="btn-animation waves-effect waves-light"
+                @click="updateThumbnailImage"
+                :variant="'primary'"
+              >
+                Save Changes
+              </BButton>
+            </div>
+          </BCol>
+        </BRow>
+      </BCardBody>
+    </BForm>
+    <BForm class="needs-validation bg-light px-4 py-3 mt-3">
+      <BCardHeader>
+        <h5 class="card-title mb-2">Edit Product Images</h5>
+      </BCardHeader>
+      <BCardBody class="mt-3">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th
+                  scope="col"
+                  class="text-center"
+                >
+                  Image
+                </th>
+                <th
+                  scope="col"
+                  class="text-center"
+                >
+                  Change Image
+                </th>
+                <th
+                  scope="col"
+                  class="text-center"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(image, index) in product.images"
+                :key="image.id"
+              >
+                <td>{{ index + 1 }}</td>
+                <td class="text-center w-25">
+                  <img
+                    :src="image.image_url"
+                    class="img-fluid w-25 rounded"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="file"
+                    class="form-control w-75"
+                    @change="
+                      handleUpdateImageFileChange($event, {
+                        id: image.id,
+                        product_id: image.product_id,
+                      })
+                    "
+                    accept="image/*"
+                  />
+                </td>
+                <td class="d-flex justify-content-center gap-2">
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-sm"
+                    @click="
+                      updateImage({
+                        id: image.id,
+                        product_id: image.product_id,
+                      })
+                    "
+                  >
+                    Update
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    @click="deleteImage(image.id)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <BRow>
+          <BCol lg="9">
+            <div class="mb-3">
+              <input
+                type="file"
+                class="form-control"
+                id="newImageInput"
+                @change="handleNewImageFileChange($event)"
+                accept="image/*"
+              />
+              <span
+                class="text-danger"
+                v-if="errors.image && errors.image[0]"
+                >{{ errors.image[0] }}</span
+              >
+            </div>
+          </BCol>
+          <BCol lg="3">
+            <div class="text-end">
+              <BButton
+                type="submit"
+                class="btn-animation waves-effect waves-light"
+                @click="addNewImage(product.id)"
+                :variant="'primary'"
+              >
+                Add Image
+              </BButton>
+            </div></BCol
+          >
+        </BRow>
+      </BCardBody>
+    </BForm>
+  </div>
 </template>
 
 <script>
-import { BCol } from 'bootstrap-vue-next';
 import { ref } from 'vue';
 import { useToast } from 'vue-toastification';
 
@@ -324,6 +434,47 @@ export default {
     const thumbnailImage = ref('');
     const images = [];
     const imagePreviews = ref([]);
+    const newImage = { file: null };
+    const updateImages = [];
+
+    const handleUpdateImageFileChange = async ($event, { id, product_id }) => {
+      const file = await $event.target.files[0];
+      const data = { id, product_id, image: file };
+
+      // check if a value with id and product_id already exists
+      const index = updateImages.findIndex(
+        (image) => image.id === id && image.product_id === product_id,
+      );
+      if (index === -1) {
+        updateImages.push(data);
+      } else {
+        updateImages[index] = data;
+      }
+    };
+
+    const updateImage = async ({ id, product_id }) => {
+      const data = updateImages.find(
+        (image) => image.id === id && image.product_id === product_id,
+      );
+      if (!data || !data.image) {
+        toast.error('Please select an image');
+        return;
+      }
+      emit('updateImage', data);
+    };
+
+    const deleteImage = async (id) => {
+      emit('deleteImage', id);
+    };
+
+    const handleNewImageFileChange = async ($event) => {
+      const file = await $event.target.files[0];
+      newImage.file = file;
+    };
+
+    const addNewImage = async (product_id) => {
+      emit('addNewImage', { product_id, image: newImage.file });
+    };
 
     const handleFileChange = async ($event) => {
       const file = $event.target.files[0];
@@ -364,6 +515,11 @@ export default {
       thumbnailImage,
       handleMultipleImagesChange,
       imagePreviews,
+      handleNewImageFileChange,
+      addNewImage,
+      handleUpdateImageFileChange,
+      updateImage,
+      deleteImage,
     };
   },
 };

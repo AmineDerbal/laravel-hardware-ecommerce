@@ -10,6 +10,9 @@
         :selectCategories="selectCategories"
         :isEditing="true"
         :updateThumbnailImage="updateThumbnailImage"
+        @addNewImage="addNewImage"
+        @updateImage="updateImage"
+        @deleteImage="deleteImage"
         :key="product"
         v-else
       />
@@ -65,6 +68,45 @@ export default {
       }
     };
 
+    const addNewImage = async ({ product_id, image }) => {
+      if (image) {
+        const response = await store.addNewImage({
+          product_id,
+          image,
+        });
+        if (response.status === 200 || response.status === 201) {
+          await store.getProduct(route.params.id);
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      }
+      return;
+    };
+
+    const updateImage = async (data) => {
+      if (data.image) {
+        const response = await store.updateImage(data);
+        if (response.status === 200 || response.status === 201) {
+          await store.getProduct(route.params.id);
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+        return;
+      }
+      return toast.error('Please select an image');
+    };
+    const deleteImage = async (id) => {
+      const response = await store.deleteImage(id);
+      if (response.status === 200 || response.status === 201) {
+        await store.getProduct(route.params.id);
+        toast.success(response.data.message);
+      } else {
+        toast.error('Failed to delete the image');
+      }
+    };
+
     onBeforeMount(async () => {
       isLoading.value = true;
       await store.getProduct(route.params.id);
@@ -80,6 +122,9 @@ export default {
       selectCategories,
       submitForm,
       updateThumbnailImage,
+      addNewImage,
+      updateImage,
+      deleteImage,
     };
   },
 };
