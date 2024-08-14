@@ -16,6 +16,12 @@ class ProductImage extends Model
 
     protected $appends = ['image_url'];
 
+    public static function booted()
+    {
+        static::deleting(function ($model) {
+            deleteImage($model->image);
+        });
+    }
     public function getImageUrlAttribute()
     {
         return asset($this->image);
