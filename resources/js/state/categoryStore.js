@@ -20,6 +20,13 @@ const useCategoryStore = defineStore({
   },
 
   actions: {
+    clearCategory() {
+      this.category = {
+        id: null,
+        name: null,
+        parent_id: null,
+      };
+    },
     async getCategories() {
       this.isLoading = true;
       this.hasError = false;
