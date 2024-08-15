@@ -1,5 +1,6 @@
 const LoginView = () => import('./auth/LoginView.vue');
 const HomeView = () => import('./home/HomeView.vue');
+const AdminDashboard = () => import('./backend/dashboard/DashboardView.vue');
 const CategoryList = () => import('./category/CategoryList.vue');
 const CategoryCreate = () => import('./category/CategoryCreate.vue');
 const CategoryEdit = () => import('./category/CategoryEdit.vue');
@@ -18,4 +19,5 @@ export {
   ProductCreate,
   ProductShow,
   ProductEdit,
+  AdminDashboard,
 };
