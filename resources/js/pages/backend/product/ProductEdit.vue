@@ -58,6 +58,10 @@ export default {
     };
 
     const updateThumbnailImage = async () => {
+      if (!product.value.thumbnail) {
+        toast.error('Please select a thumbnail image');
+        return;
+      }
       const response = await store.updateThumbnailImage();
 
       if (response.status === 200 || response.status === 201) {
