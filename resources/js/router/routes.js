@@ -8,6 +8,7 @@ import {
   ProductCreate,
   ProductShow,
   ProductEdit,
+  AdminDashboard,
 } from '../pages';
 
 const routes = [
@@ -27,54 +28,69 @@ const routes = [
   },
 
   {
-    path: '/products',
+    path: '/admin',
+    name: 'admin',
+    redirect: { name: 'admin-dashboard' },
     meta: {
       requireAuth: true,
     },
     children: [
       {
-        path: '',
-        name: 'product-list',
-        component: ProductList,
+        path: 'dashboard',
+        name: 'admin-dashboard',
+        component: AdminDashboard,
       },
       {
-        path: 'create',
-        name: 'product-create',
-        component: ProductCreate,
+        path: 'products',
+        meta: {
+          requireAuth: true,
+        },
+        children: [
+          {
+            path: '',
+            name: 'product-list',
+            component: ProductList,
+          },
+          {
+            path: 'create',
+            name: 'product-create',
+            component: ProductCreate,
+          },
+          {
+            path: 'show/:id',
+            name: 'product-show',
+            component: ProductShow,
+          },
+          {
+            path: 'edit/:id',
+            name: 'product-edit',
+            component: ProductEdit,
+          },
+        ],
       },
       {
-        path: 'show/:id',
-        name: 'product-show',
-        component: ProductShow,
-      },
-      {
-        path: 'edit/:id',
-        name: 'product-edit',
-        component: ProductEdit,
-      },
-    ],
-  },
-  {
-    path: '/categories',
-    meta: {
-      requireAuth: true,
-    },
+        path: 'categories',
+        meta: {
+          requireAuth: true,
+        },
 
-    children: [
-      {
-        path: '',
-        name: 'category-list',
-        component: CategoryList,
-      },
-      {
-        path: 'create',
-        name: 'category-create',
-        component: CategoryCreate,
-      },
-      {
-        path: 'edit/:id',
-        name: 'category-edit',
-        component: CategoryEdit,
+        children: [
+          {
+            path: '',
+            name: 'category-list',
+            component: CategoryList,
+          },
+          {
+            path: 'create',
+            name: 'category-create',
+            component: CategoryCreate,
+          },
+          {
+            path: 'edit/:id',
+            name: 'category-edit',
+            component: CategoryEdit,
+          },
+        ],
       },
     ],
   },
