@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProductImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,5 +46,11 @@ Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])-
         Route::post('products/update/thumbnail', 'updateThumbnailImage')->name('products.update.thumbnail');
         Route::put('products/update', 'update')->name('products.update');
         Route::delete('products/{id}', 'destroy')->name('products.destroy');
+    });
+
+    Route::controller(ProductImageController::class)->group(function () {
+        Route::post('products/store/images', 'store')->name('products.store.images');
+        Route::post('products/update/images', 'update')->name('products.update.images');
+        Route::delete('products/images/{id}', 'destroy')->name('products.images.destroy');
     });
 });
