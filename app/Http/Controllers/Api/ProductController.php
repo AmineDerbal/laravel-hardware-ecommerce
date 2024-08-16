@@ -8,17 +8,17 @@ use App\Models\ProductImage;
 use App\Http\Requests\products\StoreRequest;
 use App\Http\Requests\products\EditRequest;
 use App\Http\Requests\products\UpdateThumbNailImageRequest;
-use App\Http\Resources\Products\AllProductsResource;
 use App\Http\Resources\Products\ProductResource;
+use App\Http\Resources\Products\ProductCollection;
 
 class ProductController extends Controller
 {
     public function index()
     {
 
-        $products = Product::with('category')->get();
+        $products = Product::with('category')->paginate(10);
 
-        return response()->json(AllProductsResource::collection($products));
+        return response()->json(new ProductCollection($products));
 
 
     }

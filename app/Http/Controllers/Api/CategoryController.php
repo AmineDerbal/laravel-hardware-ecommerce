@@ -7,14 +7,15 @@ use App\Models\Category;
 use App\Http\Requests\Categories\StoreCategoryRequest;
 use App\Http\Requests\Categories\EditCategoryRequest;
 use App\Http\Resources\Category\AllCategoriesResource;
+use App\Http\Resources\Category\CategoryCollection;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('parent')->get();
+        $categories = Category::with('parent')->paginate(10);
+        return response()->json(new CategoryCollection($categories));
 
-        return response()->json(AllCategoriesResource::collection($categories));
     }
 
     public function show($id)
