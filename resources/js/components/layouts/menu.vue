@@ -28,7 +28,7 @@ export default {
       </li>
       <li class="nav-item">
         <router-link
-          to="/"
+          :to="{ name: 'admin' }"
           class="nav-link menu-link"
         >
           <HomeIcon
@@ -60,7 +60,7 @@ export default {
           <ul class="nav nav-sm flex-column">
             <li class="nav-item">
               <router-link
-                :to="{ name: 'product-list' }"
+                :to="{ name: 'admin-product-list' }"
                 class="nav-link custom-abc"
                 data-key="products"
                 >All Products</router-link
@@ -68,7 +68,7 @@ export default {
             </li>
             <li class="nav-item">
               <router-link
-                :to="{ name: 'product-create' }"
+                :to="{ name: 'admin-product-create' }"
                 class="nav-link custom-abc"
                 data-key="products"
                 >Add Product</router-link
@@ -96,7 +96,7 @@ export default {
           <ul class="nav nav-sm flex-column">
             <li class="nav-item">
               <router-link
-                :to="{ name: 'category-list' }"
+                :to="{ name: 'admin-category-list' }"
                 class="nav-link custom-abc"
                 data-key="categories"
                 >All Categories</router-link
@@ -104,7 +104,7 @@ export default {
             </li>
             <li class="nav-item">
               <router-link
-                :to="{ name: 'category-create' }"
+                :to="{ name: 'admin-category-create' }"
                 class="nav-link custom-abc"
                 data-key="categories"
                 >Add Category</router-link

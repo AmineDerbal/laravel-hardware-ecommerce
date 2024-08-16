@@ -5,7 +5,7 @@
     title="edit"
   >
     <router-link
-      :to="{ name: `${item}-edit`, params: { id } }"
+      :to="{ name: `admin-${item}-edit`, params: { id } }"
       class="text-primary d-inline-block"
     >
       <i class="ri-pencil-fill fs-16"></i>

@@ -48,22 +48,22 @@ const routes = [
         children: [
           {
             path: '',
-            name: 'product-list',
+            name: 'admin-product-list',
             component: ProductList,
           },
           {
             path: 'create',
-            name: 'product-create',
+            name: 'admin-product-create',
             component: ProductCreate,
           },
           {
             path: 'show/:id',
-            name: 'product-show',
+            name: 'admin-product-show',
             component: ProductShow,
           },
           {
             path: 'edit/:id',
-            name: 'product-edit',
+            name: 'admin-product-edit',
             component: ProductEdit,
           },
         ],
@@ -77,17 +77,17 @@ const routes = [
         children: [
           {
             path: '',
-            name: 'category-list',
+            name: 'admin-category-list',
             component: CategoryList,
           },
           {
             path: 'create',
-            name: 'category-create',
+            name: 'admin-category-create',
             component: CategoryCreate,
           },
           {
             path: 'edit/:id',
-            name: 'category-edit',
+            name: 'admin-category-edit',
             component: CategoryEdit,
           },
         ],

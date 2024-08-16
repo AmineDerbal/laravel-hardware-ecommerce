@@ -66,7 +66,7 @@ export default {
 
       if (response.status === 200 || response.status === 201) {
         toast.success(response.data.message, { timeout: 2000 });
-        router.push({ name: 'product-list' });
+        router.push({ name: 'admin-product-list' });
       } else {
         toast.error(response.data.message);
       }

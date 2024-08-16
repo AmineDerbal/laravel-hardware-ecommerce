@@ -45,7 +45,7 @@ export default {
       if (response.status === 200 || response.status === 201) {
         toast.success(response.data.message, { timeout: 2000 });
 
-        router.push({ name: 'category-list' });
+        router.push({ name: 'admin-category-list' });
       } else {
         toast.error('Failed to create category');
       }

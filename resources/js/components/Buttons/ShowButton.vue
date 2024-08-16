@@ -5,7 +5,7 @@
     title="show"
   >
     <router-link
-      :to="{ name: `${item}-show`, params: { id } }"
+      :to="{ name: `admin-${item}-show`, params: { id } }"
       class="text-success d-inline-block"
     >
       <i class="ri-eye-fill fs-16"></i>
