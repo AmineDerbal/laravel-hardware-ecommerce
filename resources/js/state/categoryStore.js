@@ -27,11 +27,11 @@ const useCategoryStore = defineStore({
         parent_id: null,
       };
     },
-    async getCategories() {
+    async getCategories(page = 1) {
       this.isLoading = true;
       this.hasError = false;
       try {
-        const response = await axios.get('/api/categories');
+        const response = await axios.get(`/api/categories?page=${page}`);
         this.categories = response.data;
         return response;
       } catch (error) {

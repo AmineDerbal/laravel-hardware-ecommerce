@@ -39,12 +39,12 @@ const useProductStore = defineStore({
       };
     },
 
-    async getProducts() {
+    async getProducts(page = 1) {
       this.isLoading = true;
       this.hasError = false;
       this.errors = {};
       try {
-        const response = await axios.get('/api/products');
+        const response = await axios.get(`/api/products?page=${page}`);
         this.products = response.data;
         return response;
       } catch (error) {
