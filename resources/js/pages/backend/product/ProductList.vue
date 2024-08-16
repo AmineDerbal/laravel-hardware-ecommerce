@@ -12,18 +12,21 @@
       <BCol sm="auto">
         <div v-if="!isLoading">
           <BLink
-            :to="{ name: 'product-create' }"
+            :to="{ name: 'admin-product-create' }"
             class="btn btn-primary"
             ><i class="ri-add-line align-bottom me-1"></i>Add Product
           </BLink>
         </div>
       </BCol>
       <Table
-        :data="products"
+        :data="products.data"
         :columns="columns"
         :customGlobalFilter="customGlobalFilter"
+        :links="products.links"
+        :meta="products.meta"
+        :onPageChange="getProducts"
         :key="products"
-        v-if="products.length > 0 && !isLoading && !hasError"
+        v-if="products.data.length > 0 && !isLoading && !hasError"
       />
     </BRow>
   </LayoutView>
@@ -31,6 +34,7 @@
 
 <script>
 import { onBeforeMount, computed, h } from 'vue';
+import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useProductStore } from '@/state';
 import {
@@ -54,13 +58,15 @@ export default {
 
   setup() {
     const store = useProductStore();
+    const route = useRoute();
     const toast = useToast();
     const products = computed(() => store.products);
     const isLoading = computed(() => store.isLoading);
     const hasError = computed(() => store.hasError);
+    const page = route.query.page || 1;
 
-    const getProducts = async () => {
-      await store.getProducts();
+    const getProducts = async (page) => {
+      await store.getProducts(page);
     };
 
     const handleDelete = async (id) => {
@@ -147,7 +153,7 @@ export default {
     };
 
     onBeforeMount(async () => {
-      await getProducts();
+      await getProducts(page);
     });
 
     return {
@@ -156,6 +162,7 @@ export default {
       isLoading,
       hasError,
       customGlobalFilter,
+      getProducts,
     };
   },
 };

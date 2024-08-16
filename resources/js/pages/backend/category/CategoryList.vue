@@ -12,18 +12,21 @@
       <BCol sm="auto">
         <div v-if="!isLoading">
           <BLink
-            :to="{ name: 'category-create' }"
+            :to="{ name: 'admin-category-create' }"
             class="btn btn-primary"
             ><i class="ri-add-line align-bottom me-1"></i>Add Category
           </BLink>
         </div>
       </BCol>
       <Table
-        :data="categories"
+        :data="categories.data"
         :columns="columns"
         :customGlobalFilter="customGlobalFilter"
+        :links="categories.links"
+        :meta="categories.meta"
+        :onPageChange="getCategories"
         :key="categories"
-        v-if="categories.length > 0 && !isLoading && !hasError"
+        v-if="categories.data.length > 0 && !isLoading && !hasError"
       />
     </BRow>
   </LayoutView>
@@ -31,6 +34,7 @@
 
 <script>
 import { computed, onBeforeMount, h } from 'vue';
+import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import {
   LayoutView,
@@ -53,12 +57,14 @@ export default {
   setup() {
     const store = useCategoryStore();
     const toast = useToast();
+    const route = useRoute();
     const categories = computed(() => store.categories);
     const isLoading = computed(() => store.isLoading);
     const hasError = computed(() => store.hasError);
+    const page = route.query.page || 1;
 
-    const getCategories = async () => {
-      await store.getCategories();
+    const getCategories = async (page) => {
+      await store.getCategories(page);
     };
 
     const handleDelete = async (id) => {
@@ -122,7 +128,7 @@ export default {
 
     // Fetch categories on mount
     onBeforeMount(async () => {
-      await getCategories();
+      await getCategories(page);
     });
 
     return {
@@ -131,6 +137,7 @@ export default {
       hasError,
       columns,
       customGlobalFilter,
+      getCategories,
     };
   },
 };
