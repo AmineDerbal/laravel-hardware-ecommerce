@@ -34,7 +34,8 @@
     },
     "files": [
       "app/Helpers/CodeUtility.php",
-      "app/Helpers/ImageUtility.php"
+      "app/Helpers/ImageUtility.php",
+      "app/Helpers/PaginationUtility.php"
     ]
   },
   "autoload-dev": {
