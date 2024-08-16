@@ -19,6 +19,18 @@ export default {
       type: Array,
       required: true,
     },
+    meta: {
+      type: Object,
+      required: false,
+    },
+    links: {
+      type: Object,
+      required: false,
+    },
+    onPageChange: {
+      type: Function,
+      required: true,
+    },
 
     customGlobalFilter: {
       type: Function,
@@ -31,7 +43,7 @@ export default {
   setup(props) {
     const sorting = ref([]);
     const filter = ref('');
-    const currentPage = ref(1);
+    const currentPage = ref(props.meta.current_page || 1);
 
     const table = useVueTable({
       data: props.data,
@@ -63,7 +75,7 @@ export default {
     });
 
     const paginationRange = computed(() => {
-      const totalPages = table?.getPageCount() || 0;
+      const totalPages = props.meta?.last_page || 1;
       const visiblePages = 5;
       const half = Math.floor(visiblePages / 2);
 
@@ -89,16 +101,9 @@ export default {
       return range;
     });
 
-    const handlePageChange = (page) => {
-      if (page === '...') return;
-      currentPage.value = page;
-      table.setPageIndex(page - 1);
-    };
-
     return {
       table,
       paginationRange,
-      handlePageChange,
       currentPage,
       filter,
     };
@@ -175,15 +180,14 @@ export default {
   <div class="d-flex justify-content-end">
     <div class="pagination-wrap hstack gap-2">
       <p class="mb-0">
-        Page {{ table.getState().pagination.pageIndex + 1 }} of
-        {{ table.getPageCount() }} -
+        Page {{ currentPage }} of {{ meta.last_page }} -
         {{ table.getFilteredRowModel().rows.length }} results
       </p>
       <BLink
         class="page-item pagination-prev"
         href="#"
-        :disabled="!table.getCanPreviousPage()"
-        @click="table.previousPage()"
+        :disabled="!links.prev"
+        @click="onPageChange(links.prev)"
       >
         Previous
       </BLink>
@@ -200,7 +204,7 @@ export default {
           <BLink
             class="page-link"
             href="#"
-            @click.prevent="handlePageChange(page)"
+            @click.prevent="onPageChange(page)"
           >
             {{ page }}
           </BLink>
@@ -209,8 +213,8 @@ export default {
       <BLink
         class="page-item pagination-next"
         href="#"
-        :disabled="!table.getCanNextPage()"
-        @click="table.nextPage()"
+        :disabled="!links.next"
+        @click="onPageChange(links.next)"
       >
         Next
       </BLink>
