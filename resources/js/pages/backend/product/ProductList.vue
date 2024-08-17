@@ -24,7 +24,7 @@
         :customGlobalFilter="customGlobalFilter"
         :links="products.links"
         :meta="products.meta"
-        :onPageChange="getProducts"
+        :onPageChange="onPageChange"
         :key="products"
         v-if="products.data.length > 0 && !isLoading && !hasError"
       />
@@ -34,7 +34,7 @@
 
 <script>
 import { onBeforeMount, computed, h } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useProductStore } from '@/state';
 import {
@@ -59,12 +59,20 @@ export default {
   setup() {
     const store = useProductStore();
     const route = useRoute();
+    const router = useRouter();
     const toast = useToast();
     const products = computed(() => store.products);
     const isLoading = computed(() => store.isLoading);
     const hasError = computed(() => store.hasError);
     const page = route.query.page || 1;
 
+    const onPageChange = (page) => {
+      router
+        .push({ name: 'admin-product-list', query: { page: page } })
+        .then(() => {
+          window.location.reload();
+        });
+    };
     const getProducts = async (page) => {
       await store.getProducts(page);
     };
@@ -162,7 +170,7 @@ export default {
       isLoading,
       hasError,
       customGlobalFilter,
-      getProducts,
+      onPageChange,
     };
   },
 };

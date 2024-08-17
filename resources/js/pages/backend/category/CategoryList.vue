@@ -24,7 +24,7 @@
         :customGlobalFilter="customGlobalFilter"
         :links="categories.links"
         :meta="categories.meta"
-        :onPageChange="getCategories"
+        :onPageChange="onPageChange"
         :key="categories"
         v-if="categories.data.length > 0 && !isLoading && !hasError"
       />
@@ -34,7 +34,7 @@
 
 <script>
 import { computed, onBeforeMount, h } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import {
   LayoutView,
@@ -58,6 +58,7 @@ export default {
     const store = useCategoryStore();
     const toast = useToast();
     const route = useRoute();
+    const router = useRouter();
     const categories = computed(() => store.categories);
     const isLoading = computed(() => store.isLoading);
     const hasError = computed(() => store.hasError);
@@ -65,6 +66,14 @@ export default {
 
     const getCategories = async (page) => {
       await store.getCategories(page);
+    };
+
+    const onPageChange = (page) => {
+      router
+        .push({ name: 'admin-category-list', query: { page: page } })
+        .then(() => {
+          window.location.reload();
+        });
     };
 
     const handleDelete = async (id) => {
@@ -137,7 +146,7 @@ export default {
       hasError,
       columns,
       customGlobalFilter,
-      getCategories,
+      onPageChange,
     };
   },
 };
