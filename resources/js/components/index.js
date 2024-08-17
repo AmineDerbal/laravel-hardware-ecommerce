@@ -1,19 +1,19 @@
-import LayoutView from './layouts/LayoutView.vue';
+import AdminLayoutView from './backend/layouts/LayoutView.vue';
 import LoaderView from './LoaderView.vue';
-import DeleteButton from './Buttons/DeleteButton.vue';
-import EditButton from './Buttons/EditButton.vue';
-import ShowButton from './Buttons/ShowButton.vue';
-import Table from './table/Table.vue';
-import CategoryForm from './category/CategoryForm.vue';
-import ProductForm from './product/ProductForm.vue';
+import AdminDeleteButton from './backend/Buttons/DeleteButton.vue';
+import AdminEditButton from './backend/Buttons/EditButton.vue';
+import AdminShowButton from './backend/Buttons/ShowButton.vue';
+import AdminTable from './backend/table/Table.vue';
+import AdminCategoryForm from './backend/category/CategoryForm.vue';
+import AdminProductForm from './backend/product/ProductForm.vue';
 
 export {
-  LayoutView,
+  AdminLayoutView,
   LoaderView,
-  DeleteButton,
-  EditButton,
-  ShowButton,
-  Table,
-  CategoryForm,
-  ProductForm,
+  AdminDeleteButton,
+  AdminEditButton,
+  AdminShowButton,
+  AdminTable,
+  AdminCategoryForm,
+  AdminProductForm,
 };
