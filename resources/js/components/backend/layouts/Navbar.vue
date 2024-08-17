@@ -1,6 +1,4 @@
 <script>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import simplebar from 'simplebar-vue';
 import { useLayoutStore } from '@/state';
 
