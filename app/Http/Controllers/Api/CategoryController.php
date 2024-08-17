@@ -28,8 +28,16 @@ class CategoryController extends Controller
 
     public function forSelect()
     {
+        // select categories that has either no parents or just one parent and it's parent has no parent
 
-        $categories = Category::select('id', 'name')->get();
+        $categories = Category::whereNull('parent_id')
+        ->orWhereIn('parent_id', function ($query) {
+            $query->select('id')
+                  ->from('categories')
+                  ->whereNull('parent_id');
+        })
+        ->get();
+
 
         return response()->json($categories);
     }
@@ -38,6 +46,7 @@ class CategoryController extends Controller
     {
 
         $categories = Category::with('children')->where('parent_id', null)->get();
+
 
         return response()->json($categories);
     }
