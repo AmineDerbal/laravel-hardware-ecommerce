@@ -1,5 +1,5 @@
 <template>
-  <LayoutView>
+  <AdminLayoutView>
     <LoaderView v-if="isLoading" />
     <div v-if="hasError">
       <h1>An Error has occurred</h1>
@@ -18,7 +18,7 @@
           </BLink>
         </div>
       </BCol>
-      <Table
+      <AdminTable
         :data="categories.data"
         :columns="columns"
         :customGlobalFilter="customGlobalFilter"
@@ -29,7 +29,7 @@
         v-if="categories.data.length > 0 && !isLoading && !hasError"
       />
     </BRow>
-  </LayoutView>
+  </AdminLayoutView>
 </template>
 
 <script>
@@ -37,21 +37,21 @@ import { computed, onBeforeMount, h } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import {
-  LayoutView,
+  AdminLayoutView,
   LoaderView,
-  DeleteButton,
-  EditButton,
-  Table,
+  AdminDeleteButton,
+  AdminEditButton,
+  AdminTable,
 } from '@/components';
 import { useCategoryStore } from '@/state';
 
 export default {
   components: {
-    LayoutView,
+    AdminLayoutView,
     LoaderView,
-    DeleteButton,
-    EditButton,
-    Table,
+    AdminDeleteButton,
+    AdminEditButton,
+    AdminTable,
   },
 
   setup() {
@@ -109,8 +109,8 @@ export default {
         header: 'Actions',
         cell: ({ row }) => {
           const { id } = row.original;
-          const editButton = h(EditButton, { id: id, item: 'category' });
-          const deleteButton = h(DeleteButton, {
+          const editButton = h(AdminEditButton, { id: id, item: 'category' });
+          const deleteButton = h(AdminDeleteButton, {
             id: id,
             item: 'category',
             handleDelete,

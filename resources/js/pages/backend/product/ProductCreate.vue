@@ -1,12 +1,12 @@
 <template>
-  <LayoutView>
-    <ProductForm
+  <AdminLayoutView>
+    <AdminProductForm
       v-model:product="product"
       :errors="errors"
       :selectCategories="selectCategories"
       :submitForm="submitForm"
     />
-  </LayoutView>
+  </AdminLayoutView>
 </template>
 
 <script>
@@ -14,10 +14,10 @@ import { computed, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useProductStore, useCategoryStore } from '@/state';
-import { LayoutView, LoaderView, ProductForm } from '@/components';
+import { AdminLayoutView, LoaderView, AdminProductForm } from '@/components';
 
 export default {
-  components: { LayoutView, LoaderView, ProductForm },
+  components: { AdminLayoutView, LoaderView, AdminProductForm },
 
   setup() {
     const store = useProductStore();

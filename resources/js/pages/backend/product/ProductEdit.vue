@@ -1,9 +1,9 @@
 <template>
-  <LayoutView>
+  <AdminLayoutView>
     <h1 v-if="hasError">An Error has occurred</h1>
     <div v-else>
       <LoaderView v-if="isLoading" />
-      <ProductForm
+      <AdminProductForm
         v-model:product="product"
         :errors="errors"
         :submitForm="submitForm"
@@ -17,21 +17,21 @@
         v-else
       />
     </div>
-  </LayoutView>
+  </AdminLayoutView>
 </template>
 
 <script>
 import { onBeforeMount, computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import { LayoutView, LoaderView, ProductForm } from '@/components';
+import { AdminLayoutView, LoaderView, AdminProductForm } from '@/components';
 import { useProductStore, useCategoryStore } from '@/state';
 
 export default {
   components: {
-    LayoutView,
+    AdminLayoutView,
     LoaderView,
-    ProductForm,
+    AdminProductForm,
   },
 
   setup() {

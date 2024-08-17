@@ -1,26 +1,25 @@
 <template>
-  <LayoutView>
+  <AdminLayoutView>
     <LoaderView v-if="isLoading" />
-    <CategoryForm
+    <AdminCategoryForm
       v-model:category="category"
       :errors="errors"
       :submitForm="submitForm"
       :selectChoicesCategories="selectChoicesCategories"
       v-else
     />
-  </LayoutView>
+  </AdminLayoutView>
 </template>
 
 <script>
 import { onBeforeMount, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import { LayoutView, LoaderView } from '@/components';
+import { AdminLayoutView, LoaderView, AdminCategoryForm } from '@/components';
 import { useCategoryStore } from '@/state';
-import CategoryForm from '@/components/category/CategoryForm.vue';
 
 export default {
-  components: { LayoutView, LoaderView, CategoryForm },
+  components: { AdminLayoutView, LoaderView, AdminCategoryForm },
 
   setup() {
     const toast = useToast();

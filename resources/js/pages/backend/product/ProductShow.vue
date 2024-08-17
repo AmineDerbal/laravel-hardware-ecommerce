@@ -1,5 +1,5 @@
 <template>
-  <LayoutView>
+  <AdminLayoutView>
     <LoaderView v-if="isLoading" />
     <div v-else>
       <div class="card">
@@ -79,17 +79,17 @@
         </div>
       </div>
     </div>
-  </LayoutView>
+  </AdminLayoutView>
 </template>
 
 <script>
 import { computed, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
-import { LayoutView, LoaderView } from '@/components';
+import { AdminLayoutView, LoaderView } from '@/components';
 import { useProductStore } from '@/state';
 
 export default {
-  components: { LayoutView, LoaderView },
+  components: { AdminLayoutView, LoaderView },
 
   setup() {
     const store = useProductStore();

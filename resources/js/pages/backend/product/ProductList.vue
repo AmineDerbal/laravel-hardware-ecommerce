@@ -1,5 +1,5 @@
 <template>
-  <LayoutView>
+  <AdminLayoutView>
     <LoaderView v-if="isLoading" />
     <div v-if="hasError">
       <h1>An Error has occurred</h1>
@@ -18,7 +18,7 @@
           </BLink>
         </div>
       </BCol>
-      <Table
+      <AdminTable
         :data="products.data"
         :columns="columns"
         :customGlobalFilter="customGlobalFilter"
@@ -29,7 +29,7 @@
         v-if="products.data.length > 0 && !isLoading && !hasError"
       />
     </BRow>
-  </LayoutView>
+  </AdminLayoutView>
 </template>
 
 <script>
@@ -38,22 +38,22 @@ import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useProductStore } from '@/state';
 import {
-  LayoutView,
+  AdminLayoutView,
   LoaderView,
-  DeleteButton,
-  EditButton,
-  Table,
+  AdminDeleteButton,
+  AdminEditButton,
+  AdminShowButton,
+  AdminTable,
 } from '@/components';
-import ShowButton from '@/components/Buttons/ShowButton.vue';
 
 export default {
   components: {
-    LayoutView,
+    AdminLayoutView,
     LoaderView,
-    DeleteButton,
-    EditButton,
-    ShowButton,
-    Table,
+    AdminDeleteButton,
+    AdminEditButton,
+    AdminShowButton,
+    AdminTable,
   },
 
   setup() {
@@ -80,7 +80,7 @@ export default {
     const handleDelete = async (id) => {
       const response = await store.deleteProduct(id);
       if (response.status === 200 || response.status === 201) {
-        await getProducts();
+        await getProducts(page);
         toast.success(response.data.message, { timeout: 2000 });
       } else {
         toast.error('Failed to delete the product');
@@ -133,9 +133,9 @@ export default {
         enableSorting: false,
         cell: ({ row }) => {
           const { id } = row.original;
-          const showButton = h(ShowButton, { id: id, item: 'product' });
-          const editButton = h(EditButton, { id: id, item: 'product' });
-          const deleteButton = h(DeleteButton, {
+          const showButton = h(AdminShowButton, { id: id, item: 'product' });
+          const editButton = h(AdminEditButton, { id: id, item: 'product' });
+          const deleteButton = h(AdminDeleteButton, {
             id: id,
             item: 'product',
             handleDelete,
