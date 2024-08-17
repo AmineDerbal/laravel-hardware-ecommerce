@@ -6,6 +6,7 @@ const useCategoryStore = defineStore({
   state: () => ({
     categories: [],
     selectCategories: [],
+    headerCategories: [],
     category: {
       id: null,
       name: null,
@@ -16,7 +17,7 @@ const useCategoryStore = defineStore({
     hasError: false,
   }),
   persist: {
-    paths: ['categories', 'selectCategories'],
+    paths: ['categories', 'selectCategories', 'headerCategories'],
   },
 
   actions: {
@@ -75,6 +76,18 @@ const useCategoryStore = defineStore({
         return;
       } finally {
         this.isLoading = false;
+      }
+    },
+
+    async getHeaderCategories() {
+      this.hasError = false;
+      try {
+        const response = await axios.get('/api/categories/header');
+        this.headerCategories = response.data;
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return;
       }
     },
 
