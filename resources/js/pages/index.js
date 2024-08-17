@@ -1,23 +1,24 @@
 const LoginView = () => import('./auth/LoginView.vue');
-const HomeView = () => import('./home/HomeView.vue');
+const HomeView = () => import('./frontend/home/HomeView.vue');
 const AdminDashboard = () => import('./backend/dashboard/DashboardView.vue');
-const CategoryList = () => import('./backend/category/CategoryList.vue');
-const CategoryCreate = () => import('./backend/category/CategoryCreate.vue');
-const CategoryEdit = () => import('./backend/category/CategoryEdit.vue');
-const ProductList = () => import('./backend/product/ProductList.vue');
-const ProductCreate = () => import('./backend/product/ProductCreate.vue');
-const ProductShow = () => import('./backend/product/ProductShow.vue');
-const ProductEdit = () => import('./backend/product/ProductEdit.vue');
+const AdminCategoryList = () => import('./backend/category/CategoryList.vue');
+const AdminCategoryCreate = () =>
+  import('./backend/category/CategoryCreate.vue');
+const AdminCategoryEdit = () => import('./backend/category/CategoryEdit.vue');
+const AdminProductList = () => import('./backend/product/ProductList.vue');
+const AdminProductCreate = () => import('./backend/product/ProductCreate.vue');
+const AdminProductShow = () => import('./backend/product/ProductShow.vue');
+const AdminProductEdit = () => import('./backend/product/ProductEdit.vue');
 
 export {
   LoginView,
   HomeView,
-  CategoryList,
-  CategoryCreate,
-  CategoryEdit,
-  ProductList,
-  ProductCreate,
-  ProductShow,
-  ProductEdit,
+  AdminCategoryList,
+  AdminCategoryCreate,
+  AdminCategoryEdit,
+  AdminProductList,
+  AdminProductCreate,
+  AdminProductShow,
+  AdminProductEdit,
   AdminDashboard,
 };
