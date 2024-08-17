@@ -13,6 +13,7 @@ import App from './App.vue';
 import './assets/scss/config/minimal/app.scss';
 import './assets/scss/mermaid.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
+import '../css/app.css';
 
 const pinia = createPinia().use(piniaPluginPersistedstate);
 
