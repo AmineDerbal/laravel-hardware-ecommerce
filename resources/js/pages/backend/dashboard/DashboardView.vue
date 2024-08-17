@@ -1,13 +1,13 @@
 <script>
-import { LayoutView } from '@/components';
+import { AdminLayoutView } from '@/components';
 
 export default {
   components: {
-    LayoutView,
+    AdminLayoutView,
   },
 };
 </script>
 
 <template>
-  <LayoutView> </LayoutView>
+  <AdminLayoutView> </AdminLayoutView>
 </template>
