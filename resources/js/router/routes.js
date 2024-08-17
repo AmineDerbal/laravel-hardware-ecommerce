@@ -1,13 +1,13 @@
 import {
   HomeView,
   LoginView,
-  CategoryList,
-  CategoryCreate,
-  CategoryEdit,
-  ProductList,
-  ProductCreate,
-  ProductShow,
-  ProductEdit,
+  AdminCategoryList,
+  AdminCategoryCreate,
+  AdminCategoryEdit,
+  AdminProductList,
+  AdminProductCreate,
+  AdminProductShow,
+  AdminProductEdit,
   AdminDashboard,
 } from '../pages';
 
@@ -49,22 +49,22 @@ const routes = [
           {
             path: '',
             name: 'admin-product-list',
-            component: ProductList,
+            component: AdminProductList,
           },
           {
             path: 'create',
             name: 'admin-product-create',
-            component: ProductCreate,
+            component: AdminProductCreate,
           },
           {
             path: 'show/:id',
             name: 'admin-product-show',
-            component: ProductShow,
+            component: AdminProductShow,
           },
           {
             path: 'edit/:id',
             name: 'admin-product-edit',
-            component: ProductEdit,
+            component: AdminProductEdit,
           },
         ],
       },
@@ -78,17 +78,17 @@ const routes = [
           {
             path: '',
             name: 'admin-category-list',
-            component: CategoryList,
+            component: AdminCategoryList,
           },
           {
             path: 'create',
             name: 'admin-category-create',
-            component: CategoryCreate,
+            component: AdminCategoryCreate,
           },
           {
             path: 'edit/:id',
             name: 'admin-category-edit',
-            component: CategoryEdit,
+            component: AdminCategoryEdit,
           },
         ],
       },
