@@ -22,6 +22,10 @@ use App\Http\Controllers\Api\ProductImageController;
 //     return $request->user();
 // });
 
+Route::controller(CategoryController::class)->group(function () {
+    Route::get('categories/header', 'forHeader')->name('categories.header');
+});
+
 Route::controller(AuthController::class)->group(function () {
     Route::post('auth/login', 'login')->name('login');
     Route::post('auth/register', 'register')->name('register');
@@ -32,7 +36,6 @@ Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])-
     Route::controller(CategoryController::class)->group(function () {
         Route::get('categories', 'index')->name('categories');
         Route::get('categories/select', 'forSelect')->name('categories.select');
-        Route::get('categories/header', 'forHeader')->name('categories.header');
         Route::get('categories/{id}', 'show')->name('categories.show');
         Route::post('categories/store', 'store')->name('categories.store');
         Route::put('categories/update', 'update')->name('categories.update');
