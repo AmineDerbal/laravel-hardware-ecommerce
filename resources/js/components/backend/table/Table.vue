@@ -21,11 +21,11 @@ export default {
     },
     meta: {
       type: Object,
-      required: false,
+      required: true,
     },
     links: {
       type: Object,
-      required: false,
+      required: true,
     },
     onPageChange: {
       type: Function,
