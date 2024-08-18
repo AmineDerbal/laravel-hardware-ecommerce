@@ -7,7 +7,7 @@ import AdminTable from './backend/table/Table.vue';
 import AdminCategoryForm from './backend/category/CategoryForm.vue';
 import AdminProductForm from './backend/product/ProductForm.vue';
 
-import HeaderView from './frontend/layouts/HeaderView.vue';
+import LayoutView from './frontend/layouts/LayoutView.vue';
 
 export {
   AdminLayoutView,
@@ -18,5 +18,5 @@ export {
   AdminTable,
   AdminCategoryForm,
   AdminProductForm,
-  HeaderView,
+  LayoutView,
 };
