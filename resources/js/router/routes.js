@@ -21,10 +21,16 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView,
-    meta: {
-      requireAuth: true,
-    },
+    children: [
+      {
+        path: '',
+        component: HomeView,
+      },
+      {
+        path: 'category-products/:slug',
+        name: 'category-products',
+      },
+    ],
   },
 
   {
