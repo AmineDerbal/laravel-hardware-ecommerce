@@ -2,13 +2,15 @@ import { defineStore } from 'pinia';
 
 const useLayoutStore = defineStore({
   id: 'layout',
-  persist: true,
+
   state: () => ({
     layout: {
       type: 'vertical',
       themeMode: 'light',
       sidebarTheme: 'light',
+      showMenu: false,
     },
+    persistPaths: ['layout.type', 'layout.themeMode', 'layout.sidebarTheme'],
   }),
 
   actions: {
@@ -17,6 +19,9 @@ const useLayoutStore = defineStore({
     },
     changeSidebarTheme(sidebarTheme) {
       this.layout.sidebarTheme = sidebarTheme;
+    },
+    setShowMenu(showMenu) {
+      this.layout.showMenu = showMenu;
     },
   },
 });
