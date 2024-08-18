@@ -93,7 +93,7 @@ export default {
         header: 'Code',
       },
       {
-        header: 'image',
+        header: 'Image',
         cell: ({ row }) => {
           const image = row.original.image_url;
           return h('img', {
