@@ -1,5 +1,12 @@
-<script>
-export default {};
-</script>
+<template>
+  <LayoutView> </LayoutView>
+</template>
 
-<template></template>
+<script>
+import { LayoutView } from '@/components';
+export default {
+  components: {
+    LayoutView,
+  },
+};
+</script>
