@@ -1,15 +1,21 @@
 <template>
-  <div class="whb-top-bar py-2">
+  <div class="whb-top-bar py-2 d-none d-lg-block">
     <nav class="navbar navbar-light">
-      <div class="d-flex align-items-center gap-2">
+      <div class="mx-5 d-flex align-items-center gap-2">
         <div
-          v-for="category in headerCategories"
+          v-for="category in items"
           :key="category.id"
         >
           <button
-            class="navbar-toggler text-white"
+            class="navbar-toggler text-white bodrer-0 outline-0"
             type="button"
             v-if="category.children.length === 0"
+            @click="
+              $router.push({
+                name: 'category-products',
+                params: { slug: category.slug },
+              })
+            "
           >
             {{ category.name }}
           </button>
@@ -25,29 +31,17 @@
 </template>
 
 <script>
-import { onBeforeMount, computed } from 'vue';
-import { useCategoryStore } from '@/state';
-import DropdownButton from './Buttons/DropdownButton.vue';
+import DropdownButton from '../Buttons/DropdownButton.vue';
 
 export default {
   components: {
     DropdownButton,
   },
-  setup() {
-    const store = useCategoryStore();
-    const headerCategories = computed(() => store.headerCategories);
-
-    const getHeaderCategories = async () => {
-      await store.getHeaderCategories();
-    };
-
-    onBeforeMount(async () => {
-      await getHeaderCategories();
-    });
-
-    return {
-      headerCategories,
-    };
+  props: {
+    items: {
+      type: Array,
+      required: true,
+    },
   },
 };
 </script>
