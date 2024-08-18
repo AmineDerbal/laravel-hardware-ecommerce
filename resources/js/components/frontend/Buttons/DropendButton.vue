@@ -4,7 +4,7 @@
     @click.stop="toggleDropdown"
   >
     <button
-      class="btn dropdown-toggle menu-right-icon"
+      class="btn dropdown-item dropdown-toggle menu-right-icon"
       type="button"
       id="dropendMenuButton1"
       data-bs-toggle="dropdown"
@@ -17,12 +17,15 @@
       aria-labelledby="dropendMenuButton1"
     >
       <li v-for="child in item.children">
-        <a
+        <router-link
           class="dropdown-item"
-          href="#"
+          :to="{
+            name: 'category-products',
+            params: { slug: child.slug },
+          }"
         >
           {{ child.name }}
-        </a>
+        </router-link>
       </li>
     </ul>
   </div>
@@ -36,10 +39,6 @@ export default {
       type: Object,
       required: true,
     },
-  },
-  setup(props) {
-    console.log(props.item);
-    return {};
   },
 };
 </script>

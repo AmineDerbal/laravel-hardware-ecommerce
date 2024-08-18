@@ -15,12 +15,15 @@
     >
       <div v-for="child in item.children">
         <li v-if="child.children.length <= 0">
-          <a
+          <router-link
             class="dropdown-item"
-            href="#"
+            :to="{
+              name: 'category-products',
+              params: { slug: child.slug },
+            }"
           >
             {{ child.name }}
-          </a>
+          </router-link>
         </li>
         <DropendButton
           v-else
