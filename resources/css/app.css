@@ -1,3 +1,18 @@
+:root {
+  --whb-top-bar-bg: #e30713;
+}
+
 .whb-top-bar {
-  background-color: #e30713;
+  background-color: var(--whb-top-bar-bg);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+.gray-border {
+  border: 1px solid rgba(0, 0, 0, 0.105);
+}
+
+.hover-header-link:hover {
+  color: var(--whb-top-bar-bg);
 }
