@@ -56,7 +56,7 @@
       >
         <div
           class="menu position-relative"
-          @click="setShowMenu"
+          @click="setShowMenu(true)"
         >
           <i class="ri-menu-line fs-24"></i>
         </div>
@@ -98,6 +98,7 @@
       v-if="showMenu"
       :items="items"
       :key="showMenu"
+      @setShowMenu="setShowMenu"
     />
   </header>
 </template>
@@ -123,8 +124,8 @@ export default {
     onBeforeMount(async () => {
       await getHeaderCategories();
     });
-    const setShowMenu = () => {
-      layoutStore.setShowMenu(!showMenu.value);
+    const setShowMenu = (value) => {
+      layoutStore.setShowMenu(value);
     };
 
     return { setShowMenu, showMenu, items };
