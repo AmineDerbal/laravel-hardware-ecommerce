@@ -83,7 +83,7 @@
         </div>
       </div>
     </div>
-    <div class="search-bar my-2 mx-3 wv-100">
+    <div class="search-bar d-block d-lg-none my-2 mx-3 wv-100">
       <input
         type="text"
         class="form-control"
@@ -97,7 +97,7 @@
     <MobileMenu
       v-if="showMenu"
       :items="items"
-      :key="showMenu"
+      :key="items"
       @setShowMenu="setShowMenu"
     />
   </header>
