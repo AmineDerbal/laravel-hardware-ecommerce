@@ -23,6 +23,12 @@ class ProductController extends Controller
 
     }
 
+    public function latest()
+    {
+        $products = Product::latest()->limit(30)->get();
+        return response()->json(ProductResource::collection($products));
+    }
+
     public function show($id)
     {
 
