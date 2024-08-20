@@ -13,6 +13,10 @@
   border: 1px solid rgba(0, 0, 0, 0.105);
 }
 
+.gray-bottom-border {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.105);
+}
+
 .hover-header-link:hover {
   color: var(--whb-top-bar-bg);
 }
