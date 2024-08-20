@@ -1,12 +1,15 @@
 <template>
-  <LayoutView> </LayoutView>
+  <LayoutView>
+    <HomeContent />
+  </LayoutView>
 </template>
 
 <script>
-import { LayoutView } from '@/components';
+import { LayoutView, HomeContent } from '@/components';
 export default {
   components: {
     LayoutView,
+    HomeContent,
   },
 };
 </script>
