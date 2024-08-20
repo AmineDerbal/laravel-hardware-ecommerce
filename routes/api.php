@@ -26,6 +26,10 @@ Route::controller(CategoryController::class)->group(function () {
     Route::get('categories/header', 'forHeader')->name('categories.header');
 });
 
+Route::controller(ProductController::class)->group(function () {
+    Route::get('products/latest', 'latest')->name('products.latest');
+});
+
 Route::controller(AuthController::class)->group(function () {
     Route::post('auth/login', 'login')->name('login');
     Route::post('auth/register', 'register')->name('register');
