@@ -1,9 +1,18 @@
 :root {
   --whb-top-bar-bg: #e30713;
+  --whb-red-bg: #e30713;
 }
 
 .whb-top-bar {
   background-color: var(--whb-top-bar-bg);
+}
+
+.whb-red-bg {
+  background-color: var(--whb-red-bg);
+}
+
+.whb-red-text {
+  color: var(--whb-red-bg);
 }
 
 .cursor-pointer {
