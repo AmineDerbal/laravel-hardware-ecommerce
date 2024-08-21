@@ -20,6 +20,7 @@ class AllProductsResource extends JsonResource
             'name' => $this->name,
             'code' => $this->code,
             'price' => $this->price,
+            'slug' => $this->slug,
             'stock' => $this->stock,
             'image_url' => $this->image_url,
             'category' => new CategoryParentResource($this->category),
