@@ -5,6 +5,7 @@ const useProductStore = defineStore({
   id: 'product',
   state: () => ({
     products: [],
+    latest: [],
     product: {
       id: null,
       name: null,
@@ -21,7 +22,7 @@ const useProductStore = defineStore({
     hasError: false,
   }),
   persist: {
-    paths: ['products'],
+    paths: ['products', 'latest'],
   },
 
   actions: {
@@ -63,6 +64,22 @@ const useProductStore = defineStore({
         const response = await axios.get(`/api/products/${id}`);
         this.product = response.data;
         this.product.category_id = this.product.category.id;
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return error.response;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async getLatest() {
+      this.isLoading = true;
+      this.hasError = false;
+      this.errors = {};
+      try {
+        const response = await axios.get('/api/products/latest');
+        this.latest = response.data;
         return response;
       } catch (error) {
         this.hasError = true;
