@@ -30,6 +30,10 @@ const routes = [
         path: 'category-products/:slug',
         name: 'category-products',
       },
+      {
+        path: 'products/:slug',
+        name: 'product-show',
+      },
     ],
   },
 
