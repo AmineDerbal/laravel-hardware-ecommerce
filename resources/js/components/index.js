@@ -8,6 +8,7 @@ import AdminCategoryForm from './backend/category/CategoryForm.vue';
 import AdminProductForm from './backend/product/ProductForm.vue';
 
 import LayoutView from './frontend/layouts/LayoutView.vue';
+import HomeContent from './frontend/home/HomeContent.vue';
 
 export {
   AdminLayoutView,
@@ -19,4 +20,5 @@ export {
   AdminCategoryForm,
   AdminProductForm,
   LayoutView,
+  HomeContent,
 };
