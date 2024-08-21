@@ -121,12 +121,16 @@ export default {
         header: 'Price',
         cell: ({ row }) => {
           const { price } = row.original;
-          return h('span', {}, `${price} $`);
+          return h('span', {}, `$ ${price}`);
         },
       },
       {
-        accessorKey: 'stock',
         header: 'Stock',
+        cell: ({ row }) => {
+          const { stock } = row.original;
+          const value = stock < 2 ? 'Unit' : 'Units';
+          return h('span', {}, `${stock} ${value}`);
+        },
       },
       {
         header: 'Action',
