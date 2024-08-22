@@ -4,7 +4,7 @@ import axios from '@/utils/axiosUtils';
 const useProductStore = defineStore({
   id: 'product',
   state: () => ({
-    products: [],
+    products: {},
     latest: [],
     product: {
       id: null,
@@ -38,6 +38,7 @@ const useProductStore = defineStore({
         images: [],
         category_id: null,
       };
+      this.errors = {};
     },
 
     async getProducts(page = 1) {

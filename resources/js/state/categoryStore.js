@@ -4,7 +4,7 @@ import axios from '@/utils/axiosUtils';
 const useCategoryStore = defineStore({
   id: 'category',
   state: () => ({
-    categories: [],
+    categories: {},
     selectCategories: [],
     headerCategories: [],
     category: {
@@ -22,11 +22,8 @@ const useCategoryStore = defineStore({
 
   actions: {
     clearCategory() {
-      this.category = {
-        id: null,
-        name: null,
-        parent_id: null,
-      };
+      this.category = {};
+      this.errors = {};
     },
     async getCategories(page = 1) {
       this.isLoading = true;
