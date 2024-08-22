@@ -22,7 +22,11 @@ const useCategoryStore = defineStore({
 
   actions: {
     clearCategory() {
-      this.category = {};
+      this.category = {
+        id: null,
+        name: null,
+        parent_id: null,
+      };
       this.errors = {};
     },
     async getCategories(page = 1) {
