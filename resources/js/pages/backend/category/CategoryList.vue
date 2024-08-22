@@ -26,7 +26,7 @@
         :meta="categories.meta"
         :onPageChange="onPageChange"
         :key="categories"
-        v-if="categories.data.length > 0 && !isLoading && !hasError"
+        v-if="categories"
       />
     </BRow>
   </AdminLayoutView>

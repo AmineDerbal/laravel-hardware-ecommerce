@@ -26,7 +26,7 @@
         :meta="products.meta"
         :onPageChange="onPageChange"
         :key="products"
-        v-if="products.data.length > 0 && !isLoading && !hasError"
+        v-if="products"
       />
     </BRow>
   </AdminLayoutView>
@@ -166,6 +166,7 @@ export default {
 
     onBeforeMount(async () => {
       await getProducts(page);
+      console.log(products.value);
     });
 
     return {
