@@ -8,6 +8,7 @@ use App\Http\Requests\Categories\StoreCategoryRequest;
 use App\Http\Requests\Categories\EditCategoryRequest;
 use App\Http\Resources\Category\AllCategoriesResource;
 use App\Http\Resources\Category\CategoryCollection;
+use App\Http\Resources\Category\CategoryParentResource;
 use App\Http\Resources\Category\HeaderCategoryResource;
 
 class CategoryController extends Controller
@@ -40,7 +41,7 @@ class CategoryController extends Controller
         ->get();
 
 
-        return response()->json($categories);
+        return response()->json(CategoryParentResource::collection($categories));
     }
 
     public function forHeader()
