@@ -96,7 +96,7 @@ export default {
         header: 'Name',
       },
       {
-        accessorKey: 'parent',
+        accessorKey: 'parent.name',
         header: 'Parent Category',
         cell: ({ row }) => {
           const parent = row.original.parent;
