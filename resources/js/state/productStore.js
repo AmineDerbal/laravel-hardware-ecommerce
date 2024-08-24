@@ -6,17 +6,7 @@ const useProductStore = defineStore({
   state: () => ({
     products: {},
     latest: [],
-    product: {
-      id: null,
-      name: null,
-      description: null,
-      price: null,
-      stock: null,
-      thumbnail: {},
-      image_url: null,
-      images: [],
-      category_id: null,
-    },
+    product: {},
     errors: {},
     isLoading: false,
     hasError: false,
@@ -64,10 +54,14 @@ const useProductStore = defineStore({
       try {
         const response = await axios.get(`/api/products/${id}`);
         this.product = response.data;
-        this.product.category_id = this.product.category.id;
+        this.product.category_id =
+          this.product.category && this.product.category.id
+            ? this.product.category.id
+            : null;
         return response;
       } catch (error) {
         this.hasError = true;
+        console.log(error);
         return error.response;
       } finally {
         this.isLoading = false;
