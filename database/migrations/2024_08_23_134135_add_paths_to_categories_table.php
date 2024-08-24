@@ -12,7 +12,7 @@ return new class () extends Migration {
     {
         Schema::table('categories', function (Blueprint $table) {
             $table->json('category_parent_path')->nullable();
-            $table->json('category_children_path')->nullable();
+
         });
     }
 
@@ -23,7 +23,7 @@ return new class () extends Migration {
     {
         Schema::table('categories', function (Blueprint $table) {
             $table->dropColumn('category_parent_path');
-            $table->dropColumn('category_children_path');
+
         });
     }
 };
