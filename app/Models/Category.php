@@ -16,14 +16,19 @@ class Category extends Model
         'code'
     ];
 
+
     public static function booted()
     {
         static::creating(function ($model) {
 
             $model->slug = Str::slug($model->name);
+            $model->category_parent_path = json_encode($model->buildCategoryParentPath());
+
         });
         static::updating(function ($model) {
             $model->slug = Str::slug($model->name);
+            $model->category_parent_path = json_encode($model->buildCategoryParentPath());
+
         });
     }
 
@@ -36,4 +41,27 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
+
+    protected function buildCategoryParentPath()
+    {
+        $parentArray = [
+            [
+
+                'name' => $this->name,
+                'slug' => $this->slug
+                ]
+        ];
+        $category = $this;
+        while(!is_null($category->parent)) {
+            $parentArray[] = [
+                'name' => $category->parent->name,
+                'slug' => $category->parent->slug
+            ];
+            $category = $category->parent;
+        }
+
+        return array_reverse($parentArray);
+    }
+
+
 }
