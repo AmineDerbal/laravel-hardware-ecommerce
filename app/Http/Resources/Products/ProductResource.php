@@ -24,6 +24,7 @@ class ProductResource extends JsonResource
             'stock' => $this->stock,
             'slug' => $this->slug,
             'image_url' => $this->image_url,
+            'category_id' => $this->category_id,
             'category' => new CategoryParentResource($this->category),
             'images' => AllProductImagesResource::collection($this->images),
         ];

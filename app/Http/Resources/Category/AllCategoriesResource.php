@@ -14,12 +14,13 @@ class AllCategoriesResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
+        $basicData = (new BasicCategoryResource($this->resource))->toArray($request);
+        return array_merge($basicData, [
             'code' => $this->code,
             'parent_id' => $this->parent_id,
             'parent' => new CategoryParentResource($this->parent),
-        ];
+            'category_parent_path' => $this->category_parent_path,
+        ]);
+
     }
 }

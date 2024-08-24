@@ -14,11 +14,11 @@ class HeaderCategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'slug' => $this->slug,
+        $basicData = (new BasicCategoryResource($this->resource))->toArray($request);
+
+        return array_merge($basicData, [
             'children' => CategoryChildrenResource::collection($this->children),
-        ];
+        ]);
+
     }
 }
