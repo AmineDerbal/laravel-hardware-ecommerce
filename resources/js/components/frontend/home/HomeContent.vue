@@ -29,7 +29,6 @@ export default {
 
     onBeforeMount(async () => {
       await fetchLatestProducts();
-      console.log('latestProducts', latestProducts.value);
     });
 
     return {
