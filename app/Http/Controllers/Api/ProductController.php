@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\Category;
 use App\Http\Requests\products\StoreRequest;
 use App\Http\Requests\products\EditRequest;
 use App\Http\Requests\products\UpdateThumbNailImageRequest;
@@ -35,6 +36,27 @@ class ProductController extends Controller
         $product = Product::with('category', 'images')->findOrFail($id);
 
         return response()->json(new ProductResource($product));
+
+    }
+
+    public function getCategoryProducts($slug)
+    {
+
+        $category = Category::where('slug', $slug)->first();
+
+        $category_children = buildCategoryChildrenPath($category);
+
+        // get All the products that are in the children categories
+
+        $products = Product::whereHas('category', function ($query) use ($category_children) {
+            $query->whereIn('slug', $category_children);
+        })->paginate(10);
+
+
+        return response()->json(ProductResource::collection($products));
+
+
+
 
     }
     public function store(StoreRequest $request)
