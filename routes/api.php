@@ -28,6 +28,7 @@ Route::controller(CategoryController::class)->group(function () {
 
 Route::controller(ProductController::class)->group(function () {
     Route::get('products/latest', 'latest')->name('products.latest');
+    Route::get('products/category-products/{slug}', 'getCategoryProducts')->name('products.category-products');
 });
 
 Route::controller(AuthController::class)->group(function () {
