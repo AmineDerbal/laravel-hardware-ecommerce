@@ -33,10 +33,7 @@ if(!function_exists('getChildrenRecursive')) {
     {
 
         foreach ($category->children as $child) {
-            $childrenArray[] = [
-                'name' => $child->name,
-                'slug' => $child->slug
-            ];
+            $childrenArray[] = $child->slug;
             if ($child->children->isNotEmpty()) {
                 getChildrenRecursive($child, $childrenArray);
             }
@@ -50,10 +47,10 @@ if(!function_exists('getChildrenRecursive')) {
 if(!function_exists('buildCategoryChildrenPath')) {
     function buildCategoryChildrenPath(Category $category): array
     {
-        $childrenArray = [[
-            'name' => $category->name,
-            'slug' => $category->slug
-        ]];
+        $childrenArray = [
+
+             $category->slug
+        ];
         getChildrenRecursive($category, $childrenArray);
 
         return $childrenArray;
