@@ -56,3 +56,27 @@ if(!function_exists('buildCategoryChildrenPath')) {
         return $childrenArray;
     }
 }
+
+
+if(!function_exists('buildCategoryParentPath')) {
+    function buildCategoryParentPath($category)
+    {
+        $parentArray = [
+            [
+
+                'name' => $category->name,
+                'slug' => $category->slug
+                ]
+        ];
+
+        while(!is_null($category->parent)) {
+            $parentArray[] = [
+                'name' => $category->parent->name,
+                'slug' => $category->parent->slug
+            ];
+            $category = $category->parent;
+        }
+
+        return array_reverse($parentArray);
+    }
+}
