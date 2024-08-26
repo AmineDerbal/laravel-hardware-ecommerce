@@ -11,6 +11,7 @@ use App\Http\Requests\products\EditRequest;
 use App\Http\Requests\products\UpdateThumbNailImageRequest;
 use App\Http\Resources\Products\ProductResource;
 use App\Http\Resources\Products\ProductCollection;
+use App\Http\Resources\Products\ProductCategoryCollection;
 
 class ProductController extends Controller
 {
@@ -46,17 +47,16 @@ class ProductController extends Controller
 
         $category_children = buildCategoryChildrenPath($category);
 
+
         // get All the products that are in the children categories
 
         $products = Product::whereHas('category', function ($query) use ($category_children) {
             $query->whereIn('slug', $category_children);
-        })->paginate(10);
-
-
-        return response()->json(ProductResource::collection($products));
+        })->paginate(9);
 
 
 
+        return response()->json(new ProductCategoryCollection($products));
 
     }
     public function store(StoreRequest $request)
