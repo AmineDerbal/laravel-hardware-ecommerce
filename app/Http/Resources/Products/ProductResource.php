@@ -16,17 +16,11 @@ class ProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'code' => $this->code,
-            'price' => $this->price,
-            'stock' => $this->stock,
-            'slug' => $this->slug,
-            'image_url' => $this->image_url,
-            'category_id' => $this->category_id,
+        $basicData = (new BasicProductResource($this->resource))->toArray($request);
+        return array_merge($basicData, [
             'category' => new CategoryParentResource($this->category),
             'images' => AllProductImagesResource::collection($this->images),
-        ];
+        ]);
+
     }
 }
