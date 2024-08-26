@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { onBeforeMount, computed, h } from 'vue';
+import { onBeforeMount, computed, h, onUpdated } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useProductStore } from '@/state';
@@ -64,14 +64,13 @@ export default {
     const products = computed(() => store.products);
     const isLoading = computed(() => store.isLoading);
     const hasError = computed(() => store.hasError);
-    const page = route.query.page || 1;
+
+    const getPage = () => {
+      return route.query.page || 1;
+    };
 
     const onPageChange = (page) => {
-      router
-        .push({ name: 'admin-product-list', query: { page: page } })
-        .then(() => {
-          window.location.reload();
-        });
+      router.push({ name: 'admin-product-list', query: { page: page } });
     };
     const getProducts = async (page) => {
       await store.getProducts(page);
@@ -80,7 +79,7 @@ export default {
     const handleDelete = async (id) => {
       const response = await store.deleteProduct(id);
       if (response.status === 200 || response.status === 201) {
-        await getProducts(page);
+        await getProducts(getPage());
         toast.success(response.data.message, { timeout: 2000 });
       } else {
         toast.error('Failed to delete the product');
@@ -165,8 +164,11 @@ export default {
     };
 
     onBeforeMount(async () => {
-      await getProducts(page);
-      console.log(products.value);
+      await getProducts(getPage());
+    });
+
+    onUpdated(async () => {
+      await getProducts(getPage());
     });
 
     return {

@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { computed, onBeforeMount, h } from 'vue';
+import { computed, onBeforeMount, h, onUpdated } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import {
@@ -62,24 +62,21 @@ export default {
     const categories = computed(() => store.categories);
     const isLoading = computed(() => store.isLoading);
     const hasError = computed(() => store.hasError);
-    const page = route.query.page || 1;
+
+    const getPage = () => route.query.page || 1;
 
     const getCategories = async (page) => {
       await store.getCategories(page);
     };
 
     const onPageChange = (page) => {
-      router
-        .push({ name: 'admin-category-list', query: { page: page } })
-        .then(() => {
-          window.location.reload();
-        });
+      router.push({ name: 'admin-category-list', query: { page: page } });
     };
 
     const handleDelete = async (id) => {
       const response = await store.deleteCategory(id);
       if (response.status === 200 || response.status === 201) {
-        await getCategories();
+        await getCategories(getPage());
         toast.success(response.data.message, { timeout: 2000 });
       } else {
         toast.error('Failed to delete the category');
@@ -137,7 +134,11 @@ export default {
 
     // Fetch categories on mount
     onBeforeMount(async () => {
-      await getCategories(page);
+      await getCategories(getPage());
+    });
+
+    onUpdated(async () => {
+      await getCategories(getPage());
     });
 
     return {
