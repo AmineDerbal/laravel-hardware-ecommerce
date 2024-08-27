@@ -7,12 +7,14 @@ const useProductStore = defineStore({
     products: {},
     latest: [],
     product: {},
+    categoryProducts: {},
+    categoryProductsPerPage: 9,
     errors: {},
     isLoading: false,
     hasError: false,
   }),
   persist: {
-    paths: ['products', 'latest'],
+    paths: ['products', 'latest', 'categoryProductsPerPage'],
   },
 
   actions: {
@@ -29,6 +31,10 @@ const useProductStore = defineStore({
         category_id: null,
       };
       this.errors = {};
+    },
+
+    setCategoryProductsPerPage(perPage) {
+      this.categoryProductsPerPage = perPage;
     },
 
     async getProducts(page = 1) {
@@ -75,6 +81,24 @@ const useProductStore = defineStore({
       try {
         const response = await axios.get('/api/products/latest');
         this.latest = response.data;
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return error.response;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async getCategoryProducts(slug, page = 1) {
+      this.isLoading = true;
+      this.hasError = false;
+      this.errors = {};
+      try {
+        const response = await axios.get(
+          `/api/products/category-products/${slug}?page=${page}`,
+        );
+        this.categoryProducts = response.data;
         return response;
       } catch (error) {
         this.hasError = true;
