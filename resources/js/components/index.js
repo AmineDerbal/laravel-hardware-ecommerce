@@ -9,6 +9,8 @@ import AdminProductForm from './backend/product/ProductForm.vue';
 
 import LayoutView from './frontend/layouts/LayoutView.vue';
 import HomeContent from './frontend/home/HomeContent.vue';
+import ProductsGrid from './frontend/products/LatestList.vue';
+import PaginationUtils from './utils/PaginationUtils.vue';
 
 export {
   AdminLayoutView,
@@ -21,4 +23,6 @@ export {
   AdminProductForm,
   LayoutView,
   HomeContent,
+  ProductsGrid,
+  PaginationUtils,
 };
