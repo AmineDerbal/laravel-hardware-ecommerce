@@ -46,7 +46,7 @@ class ProductController extends Controller
         $category = Category::where('slug', $slug)->first();
 
         $category_children = buildCategoryChildrenPath($category);
-
+        $category_parent_path = buildCategoryParentPath($category);
 
         // get All the products that are in the children categories
 
@@ -54,9 +54,10 @@ class ProductController extends Controller
             $query->whereIn('slug', $category_children);
         })->paginate(9);
 
-
-
-        return response()->json(new ProductCategoryCollection($products));
+        return response()->json([
+            'products' => new ProductCategoryCollection($products),
+            'category_parent_path' => $category_parent_path
+        ]);
 
     }
     public function store(StoreRequest $request)
