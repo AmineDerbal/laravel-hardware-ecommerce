@@ -22,8 +22,12 @@
         :data="categories.data"
         :columns="columns"
         :customGlobalFilter="customGlobalFilter"
-        :links="categories.links"
+        :key="categories"
+        v-if="categories"
+      />
+      <PaginationUtils
         :meta="categories.meta"
+        :links="categories.links"
         :onPageChange="onPageChange"
         :key="categories"
         v-if="categories"
@@ -42,6 +46,7 @@ import {
   AdminDeleteButton,
   AdminEditButton,
   AdminTable,
+  PaginationUtils,
 } from '@/components';
 import { useCategoryStore } from '@/state';
 
@@ -52,6 +57,7 @@ export default {
     AdminDeleteButton,
     AdminEditButton,
     AdminTable,
+    PaginationUtils,
   },
 
   setup() {

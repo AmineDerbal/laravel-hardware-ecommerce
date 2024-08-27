@@ -22,13 +22,17 @@
         :data="products.data"
         :columns="columns"
         :customGlobalFilter="customGlobalFilter"
-        :links="products.links"
-        :meta="products.meta"
-        :onPageChange="onPageChange"
         :key="products"
         v-if="products"
       />
     </BRow>
+    <PaginationUtils
+      :meta="products.meta"
+      :links="products.links"
+      :onPageChange="onPageChange"
+      :key="products"
+      v-if="products"
+    />
   </AdminLayoutView>
 </template>
 
@@ -44,6 +48,7 @@ import {
   AdminEditButton,
   AdminShowButton,
   AdminTable,
+  PaginationUtils,
 } from '@/components';
 
 export default {
@@ -54,6 +59,7 @@ export default {
     AdminEditButton,
     AdminShowButton,
     AdminTable,
+    PaginationUtils,
   },
 
   setup() {
