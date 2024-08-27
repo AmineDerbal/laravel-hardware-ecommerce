@@ -19,19 +19,6 @@ export default {
       type: Array,
       required: true,
     },
-    meta: {
-      type: Object,
-      required: true,
-    },
-    links: {
-      type: Object,
-      required: true,
-    },
-    onPageChange: {
-      type: Function,
-      required: true,
-    },
-
     customGlobalFilter: {
       type: Function,
       required: false,
@@ -43,7 +30,6 @@ export default {
   setup(props) {
     const sorting = ref([]);
     const filter = ref('');
-    const currentPage = ref(props.meta.current_page || 1);
 
     const table = useVueTable({
       data: props.data,
@@ -74,37 +60,8 @@ export default {
         : {}),
     });
 
-    const paginationRange = computed(() => {
-      const totalPages = props.meta?.last_page || 1;
-      const visiblePages = 5;
-      const half = Math.floor(visiblePages / 2);
-
-      if (totalPages <= visiblePages) {
-        return Array.from({ length: totalPages }, (_, i) => i + 1);
-      }
-
-      let start = Math.max(currentPage.value - half, 1);
-      let end = Math.min(start + visiblePages - 1, totalPages);
-
-      if (end - start < visiblePages - 1) {
-        start = Math.max(end - visiblePages + 1, 1);
-      }
-
-      const range = Array.from(
-        { length: end - start + 1 },
-        (_, i) => start + 1,
-      );
-
-      if (start > 1) range.unshift('...');
-      if (end < totalPages) range.push('...');
-
-      return range;
-    });
-
     return {
       table,
-      paginationRange,
-      currentPage,
       filter,
     };
   },
@@ -177,47 +134,4 @@ export default {
       </table>
     </div>
   </BCol>
-  <div class="d-flex justify-content-end">
-    <div class="pagination-wrap hstack gap-2">
-      <p class="mb-0">
-        Page {{ currentPage }} of {{ meta.last_page }} -
-        {{ table.getFilteredRowModel().rows.length }} results
-      </p>
-      <BLink
-        class="page-item pagination-prev"
-        href="#"
-        :disabled="!links.prev"
-        @click="onPageChange(links.prev)"
-      >
-        Previous
-      </BLink>
-
-      <ul class="pagination listjs-pagination mb-0">
-        <li
-          v-for="page in paginationRange"
-          :key="page"
-          :class="[
-            'page-item',
-            { active: page === currentPage, disabled: page === '...' },
-          ]"
-        >
-          <BLink
-            class="page-link"
-            href="#"
-            @click.prevent="onPageChange(page)"
-          >
-            {{ page }}
-          </BLink>
-        </li>
-      </ul>
-      <BLink
-        class="page-item pagination-next"
-        href="#"
-        :disabled="!links.next"
-        @click="onPageChange(links.next)"
-      >
-        Next
-      </BLink>
-    </div>
-  </div>
 </template>
