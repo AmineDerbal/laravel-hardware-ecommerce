@@ -1,6 +1,7 @@
 import {
   HomeView,
   LoginView,
+  CategoryProductsList,
   AdminCategoryList,
   AdminCategoryCreate,
   AdminCategoryEdit,
@@ -24,11 +25,13 @@ const routes = [
     children: [
       {
         path: '',
+        name: 'homeView',
         component: HomeView,
       },
       {
         path: 'category-products/:slug',
         name: 'category-products',
+        component: CategoryProductsList,
       },
       {
         path: 'products/:slug',
