@@ -16,9 +16,10 @@ class ProductCategoryCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
+
         return [
             'data' => $this->collection->transform(function ($resource) {
-                return new ProductCategoryResource($resource);
+                return new AllProductsResource($resource);
             }),
             'meta' => [
                 'current_page' => $this->currentPage(),
