@@ -34,7 +34,7 @@
           <div class="text-end">
             <BLink
               href="javascript:void(0);"
-              class="btn whb-red-bg text-uppercase fs-16 text-white w-100"
+              class="btn btn-outline-danger whb-red-bg text-uppercase fs-16 text-white w-100"
               >Add to cart</BLink
             >
           </div>
@@ -56,6 +56,7 @@ export default {
 
   setup() {
     const router = useRouter();
+    console.log('ok');
 
     const viewProduct = (slug) => {
       router.push({ name: 'product-show', params: { slug } });

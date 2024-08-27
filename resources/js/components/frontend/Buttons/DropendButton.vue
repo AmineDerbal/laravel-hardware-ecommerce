@@ -53,13 +53,10 @@ export default {
   },
   methods: {
     toggleDropend() {
-      console.log('start');
       this.isDropdownVisible = true;
-      console.log(this.isDropdownVisible);
     },
     closeDropend() {
       this.isDropdownVisible = false;
-      console.log(this.isDropdownVisible);
     },
     goToCategoryProductPage(slug) {
       this.$router.push({ name: 'category-products', params: { slug } });
