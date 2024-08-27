@@ -10,12 +10,7 @@
             class="navbar-toggler text-white bodrer-0 outline-0"
             type="button"
             v-if="category.children.length === 0"
-            @click="
-              $router.push({
-                name: 'category-products',
-                params: { slug: category.slug },
-              })
-            "
+            @click="goToCategoryProductPage(category.slug)"
           >
             {{ category.name }}
           </button>
@@ -41,6 +36,12 @@ export default {
     items: {
       type: Array,
       required: true,
+    },
+  },
+
+  methods: {
+    goToCategoryProductPage(slug) {
+      this.$router.push({ name: 'category-products', params: { slug } });
     },
   },
 };

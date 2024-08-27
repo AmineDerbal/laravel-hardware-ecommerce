@@ -37,12 +37,7 @@
           <div
             v-if="item.children.length < 1"
             class="p-3 d-flex w-100 align-items-center gray-border cursor-pointer"
-            @click="
-              $router.push({
-                name: 'category-products',
-                params: { slug: item.slug },
-              })
-            "
+            @click="goToCategoryProductPage(item.slug)"
           >
             <p class="fw-bold text-uppercase hover-header-link">
               {{ item.name }}
@@ -76,6 +71,9 @@ export default {
   methods: {
     setShowMenu() {
       this.$emit('setShowMenu', false);
+    },
+    goToCategoryProductPage(slug) {
+      this.$router.push({ name: 'category-products', params: { slug } });
     },
   },
 };
