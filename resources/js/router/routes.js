@@ -2,6 +2,7 @@ import {
   HomeView,
   LoginView,
   CategoryProductsList,
+  ProductShow,
   AdminCategoryList,
   AdminCategoryCreate,
   AdminCategoryEdit,
@@ -36,6 +37,7 @@ const routes = [
       {
         path: 'products/:slug',
         name: 'product-show',
+        component: ProductShow,
       },
     ],
   },
