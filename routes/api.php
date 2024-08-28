@@ -29,6 +29,8 @@ Route::controller(CategoryController::class)->group(function () {
 Route::controller(ProductController::class)->group(function () {
     Route::get('products/latest', 'latest')->name('products.latest');
     Route::get('products/category-products/{slug}', 'getCategoryProducts')->name('products.category-products');
+    Route::get('products/{slug}', 'showClientProduct')->name('products.show');
+
 });
 
 Route::controller(AuthController::class)->group(function () {
@@ -48,17 +50,17 @@ Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])-
     });
 
     Route::controller(ProductController::class)->group(function () {
-        Route::get('products', 'index')->name('products');
-        Route::get('products/{id}', 'show')->name('products.show');
-        Route::post('products/store', 'store')->name('products.store');
-        Route::post('products/update/thumbnail', 'updateThumbnailImage')->name('products.update.thumbnail');
-        Route::put('products/update', 'update')->name('products.update');
-        Route::delete('products/{id}', 'destroy')->name('products.destroy');
+        Route::get('admin/products', 'index')->name('products.admin');
+        Route::get('admin/products/{id}', 'show')->name('products.admin.show');
+        Route::post('admin/products/store', 'store')->name('products.admin.store');
+        Route::post('admin/products/update/thumbnail', 'updateThumbnailImage')->name('products.admin.update.thumbnail');
+        Route::put('admin/products/update', 'update')->name('products.admin.update');
+        Route::delete('admin/products/{id}', 'destroy')->name('products.admin.destroy');
     });
 
     Route::controller(ProductImageController::class)->group(function () {
-        Route::post('products/store/images', 'store')->name('products.store.images');
-        Route::post('products/update/images', 'update')->name('products.update.images');
-        Route::delete('products/images/{id}', 'destroy')->name('products.images.destroy');
+        Route::post('admin/products/store/images', 'store')->name('products.admin.store.images');
+        Route::post('admin/products/update/images', 'update')->name('products.admin.update.images');
+        Route::delete('admin/products/images/{id}', 'destroy')->name('products.admin.images.destroy');
     });
 });
