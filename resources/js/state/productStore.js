@@ -4,9 +4,9 @@ import axios from '@/utils/axiosUtils';
 const useProductStore = defineStore({
   id: 'product',
   state: () => ({
-    products: {},
+    products: null,
     latest: [],
-    product: {},
+    product: null,
     categoryProducts: {},
     categoryProductsPerPage: 9,
     errors: {},
@@ -42,8 +42,9 @@ const useProductStore = defineStore({
       this.hasError = false;
       this.errors = {};
       try {
-        const response = await axios.get(`/api/products?page=${page}`);
+        const response = await axios.get(`/api/admin/products?page=${page}`);
         this.products = response.data;
+        console.log(response.data);
         return response;
       } catch (error) {
         this.hasError = true;
@@ -58,7 +59,7 @@ const useProductStore = defineStore({
       this.hasError = false;
       this.errors = {};
       try {
-        const response = await axios.get(`/api/products/${id}`);
+        const response = await axios.get(`/api/admin/products/${id}`);
         this.product = response.data;
         this.product.category_id =
           this.product.category && this.product.category.id
@@ -67,7 +68,22 @@ const useProductStore = defineStore({
         return response;
       } catch (error) {
         this.hasError = true;
-        console.log(error);
+        return error.response;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async getClientProudct(slug) {
+      this.isLoading = true;
+      this.hasError = false;
+      this.errors = {};
+      try {
+        const response = await axios.get(`/api/products/${slug}`);
+        this.product = response.data;
+        return response;
+      } catch (error) {
+        this.hasError = true;
         return error.response;
       } finally {
         this.isLoading = false;
@@ -115,8 +131,8 @@ const useProductStore = defineStore({
       let response;
       try {
         response = this.product.id
-          ? await axios.put(`/api/products/update`, this.product)
-          : await axios.post('/api/products/store', this.product, {
+          ? await axios.put(`/api/admin/products/update`, this.product)
+          : await axios.post('/api/admin/products/store', this.product, {
               headers: {
                 'Content-Type': 'multipart/form-data',
               },
@@ -141,7 +157,7 @@ const useProductStore = defineStore({
       try {
         const { id, thumbnail } = this.product;
         const response = await axios.post(
-          `/api/products/update/thumbnail`,
+          `/api/admin/products/update/thumbnail`,
           { id, thumbnail },
           {
             headers: {
@@ -165,7 +181,7 @@ const useProductStore = defineStore({
       this.isLoading = true;
       this.hasError = false;
       try {
-        const response = await axios.delete(`/api/products/${id}`);
+        const response = await axios.delete(`/api/admin/products/${id}`);
         return response;
       } catch (error) {
         this.hasError = true;
@@ -180,11 +196,15 @@ const useProductStore = defineStore({
       this.hasError = false;
 
       try {
-        const response = await axios.post(`/api/products/store/images`, data, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+        const response = await axios.post(
+          `/api/admin/products/store/images`,
+          data,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
           },
-        });
+        );
         return response;
       } catch (error) {
         this.hasError = true;
@@ -198,11 +218,15 @@ const useProductStore = defineStore({
       this.isLoading = true;
       this.hasError = false;
       try {
-        const response = await axios.post(`/api/products/update/images`, data, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+        const response = await axios.post(
+          `/api/admin/products/update/images`,
+          data,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
           },
-        });
+        );
         return response;
       } catch (error) {
         this.hasError = true;
@@ -216,7 +240,7 @@ const useProductStore = defineStore({
       this.isLoading = true;
       this.hasError = false;
       try {
-        const response = await axios.delete(`/api/products/images/${id}`);
+        const response = await axios.delete(`/api/admin/products/images/${id}`);
         return response;
       } catch (error) {
         this.hasError = true;
