@@ -40,6 +40,16 @@ class ProductController extends Controller
 
     }
 
+    public function showClientProduct($slug)
+    {
+        $product = Product::where('slug', $slug)->first();
+        $category = Category::findOrFail($product->category_id);
+        $category_parent_path = buildCategoryParentPath($category);
+
+        return response()->json(['product' => new ProductResource($product),'category_parent_path' => $category_parent_path ]);
+
+    }
+
     public function getCategoryProducts($slug)
     {
 
