@@ -14,27 +14,30 @@
         ></BCol>
         <BCol lg="10">
           <div class="mb-3">
-            <span>
-              <RouterLink to="/">Home</RouterLink>
-              /
-            </span>
-            <span
-              v-for="(category, index) in categoryProducts.category_parent_path"
-              :key="category.slug"
-            >
-              <RouterLink
-                :to="{
-                  name: 'category-products',
-                  params: { slug: category.slug },
-                }"
-                >{{ category.name }}</RouterLink
-              >
-              <span
-                v-if="index < categoryProducts.category_parent_path.length - 1"
-              >
-                /
-              </span>
-            </span>
+            <nav aria-label="breadcrumb">
+              <BBreadcrumb>
+                <BBreadcrumbItem>
+                  <RouterLink to="/">Home</RouterLink></BBreadcrumbItem
+                >
+                <BBreadcrumbItem
+                  v-for="category in categoryProducts.category_parent_path"
+                  :key="category.slug"
+                >
+                  <RouterLink
+                    :to="{
+                      name: 'category-products',
+                      params: { slug: category.slug },
+                    }"
+                    >{{ category.name }}</RouterLink
+                  >
+                </BBreadcrumbItem>
+                <BBreadcrumbItem active
+                  ><span class="text-primary"
+                    >Page {{ page }}</span
+                  ></BBreadcrumbItem
+                >
+              </BBreadcrumb>
+            </nav>
           </div>
           <ProductsGrid :items="categoryProducts.products.data" />
           <PaginationUtils
@@ -84,7 +87,6 @@ export default {
 
     onBeforeMount(async () => {
       await store.getCategoryProducts(getSlug(), getPage());
-      console.log(categoryProducts.value);
     });
 
     onUpdated(async () => {
@@ -96,6 +98,7 @@ export default {
       isLoading,
       hasError,
       onPageChange,
+      page: getPage(),
     };
   },
 };
