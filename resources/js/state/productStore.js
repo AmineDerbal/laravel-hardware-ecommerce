@@ -6,7 +6,7 @@ const useProductStore = defineStore({
   state: () => ({
     products: null,
     latest: [],
-    product: null,
+    product: {},
     categoryProducts: {},
     categoryProductsPerPage: 9,
     errors: {},
