@@ -25,7 +25,12 @@
 .gray-bottom-border {
   border-bottom: 1px solid rgba(0, 0, 0, 0.105);
 }
-
+.gray-top-border {
+  border-top: 1px solid rgba(0, 0, 0, 0.105);
+}
+.red-top-border {
+  border-top: 1px solid var(--whb-red-bg);
+}
 .hover-header-link:hover {
   color: var(--whb-top-bar-bg);
 }
