@@ -56,7 +56,6 @@ export default {
 
   setup() {
     const router = useRouter();
-    console.log('ok');
 
     const viewProduct = (slug) => {
       router.push({ name: 'product-show', params: { slug } });
