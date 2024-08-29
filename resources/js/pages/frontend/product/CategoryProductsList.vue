@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { computed, onBeforeMount, onUpdated } from 'vue';
+import { computed, onBeforeMount, onUpdated, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import {
   LayoutView,
@@ -76,6 +76,7 @@ export default {
 
     const getPage = () => route.query.page || 1;
     const getSlug = () => route.params.slug;
+    const page = ref(getPage());
 
     const onPageChange = (page) => {
       router.push({
@@ -86,11 +87,12 @@ export default {
     };
 
     onBeforeMount(async () => {
-      await store.getCategoryProducts(getSlug(), getPage());
+      await store.getCategoryProducts(getSlug(), page.value);
     });
 
     onUpdated(async () => {
-      await store.getCategoryProducts(getSlug(), getPage());
+      page.value = getPage();
+      await store.getCategoryProducts(getSlug(), page.value);
     });
 
     return {
@@ -98,7 +100,7 @@ export default {
       isLoading,
       hasError,
       onPageChange,
-      page: getPage(),
+      page,
     };
   },
 };
