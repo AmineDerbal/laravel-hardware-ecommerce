@@ -14,6 +14,8 @@
     "vue": "^3.4.33"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^41.3.1",
+    "@ckeditor/ckeditor5-vue": "^5.1.0",
     "@tanstack/vue-table": "^8.19.3",
     "@zhuowenli/vue-feather-icons": "^5.0.2",
     "aos": "^2.3.4",
