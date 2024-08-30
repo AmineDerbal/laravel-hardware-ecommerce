@@ -20,6 +20,7 @@ class ProductResource extends JsonResource
         return array_merge($basicData, [
             'category' => new CategoryParentResource($this->category),
             'images' => AllProductImagesResource::collection($this->images),
+            'description' => $this->description
         ]);
 
     }
