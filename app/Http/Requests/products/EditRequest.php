@@ -27,7 +27,7 @@ class EditRequest extends FormRequest
             'id' => 'required|exists:products,id',
             'name' => 'nullable|string|max:255|unique:products,name,' . $product->id,
             'category_id' => 'nullable|exists:categories,id',
-            'description' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
             'price' => 'nullable|numeric|gt:0',
             'stock' => 'nullable|integer|min:0',
         ];
