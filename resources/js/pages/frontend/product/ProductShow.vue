@@ -93,7 +93,9 @@
           <span class="text-uppercase fs-16 fw-bold red-top-border"
             >Description</span
           >
-          <div class="description"></div>
+        </div>
+        <div class="description px-5">
+          <div v-html="product.description"></div>
         </div>
       </div>
     </div>
