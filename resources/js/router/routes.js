@@ -12,22 +12,32 @@ import {
   AdminProductEdit,
   AdminDashboard,
 } from '../pages';
+import { useUserStore } from '@/state';
 
 const routes = [
   {
-    path: '/login',
-    name: 'login',
-    component: LoginView,
-  },
-
-  {
     path: '/',
     name: 'home',
+    redirect: { name: 'homeView' },
     children: [
       {
         path: '',
         name: 'homeView',
         component: HomeView,
+      },
+      {
+        path: 'login',
+        name: 'login',
+        component: LoginView,
+        beforeEnter: (to, from, next) => {
+          const userStore = useUserStore();
+
+          if (userStore.user.isAuthenticated) {
+            next({ name: 'home' });
+          } else {
+            next();
+          }
+        },
       },
       {
         path: 'category-products/:slug',
