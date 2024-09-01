@@ -1,4 +1,4 @@
-const LoginView = () => import('./auth/LoginView.vue');
+const LoginView = () => import('./frontend/auth/LoginView.vue');
 const HomeView = () => import('./frontend/home/HomeView.vue');
 const CategoryProductsList = () =>
   import('./frontend/product/CategoryProductsList.vue');
