@@ -117,6 +117,7 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { LayoutView } from '@/components';
 import { useUserStore } from '@/state';
+import { checkIsAuthenticated } from '@/utils/authUtils';
 
 export default {
   name: 'LoginView',
@@ -142,20 +143,12 @@ export default {
       showPassword.value = !showPassword.value;
     };
 
-    const checkIsAuthenticated = () => {
-      return user.value.isAuthenticated &&
-        user.value.name &&
-        user.value.email === email.value
-        ? true
-        : false;
-    };
-
     const handleSubmit = async () => {
       await userStore.loginUser({
         email: email.value,
         password: password.value,
       });
-      if (checkIsAuthenticated()) {
+      if (checkIsAuthenticated(user) && user.value.email === email.value) {
         router.push({ name: 'home' });
       }
     };
