@@ -94,8 +94,7 @@
                 </div>
                 <div class="mt-4">
                   <BButton
-                    variant="success"
-                    class="w-100"
+                    class="w-100 whb-red-bg"
                     type="submit"
                     @click="handleSubmit"
                     :disabled="isLoading"
@@ -117,25 +116,17 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { LayoutView } from '@/components';
 import { useUserStore } from '@/state';
-import { checkIsAuthenticated } from '@/utils/authUtils';
+import { handleLoginSubmit } from '@/utils/authUtils';
 
 export default {
   name: 'LoginView',
   components: { LayoutView },
-  beforeCreate() {
-    const userStore = useUserStore();
-    if (userStore.user.isAuthenticated) {
-      this.$router.push({ name: 'home' });
-    }
-  },
-
   setup() {
     const router = useRouter();
     const userStore = useUserStore();
     const email = ref('admin@gmail.com');
     const password = ref('admin123');
     const showPassword = ref(false);
-    const user = computed(() => userStore.user);
     const isLoading = computed(() => userStore.isLoading);
     const errors = computed(() => userStore.errors);
 
@@ -144,11 +135,13 @@ export default {
     };
 
     const handleSubmit = async () => {
-      await userStore.loginUser({
-        email: email.value,
-        password: password.value,
-      });
-      if (checkIsAuthenticated(user) && user.value.email === email.value) {
+      const result = await handleLoginSubmit(
+        userStore,
+        email.value,
+        password.value,
+      );
+
+      if (result) {
         router.push({ name: 'home' });
       }
     };
