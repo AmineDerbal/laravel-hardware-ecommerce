@@ -44,7 +44,6 @@ const useProductStore = defineStore({
       try {
         const response = await axios.get(`/api/admin/products?page=${page}`);
         this.products = response.data;
-        console.log(response.data);
         return response;
       } catch (error) {
         this.hasError = true;

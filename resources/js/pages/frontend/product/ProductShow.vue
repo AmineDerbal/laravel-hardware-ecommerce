@@ -134,8 +134,6 @@ export default {
 
     onBeforeMount(async () => {
       await getProduct();
-      console.log(product.value);
-      console.log(categoryParentPath.value);
     });
 
     return { product, categoryParentPath, productNumber, setProductNumber };
