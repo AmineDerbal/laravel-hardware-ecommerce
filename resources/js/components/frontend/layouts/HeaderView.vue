@@ -37,7 +37,10 @@
         </div>
         <div class="user-info">
           <div class="d-flex align-items-center gap-2">
-            <i class="ri-user-line fs-24"></i>
+            <i
+              class="ri-user-line fs-24 cursor-pointer"
+              @click="handleUserClick"
+            ></i>
             <div class="position-relative">
               <i class="ri-clipboard-line fs-24"></i>
               <span
@@ -55,7 +58,7 @@
         class="d-flex d-lg-none align-items-center justify-content-between mx-2"
       >
         <div
-          class="menu position-relative"
+          class="cursor-pointer position-relative"
           @click="setShowMenu(true)"
         >
           <i class="ri-menu-line fs-24"></i>
@@ -100,22 +103,49 @@
       :key="items"
       @setShowMenu="setShowMenu"
     />
+    <LoginModal
+      v-if="showLoginModal"
+      :key="showLoginModal"
+      :userStore="userStore"
+      @setShowLoginModal="setShowLoginModal"
+    />
   </header>
 </template>
 <script>
 import { computed, onBeforeMount } from 'vue';
-import { useLayoutStore, useCategoryStore } from '@/state';
+import { useLayoutStore, useCategoryStore, useUserStore } from '@/state';
+import { checkIsAuthenticated } from '@/utils/authUtils';
 import Navbar from './NavbarView.vue';
 import MobileMenu from './MobileMenu.vue';
+import LoginModal from '../modals/LoginModal.vue';
 
 export default {
-  components: { Navbar, MobileMenu },
+  components: { Navbar, MobileMenu, LoginModal },
 
   setup() {
     const layoutStore = useLayoutStore();
     const categoryStore = useCategoryStore();
+    const userStore = useUserStore();
     const items = computed(() => categoryStore.headerCategories);
+    const user = computed(() => userStore.user);
     const showMenu = computed(() => layoutStore.layout.showMenu);
+    const showLoginModal = computed(() => layoutStore.layout.showLoginModal);
+
+    const setShowMenu = (value) => {
+      layoutStore.setShowMenu(value);
+    };
+
+    const setShowLoginModal = (value) => {
+      layoutStore.setShowLoginModal(value);
+    };
+
+    const handleUserClick = () => {
+      if (checkIsAuthenticated(user.value)) {
+        return;
+      }
+
+      setShowLoginModal(true);
+    };
 
     const getHeaderCategories = async () => {
       await categoryStore.getHeaderCategories();
@@ -124,19 +154,21 @@ export default {
     onBeforeMount(async () => {
       await getHeaderCategories();
     });
-    const setShowMenu = (value) => {
-      layoutStore.setShowMenu(value);
-    };
 
-    return { setShowMenu, showMenu, items };
+    return {
+      setShowMenu,
+      showMenu,
+      items,
+      showLoginModal,
+      handleUserClick,
+      setShowLoginModal,
+      userStore,
+    };
   },
 };
 </script>
 <style scoped>
 .badge-rounded {
   border-radius: 50%;
-}
-.menu {
-  cursor: pointer;
 }
 </style>
