@@ -7,12 +7,8 @@
       class="py-3"
       :key="categoryProducts"
     >
-      <BRow class="mb-3">
-        <BCol
-          class="d-none d-lg-block"
-          lg="2"
-        ></BCol>
-        <BCol lg="10">
+      <BRow class="mb-3 mx-0">
+        <div class="d-none d-lg-block">
           <div class="mb-3">
             <nav aria-label="breadcrumb">
               <BBreadcrumb>
@@ -46,7 +42,7 @@
             :onPageChange="onPageChange"
             :isRed="true"
           />
-        </BCol>
+        </div>
       </BRow>
     </div>
   </LayoutView>
