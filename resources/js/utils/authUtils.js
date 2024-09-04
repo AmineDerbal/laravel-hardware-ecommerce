@@ -2,9 +2,26 @@ const checkIsAuthenticated = (user) => {
   return user.isAuthenticated && user.name && user.email ? true : false;
 };
 
-const handleLoginSubmit = async (userStore, email, password) => {
-  await userStore.loginUser({ email, password });
+const handleLoginSubmit = async (userStore, userData) => {
+  await userStore.loginUser(userData);
   return checkIsAuthenticated(userStore.user);
 };
 
-export { checkIsAuthenticated, handleLoginSubmit };
+const handleRegisterSubmit = async (userStore, userData) => {
+  return await userStore.registerUser(userData);
+};
+
+const redirectIfAuthenticated = (user, to, from, next) => {
+  if (checkIsAuthenticated(user)) {
+    next({ name: 'home' });
+  } else {
+    next();
+  }
+};
+
+export {
+  checkIsAuthenticated,
+  handleLoginSubmit,
+  redirectIfAuthenticated,
+  handleRegisterSubmit,
+};
