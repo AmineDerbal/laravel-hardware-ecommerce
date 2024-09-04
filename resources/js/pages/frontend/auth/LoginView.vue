@@ -13,26 +13,16 @@
           <BCardBody class="p-4">
             <div class="text-center mt-2">
               <h5 class="text-primary">Welcome!</h5>
-              <p class="text-muted">
-                Login to continue toward Admin Dashboard for Hardware Commerce.
-              </p>
+              <p class="text-muted">Please Login to use Hardware Commerce.</p>
+              <div>
+                <span
+                  class="text-danger"
+                  v-if="errors.message"
+                  >{{ errors.message }}</span
+                >
+              </div>
             </div>
             <div class="p-2 mt-4">
-              <span
-                class="text-danger"
-                v-if="errors.message"
-                >{{ errors.message }}</span
-              >
-              <b-alert
-                v-model="authError"
-                variant="danger"
-                class="mt-3"
-                dismissible
-                >{{ authError }}</b-alert
-              >
-
-              <div></div>
-
               <form @submit.prevent="tryToLogIn">
                 <div class="mb-3">
                   <label
@@ -94,7 +84,7 @@
                 </div>
                 <div class="mt-4">
                   <BButton
-                    class="w-100 whb-red-bg"
+                    class="w-100 whb-red-bg border-0"
                     type="submit"
                     @click="handleSubmit"
                     :disabled="isLoading"
@@ -135,11 +125,10 @@ export default {
     };
 
     const handleSubmit = async () => {
-      const result = await handleLoginSubmit(
-        userStore,
-        email.value,
-        password.value,
-      );
+      const result = await handleLoginSubmit(userStore, {
+        email: email.value,
+        password: password.value,
+      });
 
       if (result) {
         router.push({ name: 'home' });
