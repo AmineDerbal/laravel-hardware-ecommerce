@@ -1,6 +1,7 @@
 import {
   HomeView,
   LoginView,
+  RegisterView,
   CategoryProductsList,
   ProductShow,
   AdminCategoryList,
@@ -13,6 +14,13 @@ import {
   AdminDashboard,
 } from '../pages';
 import { useUserStore } from '@/state';
+import { redirectIfAuthenticated } from '@/utils/authUtils';
+
+const checkIfAuth = (to, from, next) => {
+  const userStore = useUserStore();
+
+  redirectIfAuthenticated(userStore.user, to, from, next);
+};
 
 const routes = [
   {
@@ -29,15 +37,13 @@ const routes = [
         path: 'login',
         name: 'login',
         component: LoginView,
-        beforeEnter: (to, from, next) => {
-          const userStore = useUserStore();
-
-          if (userStore.user.isAuthenticated) {
-            next({ name: 'home' });
-          } else {
-            next();
-          }
-        },
+        beforeEnter: checkIfAuth,
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: RegisterView,
+        //beforeEnter: checkIfAuth,
       },
       {
         path: 'category-products/:slug',

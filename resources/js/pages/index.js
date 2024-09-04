@@ -1,4 +1,5 @@
 const LoginView = () => import('./frontend/auth/LoginView.vue');
+const RegisterView = () => import('./frontend/auth/RegisterView.vue');
 const HomeView = () => import('./frontend/home/HomeView.vue');
 const CategoryProductsList = () =>
   import('./frontend/product/CategoryProductsList.vue');
@@ -16,6 +17,7 @@ const AdminProductEdit = () => import('./backend/product/ProductEdit.vue');
 
 export {
   LoginView,
+  RegisterView,
   HomeView,
   CategoryProductsList,
   ProductShow,
