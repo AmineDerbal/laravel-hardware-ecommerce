@@ -18,6 +18,28 @@ const useUserStore = defineStore({
     paths: ['user'],
   },
   actions: {
+    async registerUser({ email, name, password, password_confirmation }) {
+      this.isLoading = true;
+      this.hasError = false;
+      this.errors = {};
+      try {
+        const response = await axios.post('/api/auth/register', {
+          email,
+          name,
+          password,
+          password_confirmation,
+        });
+
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        this.errors = error.response.data.errors;
+
+        return;
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async loginUser({ email, password }) {
       this.isLoading = true;
       this.hasError = false;
@@ -54,7 +76,7 @@ const useUserStore = defineStore({
         };
         return response.data;
       } catch (error) {
-        console.log(error);
+        return;
       }
     },
   },
