@@ -82,7 +82,7 @@
             </div>
             <div class="mt-4">
               <BButton
-                class="w-100 whb-red-bg"
+                class="w-100 whb-red-bg border-0"
                 type="submit"
                 @click="handleSubmit"
                 :disabled="isLoading"
@@ -93,6 +93,20 @@
           </form>
         </BCardBody>
       </BContainer>
+      <div class="w-100 gray-bottom-border mt-3"></div>
+      <div
+        class="d-flex flex-column justify-content-between align-items-center mt-3 mx-2"
+      >
+        <p class="fw-semibold mb-0 fs-18">Don't have an account?</p>
+
+        <div class="d-flex justify-content-center align-items-center">
+          <span
+            @click="goToRegisterPage"
+            class="cursor-pointer ms-1 fw-semibold fs-18 text-primary"
+            >Create an account</span
+          >
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -110,12 +124,6 @@ export default {
     },
   },
 
-  // methods: {
-  //   setShowLoginModal() {
-  //     this.$emit('setShowLoginModal', false);
-  //   },
-  // },
-
   setup(props, { emit }) {
     const router = useRouter();
     const email = ref('admin@gmail.com');
@@ -132,16 +140,21 @@ export default {
       emit('setShowLoginModal', false);
     };
     const handleSubmit = async () => {
-      const result = await handleLoginSubmit(
-        props.userStore,
-        email.value,
-        password.value,
-      );
+      const result = await handleLoginSubmit(props.userStore, {
+        email: email.value,
+        password: password.value,
+      });
 
       if (result) {
         setShowLoginModal();
         router.push({ name: 'home' });
       }
+    };
+
+    const goToRegisterPage = () => {
+      console.log('clicked');
+      setShowLoginModal();
+      router.push({ name: 'register' });
     };
 
     return {
@@ -153,6 +166,7 @@ export default {
       errors,
       isLoading,
       setShowLoginModal,
+      goToRegisterPage,
     };
   },
 };
