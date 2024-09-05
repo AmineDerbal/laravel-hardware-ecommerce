@@ -37,9 +37,29 @@
         </div>
         <div class="user-info">
           <div class="d-flex align-items-center gap-2">
+            <div
+              class="position-relative cursor-pointer dropdown"
+              aria-expanded="false"
+              v-if="isAuthenticated"
+            >
+              <i
+                class="ri-user-line fs-24 dropdown-toggle"
+                aria-expanded="false"
+                id="dropdownMenuLink"
+                data-bs-toggle="dropdown"
+              ></i>
+
+              <ul
+                class="dropdown-menu"
+                aria-labelledby="dropdownMenuLink"
+              >
+                <li class="dropdown-item">Logout</li>
+              </ul>
+            </div>
             <i
               class="ri-user-line fs-24 cursor-pointer"
-              @click="handleUserClick"
+              @click="setShowLoginModal(true)"
+              v-else
             ></i>
             <div class="position-relative">
               <i class="ri-clipboard-line fs-24"></i>
@@ -112,7 +132,7 @@
   </header>
 </template>
 <script>
-import { computed, onBeforeMount } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useLayoutStore, useCategoryStore, useUserStore } from '@/state';
 import { checkIsAuthenticated } from '@/utils/authUtils';
 import Navbar from './NavbarView.vue';
@@ -128,8 +148,15 @@ export default {
     const userStore = useUserStore();
     const items = computed(() => categoryStore.headerCategories);
     const user = computed(() => userStore.user);
+    const isAuthenticated = computed(() => userStore.user.isAuthenticated);
     const showMenu = computed(() => layoutStore.layout.showMenu);
     const showLoginModal = computed(() => layoutStore.layout.showLoginModal);
+    const isUserMenuVisible = ref(false);
+
+    const toggleUserMenu = (value) => {
+      isUserMenuVisible.value = value ?? !isUserMenuVisible.value;
+      console.log(isUserMenuVisible.value);
+    };
 
     const setShowMenu = (value) => {
       layoutStore.setShowMenu(value);
@@ -137,14 +164,6 @@ export default {
 
     const setShowLoginModal = (value) => {
       layoutStore.setShowLoginModal(value);
-    };
-
-    const handleUserClick = () => {
-      if (checkIsAuthenticated(user.value)) {
-        return;
-      }
-
-      setShowLoginModal(true);
     };
 
     const getHeaderCategories = async () => {
@@ -160,9 +179,11 @@ export default {
       showMenu,
       items,
       showLoginModal,
-      handleUserClick,
       setShowLoginModal,
       userStore,
+      isUserMenuVisible,
+      toggleUserMenu,
+      isAuthenticated,
     };
   },
 };
@@ -170,5 +191,21 @@ export default {
 <style scoped>
 .badge-rounded {
   border-radius: 50%;
+}
+
+.dropdown-menu {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.dropdown-menu.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.dropdown-toggle::after {
+  display: none;
 }
 </style>
