@@ -81,13 +81,11 @@
                       :type="showPassword ? 'text' : 'password'"
                       class="form-control pe-5"
                       placeholder="Enter password"
-                      id="password-input"
                     />
                     <BButton
                       variant="link"
                       class="position-absolute end-0 top-0 text-decoration-none text-muted"
                       type="button"
-                      id="password-addon"
                       @click="togglePasswordVisibility(1)"
                     >
                       <i
@@ -117,13 +115,11 @@
                       :type="showPasswordConfirmation ? 'text' : 'password'"
                       class="form-control pe-5"
                       placeholder="Confirm password"
-                      id="password-input"
                     />
                     <BButton
                       variant="link"
                       class="position-absolute end-0 top-0 text-decoration-none text-muted"
                       type="button"
-                      id="password-addon"
                       @click="togglePasswordVisibility(2)"
                     >
                       <i
