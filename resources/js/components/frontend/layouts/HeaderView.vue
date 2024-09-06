@@ -53,7 +53,12 @@
                 class="dropdown-menu"
                 aria-labelledby="dropdownMenuLink"
               >
-                <li class="dropdown-item">Logout</li>
+                <li
+                  class="dropdown-item"
+                  @click="logout"
+                >
+                  Logout
+                </li>
               </ul>
             </div>
             <i
@@ -133,21 +138,24 @@
 </template>
 <script>
 import { computed, onBeforeMount, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
 import { useLayoutStore, useCategoryStore, useUserStore } from '@/state';
-import { checkIsAuthenticated } from '@/utils/authUtils';
 import Navbar from './NavbarView.vue';
 import MobileMenu from './MobileMenu.vue';
 import LoginModal from '../modals/LoginModal.vue';
+import { logoutUser } from '@/utils/authUtils';
 
 export default {
   components: { Navbar, MobileMenu, LoginModal },
 
   setup() {
+    const router = useRouter();
+    const toast = useToast();
     const layoutStore = useLayoutStore();
     const categoryStore = useCategoryStore();
     const userStore = useUserStore();
     const items = computed(() => categoryStore.headerCategories);
-    const user = computed(() => userStore.user);
     const isAuthenticated = computed(() => userStore.user.isAuthenticated);
     const showMenu = computed(() => layoutStore.layout.showMenu);
     const showLoginModal = computed(() => layoutStore.layout.showLoginModal);
@@ -164,6 +172,18 @@ export default {
 
     const setShowLoginModal = (value) => {
       layoutStore.setShowLoginModal(value);
+    };
+
+    const logout = async () => {
+      const response = await logoutUser(userStore);
+
+      if (response) {
+        toast.success('Logout Successful');
+        router.push({ name: 'home' });
+        return;
+      }
+
+      toast.error('Logout Failed');
     };
 
     const getHeaderCategories = async () => {
@@ -184,6 +204,7 @@ export default {
       isUserMenuVisible,
       toggleUserMenu,
       isAuthenticated,
+      logout,
     };
   },
 };

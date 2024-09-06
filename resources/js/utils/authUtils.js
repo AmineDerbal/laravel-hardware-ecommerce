@@ -19,9 +19,15 @@ const redirectIfAuthenticated = (user, to, from, next) => {
   }
 };
 
+const logoutUser = async (userStore) => {
+  await userStore.logoutUser();
+  return !checkIsAuthenticated(userStore.user);
+};
+
 export {
   checkIsAuthenticated,
   handleLoginSubmit,
   redirectIfAuthenticated,
   handleRegisterSubmit,
+  logoutUser,
 };
