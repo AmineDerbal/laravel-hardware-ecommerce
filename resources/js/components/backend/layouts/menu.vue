@@ -1,10 +1,11 @@
 <script>
-import { HomeIcon, BoxIcon } from '@zhuowenli/vue-feather-icons';
+import { HomeIcon, BoxIcon, UserIcon } from '@zhuowenli/vue-feather-icons';
 
 export default {
   components: {
     HomeIcon,
     BoxIcon,
+    UserIcon,
   },
 
   data() {
@@ -37,6 +38,45 @@ export default {
           />
           <span data-key="Tableau de bord">Dashboard</span>
         </router-link>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link menu-link"
+          href="#sidebarUsers"
+          data-bs-toggle="collapse"
+          role="button"
+          aria-expanded="false"
+          aria-controls="sidebarUsers"
+        >
+          <UserIcon
+            width="24"
+            height="24"
+          />
+          <span data-key="user">Users</span>
+        </a>
+        <div
+          class="collapse menu-dropdown"
+          id="sidebarUsers"
+        >
+          <ul class="nav nav-sm flex-column">
+            <li class="nav-item">
+              <router-link
+                :to="{ name: 'admin-user-list' }"
+                class="nav-link custom-abc"
+                data-key="users"
+                >All Users</router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link
+                :to="{ name: 'admin-user-create' }"
+                class="nav-link custom-abc"
+                data-key="users"
+                >Add User</router-link
+              >
+            </li>
+          </ul>
+        </div>
       </li>
       <li class="nav-item">
         <a
