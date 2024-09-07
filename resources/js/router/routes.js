@@ -4,6 +4,7 @@ import {
   RegisterView,
   CategoryProductsList,
   ProductShow,
+  AdminUserList,
   AdminCategoryList,
   AdminCategoryCreate,
   AdminCategoryEdit,
@@ -43,7 +44,7 @@ const routes = [
         path: 'register',
         name: 'register',
         component: RegisterView,
-        //beforeEnter: checkIfAuth,
+        beforeEnter: checkIfAuth,
       },
       {
         path: 'category-products/:slug',
@@ -70,6 +71,23 @@ const routes = [
         path: 'dashboard',
         name: 'admin-dashboard',
         component: AdminDashboard,
+      },
+      {
+        path: 'users',
+        meta: {
+          requireAuth: true,
+        },
+        children: [
+          {
+            path: '',
+            name: 'admin-user-list',
+            component: AdminUserList,
+          },
+          {
+            path: 'create',
+            name: 'admin-user-create',
+          },
+        ],
       },
       {
         path: 'products',
