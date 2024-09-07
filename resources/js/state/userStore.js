@@ -10,12 +10,13 @@ const useUserStore = defineStore({
       role: null,
       isAuthenticated: false,
     },
+    users: {},
     errors: {},
     isLoading: false,
     hasError: false,
   }),
   persist: {
-    paths: ['user'],
+    paths: ['user', 'users'],
   },
   actions: {
     async registerUser({ email, name, password, password_confirmation }) {
@@ -76,7 +77,40 @@ const useUserStore = defineStore({
         };
         return response.data;
       } catch (error) {
-        return;
+        return error.response;
+      }
+    },
+
+    async getUsers() {
+      this.isLoading = true;
+      this.hasError = false;
+      this.errors = {};
+      try {
+        const response = await axios.get('/api/admin/users');
+        this.users = response.data;
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return error.response;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async toggleUserAciveStatus(id) {
+      this.isLoading = true;
+      this.hasError = false;
+      this.errors = {};
+      try {
+        const response = await axios.patch(
+          `/api/admin/users/${id}/toggle-active-status`,
+        );
+        return response;
+      } catch (error) {
+        this.hasError = true;
+        return error.response;
+      } finally {
+        this.isLoading = false;
       }
     },
   },
