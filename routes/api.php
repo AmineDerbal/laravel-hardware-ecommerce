@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductImageController;
+use App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,11 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])->group(function () {
+    Route::controller(UserController::class)->group(function () {
+        Route::get('admin/users', 'index')->name('users.admin');
+        Route::patch('admin/users/{id}/toggle-active-status', 'toggleIsActiveStatus')->name('users.admin.toggleActiveStatus');
+    });
+
     Route::controller(CategoryController::class)->group(function () {
         Route::get('categories', 'index')->name('categories');
         Route::get('categories/select', 'forSelect')->name('categories.select');
