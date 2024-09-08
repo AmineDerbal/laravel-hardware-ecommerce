@@ -18,6 +18,10 @@
           </BLink>
         </div>
       </BCol>
+      <ConfirmAdminModalAction
+        v-model:showModal="showConfirmModal"
+        v-model:confirmAction="confirmAction"
+      />
       <AdminTable
         :data="categories.data"
         :columns="columns"
@@ -37,7 +41,7 @@
 </template>
 
 <script>
-import { computed, onBeforeMount, h, onUpdated } from 'vue';
+import { computed, onBeforeMount, h, onUpdated, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import {
@@ -47,8 +51,10 @@ import {
   AdminEditButton,
   AdminTable,
   PaginationUtils,
+  ConfirmAdminModalAction,
 } from '@/components';
 import { useCategoryStore } from '@/state';
+import { navigateToPage, getPage } from '@/utils/pagesUtils';
 
 export default {
   components: {
@@ -58,6 +64,7 @@ export default {
     AdminEditButton,
     AdminTable,
     PaginationUtils,
+    ConfirmAdminModalAction,
   },
 
   setup() {
@@ -68,21 +75,25 @@ export default {
     const categories = computed(() => store.categories);
     const isLoading = computed(() => store.isLoading);
     const hasError = computed(() => store.hasError);
+    const cancelUpdate = ref(false);
+    const showConfirmModal = ref(false);
+    const confirmAction = ref(null);
 
-    const getPage = () => route.query.page || 1;
+    const setShowConfirmModal = (value) => {
+      cancelUpdate.value = true;
+      showConfirmModal.value = value;
+    };
 
     const getCategories = async (page) => {
       await store.getCategories(page);
     };
 
-    const onPageChange = (page) => {
-      router.push({ name: 'admin-category-list', query: { page: page } });
-    };
+    const onPageChange = (page) => navigateToPage(page, router, route);
 
-    const handleDelete = async (id) => {
+    const deleteCategory = async (id) => {
       const response = await store.deleteCategory(id);
       if (response.status === 200 || response.status === 201) {
-        await getCategories(getPage());
+        await getCategories(getPage(route));
         toast.success(response.data.message, { timeout: 2000 });
       } else {
         toast.error('Failed to delete the category');
@@ -116,7 +127,11 @@ export default {
           const deleteButton = h(AdminDeleteButton, {
             id: id,
             item: 'category',
-            handleDelete,
+
+            handleDelete: () => {
+              setShowConfirmModal(true);
+              confirmAction.value = () => deleteCategory(id);
+            },
           });
           return h('ul', { class: 'list-inline hstack gap-2 mb-0' }, [
             editButton,
@@ -140,11 +155,16 @@ export default {
 
     // Fetch categories on mount
     onBeforeMount(async () => {
-      await getCategories(getPage());
+      await getCategories(getPage(route));
     });
 
     onUpdated(async () => {
-      await getCategories(getPage());
+      if (cancelUpdate.value) {
+        cancelUpdate.value = false;
+        return;
+      }
+
+      await getCategories(getPage(route));
     });
 
     return {
@@ -154,6 +174,8 @@ export default {
       columns,
       customGlobalFilter,
       onPageChange,
+      showConfirmModal,
+      confirmAction,
     };
   },
 };
