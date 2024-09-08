@@ -53,7 +53,6 @@ export default {
     const show = computed(() => props.showModal);
 
     const closeShowModal = () => {
-      console.log('closed');
       emit('update:showModal', false);
       emit('update:confirmAction', null);
     };
