@@ -54,7 +54,11 @@ import {
   ConfirmAdminModalAction,
 } from '@/components';
 import { useCategoryStore } from '@/state';
-import { navigateToPage, getPage } from '@/utils/pagesUtils';
+import {
+  navigateToPage,
+  openConfirmModal,
+  fetchItems,
+} from '@/utils/pagesUtils';
 
 export default {
   components: {
@@ -79,21 +83,12 @@ export default {
     const showConfirmModal = ref(false);
     const confirmAction = ref(null);
 
-    const setShowConfirmModal = (value) => {
-      cancelUpdate.value = true;
-      showConfirmModal.value = value;
-    };
-
-    const getCategories = async (page) => {
-      await store.getCategories(page);
-    };
-
     const onPageChange = (page) => navigateToPage(page, router, route);
 
     const deleteCategory = async (id) => {
       const response = await store.deleteCategory(id);
       if (response.status === 200 || response.status === 201) {
-        await getCategories(getPage(route));
+        await fetchItems(store.getCategories, route);
         toast.success(response.data.message, { timeout: 2000 });
       } else {
         toast.error('Failed to delete the category');
@@ -129,7 +124,7 @@ export default {
             item: 'category',
 
             handleDelete: () => {
-              setShowConfirmModal(true);
+              openConfirmModal(cancelUpdate, showConfirmModal);
               confirmAction.value = () => deleteCategory(id);
             },
           });
@@ -155,7 +150,7 @@ export default {
 
     // Fetch categories on mount
     onBeforeMount(async () => {
-      await getCategories(getPage(route));
+      await fetchItems(store.getCategories, route);
     });
 
     onUpdated(async () => {
@@ -164,7 +159,7 @@ export default {
         return;
       }
 
-      await getCategories(getPage(route));
+      await fetchItems(store.getCategories, route);
     });
 
     return {
