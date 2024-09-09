@@ -58,6 +58,7 @@ import {
   navigateToPage,
   openConfirmModal,
   fetchItems,
+  getPage,
 } from '@/utils/pagesUtils';
 
 export default {
@@ -81,14 +82,15 @@ export default {
     const hasError = computed(() => store.hasError);
     const cancelUpdate = ref(false);
     const showConfirmModal = ref(false);
-    const confirmAction = ref(null);
+    const confirmAction = ref(() => {});
+    const routeName = route.name;
 
-    const onPageChange = (page) => navigateToPage(page, router, route);
+    const onPageChange = (page) => navigateToPage(page, router, routeName);
 
     const deleteCategory = async (id) => {
       const response = await store.deleteCategory(id);
       if (response.status === 200 || response.status === 201) {
-        await fetchItems(store.getCategories, route);
+        await fetchItems(store.getCategories, getPage(route));
         toast.success(response.data.message, { timeout: 2000 });
       } else {
         toast.error('Failed to delete the category');
@@ -150,7 +152,7 @@ export default {
 
     // Fetch categories on mount
     onBeforeMount(async () => {
-      await fetchItems(store.getCategories, route);
+      await fetchItems(store.getCategories, getPage(route));
     });
 
     onUpdated(async () => {
@@ -159,7 +161,7 @@ export default {
         return;
       }
 
-      await fetchItems(store.getCategories, route);
+      await fetchItems(store.getCategories, getPage(route));
     });
 
     return {

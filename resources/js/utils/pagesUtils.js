@@ -6,12 +6,12 @@ const openConfirmModal = (cancelUpdate, showConfirmModal) => {
   cancelUpdate.value = true;
   showConfirmModal.value = true;
 };
-const navigateToPage = (page, router, route) => {
-  router.push({ name: getRouteName(route), query: { page: page } });
+const navigateToPage = (page, router, routeName) => {
+  router.push({ name: routeName, query: { page: page } });
 };
 
-const fetchItems = async (fetchItemsFunction, route) => {
-  await fetchItemsFunction(getPage(route));
+const fetchItems = async (fetchItemsFunction, page) => {
+  await fetchItemsFunction(page);
 };
 
 export { navigateToPage, getPage, getRouteName, openConfirmModal, fetchItems };
