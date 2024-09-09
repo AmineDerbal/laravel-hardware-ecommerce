@@ -7,7 +7,7 @@
           :key="category.id"
         >
           <button
-            class="navbar-toggler text-white bodrer-0 outline-0"
+            class="navbar-toggler text-white border-0 outline-0"
             type="button"
             v-if="category.children.length === 0"
             @click="goToCategoryProductPage(category.slug)"
