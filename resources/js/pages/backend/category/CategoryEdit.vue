@@ -56,6 +56,7 @@ export default {
     };
 
     onBeforeMount(async () => {
+      store.clearCategory();
       const id = route.params.id;
       isLoading.value = true;
       await store.getCategory(id);
