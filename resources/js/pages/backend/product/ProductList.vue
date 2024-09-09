@@ -33,11 +33,15 @@
       :key="products"
       v-if="products"
     />
+    <ConfirmAdminModalAction
+      v-model:showModal="showConfirmModal"
+      v-model:confirmAction="confirmAction"
+    />
   </AdminLayoutView>
 </template>
 
 <script>
-import { onBeforeMount, computed, h, onUpdated } from 'vue';
+import { onBeforeMount, computed, h, onUpdated, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useProductStore } from '@/state';
@@ -49,7 +53,15 @@ import {
   AdminShowButton,
   AdminTable,
   PaginationUtils,
+  ConfirmAdminModalAction,
 } from '@/components';
+
+import {
+  navigateToPage,
+  getPage,
+  fetchItems,
+  openConfirmModal,
+} from '@/utils/pagesUtils';
 
 export default {
   components: {
@@ -60,6 +72,7 @@ export default {
     AdminShowButton,
     AdminTable,
     PaginationUtils,
+    ConfirmAdminModalAction,
   },
 
   setup() {
@@ -70,22 +83,17 @@ export default {
     const products = computed(() => store.products);
     const isLoading = computed(() => store.isLoading);
     const hasError = computed(() => store.hasError);
+    const cancelUpdate = ref(false);
+    const showConfirmModal = ref(false);
+    const confirmAction = ref(() => {});
+    const routeName = route.name;
 
-    const getPage = () => {
-      return route.query.page || 1;
-    };
+    const onPageChange = (page) => navigateToPage(page, router, routeName);
 
-    const onPageChange = (page) => {
-      router.push({ name: 'admin-product-list', query: { page: page } });
-    };
-    const getProducts = async (page) => {
-      await store.getProducts(page);
-    };
-
-    const handleDelete = async (id) => {
+    const deleteItem = async (id) => {
       const response = await store.deleteProduct(id);
       if (response.status === 200 || response.status === 201) {
-        await getProducts(getPage());
+        await fetchItems(store.getProducts, getPage(route));
         toast.success(response.data.message, { timeout: 2000 });
       } else {
         toast.error('Failed to delete the product');
@@ -147,7 +155,10 @@ export default {
           const deleteButton = h(AdminDeleteButton, {
             id: id,
             item: 'product',
-            handleDelete,
+            handleDelete: () => {
+              openConfirmModal(cancelUpdate, showConfirmModal);
+              confirmAction.value = () => deleteItem(id);
+            },
           });
           return h('ul', { class: 'list-inline hstack gap-2 mb-0' }, [
             showButton,
@@ -170,11 +181,16 @@ export default {
     };
 
     onBeforeMount(async () => {
-      await getProducts(getPage());
+      //await getProducts(getPage());
+      await fetchItems(store.getProducts, getPage(route));
     });
 
     onUpdated(async () => {
-      await getProducts(getPage());
+      if (cancelUpdate.value) {
+        cancelUpdate.value = false;
+        return;
+      }
+      await fetchItems(store.getProducts, getPage(route));
     });
 
     return {
@@ -184,6 +200,8 @@ export default {
       hasError,
       customGlobalFilter,
       onPageChange,
+      showConfirmModal,
+      confirmAction,
     };
   },
 };
