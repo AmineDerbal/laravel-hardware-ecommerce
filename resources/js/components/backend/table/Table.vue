@@ -79,7 +79,6 @@ export default {
         class="form-control search"
         v-model="filter"
         placeholder="Search..."
-        :disabled="isLoading"
       />
       <i class="ri-search-line search-icon"></i>
     </div>
