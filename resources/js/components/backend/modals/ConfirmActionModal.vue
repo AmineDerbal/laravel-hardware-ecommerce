@@ -46,6 +46,7 @@ export default {
     confirmAction: {
       type: Function,
       required: true,
+      default: () => {},
     },
   },
 
@@ -54,7 +55,7 @@ export default {
 
     const closeShowModal = () => {
       emit('update:showModal', false);
-      emit('update:confirmAction', null);
+      emit('update:confirmAction', () => {});
     };
 
     const onConfirm = async () => {
