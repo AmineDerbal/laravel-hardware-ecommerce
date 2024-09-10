@@ -1,6 +1,13 @@
 import axios from '@/utils/axiosUtils';
 
-const apiRequest = async (url, method = 'GET', data = null) => {
+const apiRequest = async (
+  url,
+  method = 'GET',
+  data = null,
+  multipart = false,
+) => {
+  if (multipart)
+    axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
   try {
     const response = await axios({
       url,
@@ -20,6 +27,7 @@ const apiAction = async (apiCall, store, OnSuccess = null) => {
   try {
     const response = await apiCall();
     if (OnSuccess) {
+      console.log(response.data);
       OnSuccess(response.data);
     }
     return response;
