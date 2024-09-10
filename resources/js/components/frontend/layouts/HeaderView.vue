@@ -163,7 +163,6 @@ export default {
 
     const toggleUserMenu = (value) => {
       isUserMenuVisible.value = value ?? !isUserMenuVisible.value;
-      console.log(isUserMenuVisible.value);
     };
 
     const setShowMenu = (value) => {

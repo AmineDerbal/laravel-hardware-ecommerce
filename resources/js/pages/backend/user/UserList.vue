@@ -153,11 +153,9 @@ export default {
 
     onBeforeMount(async () => {
       await getProducts(getPage());
-      console.log(users.value);
     });
 
     onUpdated(async () => {
-      console.log('updated');
       await getProducts(getPage());
     });
 
