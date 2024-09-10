@@ -19,7 +19,7 @@
               type="text"
               class="form-control"
               v-model="product.name"
-              :placeholder="name"
+              placeholder="name"
               id="nameInput"
             />
             <span
@@ -78,7 +78,7 @@
               type="number"
               class="form-control"
               v-model="product.price"
-              :placeholder="price"
+              placeholder="price"
               step="0.01"
               id="priceInput"
             />
@@ -103,7 +103,7 @@
               type="number"
               class="form-control"
               v-model="product.stock"
-              :placeholder="stock"
+              placeholder="stock"
               id="stockInput"
             />
             <span
@@ -209,7 +209,7 @@
             <BButton
               type="submit"
               class="btn-animation waves-effect waves-light"
-              @click="submitForm"
+              @click="handleSubmitForm"
               :variant="'primary'"
             >
               Save
@@ -263,7 +263,7 @@
               <BButton
                 type="submit"
                 class="btn-animation waves-effect waves-light"
-                @click="updateThumbnailImage"
+                @click="handleUpdateThumbnailImage"
                 :variant="'primary'"
               >
                 Save Changes
@@ -425,12 +425,12 @@ export default {
   },
 
   methods: {
-    submitForm() {
+    handleSubmitForm() {
       this.$emit('update:product', this.product);
       this.submitForm();
     },
 
-    updateThumbnailImage() {
+    handleUpdateThumbnailImage() {
       this.$emit('update:product', this.product);
       this.updateThumbnailImage();
     },
