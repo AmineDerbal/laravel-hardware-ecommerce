@@ -85,19 +85,19 @@ class ProductController extends Controller
 
         try {
             $image_path = uploadImage($image, $path);
-            if(!$image_path) {
+            if (!$image_path) {
                 return response()->json(['message' => 'Error in image path'], 500);
             }
 
             $data['image'] = $image_path;
             $product = Product::create($data);
 
-            if(!$product) {
+            if (!$product) {
                 unlink($image_path);
                 return response()->json(['message' => 'Error creating product'], 500);
             }
 
-            if($request->hasFile('images')) {
+            if ($request->hasFile('images')) {
 
                 $images = $request->file('images');
                 foreach ($images as $image) {
@@ -144,7 +144,7 @@ class ProductController extends Controller
 
         try {
             $image_path = uploadImage($image, $path);
-            if(!$image_path) {
+            if (!$image_path) {
                 return response()->json(['message' => 'Error in image path'], 500);
             }
             deleteImage($product->image);
@@ -171,5 +171,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         $product->delete();
+
+        return response()->json(['message' => 'Product deleted successfully']);
     }
 }
