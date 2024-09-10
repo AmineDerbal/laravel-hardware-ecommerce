@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import axios from '@/utils/axiosUtils';
+import { apiRequest, apiAction } from '@/utils/apiUtils';
 
 const useProductStore = defineStore({
   id: 'product',
@@ -19,17 +19,7 @@ const useProductStore = defineStore({
 
   actions: {
     clearProduct() {
-      this.product = {
-        id: null,
-        name: null,
-        description: null,
-        price: null,
-        stock: null,
-        thumbnail: {},
-        image_url: null,
-        images: [],
-        category_id: null,
-      };
+      this.product = {};
       this.errors = {};
     },
 
@@ -38,215 +28,116 @@ const useProductStore = defineStore({
     },
 
     async getProducts(page = 1) {
-      this.isLoading = true;
-      this.hasError = false;
-      this.errors = {};
-      try {
-        const response = await axios.get(`/api/admin/products?page=${page}`);
-        this.products = response.data;
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        return error.response;
-      } finally {
-        this.isLoading = false;
+      const response = await apiAction(
+        () => apiRequest(`/api/admin/products?page=${page}`),
+        this,
+        (data) => (this.products = data),
+      );
+      if (this.products.data.length < 1 && page > 1) {
+        this.getProducts(page - 1);
       }
+      return response;
     },
 
     async getProduct(id) {
-      this.isLoading = true;
-      this.hasError = false;
-      this.errors = {};
-      try {
-        const response = await axios.get(`/api/admin/products/${id}`);
-        this.product = response.data;
-        this.product.category_id =
-          this.product.category && this.product.category.id
-            ? this.product.category.id
-            : null;
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        return error.response;
-      } finally {
-        this.isLoading = false;
-      }
+      const response = await apiAction(
+        () => apiRequest(`/api/admin/products/${id}`),
+        this,
+        (data) => (this.product = data),
+      );
+      this.product.category_id =
+        this.product.category && this.product.category.id
+          ? this.product.category.id
+          : null;
+
+      return response;
     },
 
     async getClientProudct(slug) {
-      this.isLoading = true;
-      this.hasError = false;
-      this.errors = {};
-      try {
-        const response = await axios.get(`/api/products/${slug}`);
-        this.product = response.data;
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        return error.response;
-      } finally {
-        this.isLoading = false;
-      }
+      return await apiAction(
+        () => apiRequest(`/api/products/${slug}`),
+        this,
+        (data) => (this.product = data),
+      );
     },
 
     async getLatest() {
-      this.isLoading = true;
-      this.hasError = false;
-      this.errors = {};
-      try {
-        const response = await axios.get('/api/products/latest');
-        this.latest = response.data;
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        return error.response;
-      } finally {
-        this.isLoading = false;
-      }
+      return await apiAction(
+        () => apiRequest('/api/products/latest'),
+        this,
+        (data) => (this.latest = data),
+      );
     },
 
     async getCategoryProducts(slug, page = 1) {
-      this.isLoading = true;
-      this.hasError = false;
-      this.errors = {};
-      try {
-        const response = await axios.get(
-          `/api/products/category-products/${slug}?page=${page}`,
-        );
-        this.categoryProducts = response.data;
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        return error.response;
-      } finally {
-        this.isLoading = false;
-      }
+      return await apiAction(
+        () =>
+          apiRequest(`/api/products/category-products/${slug}?page=${page}`),
+        this,
+        (data) => (this.categoryProducts = data),
+      );
     },
 
     async addProduct() {
-      this.isLoading = true;
-      this.hasError = false;
-      this.errors = {};
-      let response;
-      try {
-        response = this.product.id
-          ? await axios.put(`/api/admin/products/update`, this.product)
-          : await axios.post('/api/admin/products/store', this.product, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            });
-
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        if (error.response.status === 422) {
-          this.errors = error.response.data.errors;
-        }
-        return error.response;
-      } finally {
-        this.isLoading = false;
-      }
+      return this.product.id
+        ? await apiAction(
+            () => apiRequest(`/api/admin/products/update`, 'PUT', this.product),
+            this,
+          )
+        : await apiAction(
+            () =>
+              apiRequest(
+                `/api/admin/products/store`,
+                'POST',
+                this.product,
+                true,
+              ),
+            this,
+          );
     },
 
     async updateThumbnailImage() {
-      this.isLoading = true;
-      this.hasError = false;
-      this.errors = {};
-      try {
-        const { id, thumbnail } = this.product;
-        const response = await axios.post(
-          `/api/admin/products/update/thumbnail`,
-          { id, thumbnail },
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        );
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        if (error.response.status === 422) {
-          this.errors = error.response.data.errors;
-        }
-        return error.response;
-      } finally {
-        this.isLoading = false;
-      }
+      const { id, thumbnail } = this.product;
+      return await apiAction(
+        () =>
+          apiRequest(
+            `/api/admin/products/update/thumbnail`,
+            'POST',
+            { id, thumbnail },
+            true,
+          ),
+        this,
+      );
     },
 
     async deleteProduct(id) {
-      this.isLoading = true;
-      this.hasError = false;
-      try {
-        const response = await axios.delete(`/api/admin/products/${id}`);
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        return;
-      } finally {
-        this.isLoading = false;
-      }
+      return await apiAction(
+        () => apiRequest(`/api/admin/products/${id}`, 'DELETE'),
+        this,
+      );
     },
 
     async addNewImage(data) {
-      this.isLoading = true;
-      this.hasError = false;
-
-      try {
-        const response = await axios.post(
-          `/api/admin/products/store/images`,
-          data,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        );
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        return error.response;
-      } finally {
-        this.isLoading = false;
-      }
+      return await apiAction(
+        () =>
+          apiRequest('/api/admin/products/store/images', 'POST', data, true),
+        this,
+      );
     },
 
     async updateImage(data) {
-      this.isLoading = true;
-      this.hasError = false;
-      try {
-        const response = await axios.post(
-          `/api/admin/products/update/images`,
-          data,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        );
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        return error.response;
-      } finally {
-        this.isLoading = false;
-      }
+      return await apiAction(
+        () =>
+          apiRequest('/api/admin/products/update/images', 'POST', data, true),
+        this,
+      );
     },
 
     async deleteImage(id) {
-      this.isLoading = true;
-      this.hasError = false;
-      try {
-        const response = await axios.delete(`/api/admin/products/images/${id}`);
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        return;
-      } finally {
-        this.isLoading = false;
-      }
+      return await apiAction(
+        () => apiRequest(`/api/admin/products/images/${id}`, 'DELETE'),
+        this,
+      );
     },
   },
 });
