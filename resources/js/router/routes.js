@@ -74,9 +74,6 @@ const routes = [
       },
       {
         path: 'users',
-        meta: {
-          requireAuth: true,
-        },
         children: [
           {
             path: '',
@@ -91,9 +88,6 @@ const routes = [
       },
       {
         path: 'products',
-        meta: {
-          requireAuth: true,
-        },
         children: [
           {
             path: '',
@@ -119,9 +113,6 @@ const routes = [
       },
       {
         path: 'categories',
-        meta: {
-          requireAuth: true,
-        },
 
         children: [
           {
