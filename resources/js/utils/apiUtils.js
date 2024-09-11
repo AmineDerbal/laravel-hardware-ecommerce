@@ -20,8 +20,8 @@ const apiRequest = async (
   }
 };
 
-const apiAction = async (apiCall, store, OnSuccess = null) => {
-  store.isLoading = true;
+const apiAction = async (apiCall, store, OnSuccess = null, Loading = true) => {
+  if (Loading) store.isLoading = true;
   store.hasError = false;
   store.errors = {};
   try {
