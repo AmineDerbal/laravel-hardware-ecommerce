@@ -28,6 +28,9 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
+        if ($user->is_active == 0) {
+            return response()->json(['message' => 'User is not active. Please contact admin'], 401);
+        }
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->accessToken;
 
