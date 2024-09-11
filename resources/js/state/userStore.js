@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import axios from '../utils/axiosUtils';
+import { apiRequest, apiAction } from '@/utils/apiUtils';
 
 const useUserStore = defineStore({
   id: 'user',
@@ -19,99 +19,57 @@ const useUserStore = defineStore({
     paths: ['user', 'users'],
   },
   actions: {
-    async registerUser({ email, name, password, password_confirmation }) {
-      this.isLoading = true;
-      this.hasError = false;
-      this.errors = {};
-      try {
-        const response = await axios.post('/api/auth/register', {
-          email,
-          name,
-          password,
-          password_confirmation,
-        });
-
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        this.errors = error.response.data.errors;
-
-        return;
-      } finally {
-        this.isLoading = false;
-      }
+    resetUserDataState() {
+      this.user = {
+        name: null,
+        email: null,
+        role: null,
+        isAuthenticated: false,
+      };
     },
-    async loginUser({ email, password }) {
-      this.isLoading = true;
-      this.hasError = false;
-      this.errors = {};
-      try {
-        const response = await axios.post('/api/auth/login', {
-          email,
-          password,
-        });
-        const { user } = response.data;
-
-        this.user = {
-          ...this.user,
-          ...user,
-          isAuthenticated: true,
-        };
-        return response.data;
-      } catch (error) {
-        this.hasError = true;
-        this.errors = error.response.data.errors;
-        return;
-      } finally {
-        this.isLoading = false;
-      }
+    async registerUser(data) {
+      return await apiAction(
+        () => apiRequest('/api/auth/register', 'POST', data),
+        this,
+      );
     },
+
+    async loginUser(data) {
+      return await apiAction(
+        () => apiRequest('/api/auth/login', 'POST', data),
+        this,
+        (data) =>
+          (this.user = { ...this.user, ...data.user, isAuthenticated: true }),
+      );
+    },
+
     async logoutUser() {
-      try {
-        const response = await axios.post('/api/auth/logout');
-        this.user = {
-          name: null,
-          email: null,
-          role: null,
-          isAuthenticated: false,
-        };
-        return response.data;
-      } catch (error) {
-        return error.response;
+      const response = await apiAction(
+        () => apiRequest('/api/auth/logout', 'POST'),
+        this,
+      );
+      if (response.status === 200) {
+        this.resetUserDataState();
       }
+      return response;
     },
 
     async getUsers() {
-      this.isLoading = true;
-      this.hasError = false;
-      this.errors = {};
-      try {
-        const response = await axios.get('/api/admin/users');
-        this.users = response.data;
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        return error.response;
-      } finally {
-        this.isLoading = false;
-      }
+      return await apiAction(
+        () => apiRequest('/api/admin/users'),
+        this,
+        (data) => (this.users = data),
+      );
     },
 
     async toggleUserAciveStatus(id) {
-      this.isLoading = true;
-      this.hasError = false;
-      this.errors = {};
-      try {
-        const response = await axios.patch(
-          `/api/admin/users/${id}/toggle-active-status`,
-        );
-        return response;
-      } catch (error) {
-        this.hasError = true;
-        return error.response;
-      } finally {
-        this.isLoading = false;
-      }
+      return await apiAction(
+        () =>
+          apiRequest(`/api/admin/users/${id}/toggle-active-status`, 'PATCH'),
+        this,
+        null,
+        false,
+      );
     },
   },
 });
