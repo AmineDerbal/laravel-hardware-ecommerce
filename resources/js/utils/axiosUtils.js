@@ -15,10 +15,14 @@ const configureAxios = () => {
       if (error.response) {
         const statusCode = error.response.status;
         if (statusCode === 401) {
+          const toastMessage = error.response.data.message;
           const userStore = useUserStore();
           await userStore.logoutUser();
 
-          window.location.href = '/login';
+          window.location.href = `/login?message=${encodeURIComponent(
+            toastMessage,
+          )}&type=error`;
+
           return;
         }
         if (statusCode === 404) {

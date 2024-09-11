@@ -103,7 +103,8 @@
 
 <script>
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+import { useToast } from 'vue-toastification';
 import { LayoutView } from '@/components';
 import { useUserStore } from '@/state';
 import { handleLoginSubmit } from '@/utils/authUtils';
@@ -113,12 +114,22 @@ export default {
   components: { LayoutView },
   setup() {
     const router = useRouter();
+    const route = useRoute();
+    const toast = useToast();
     const userStore = useUserStore();
     const email = ref('admin@gmail.com');
     const password = ref('admin123');
     const showPassword = ref(false);
     const isLoading = computed(() => userStore.isLoading);
     const errors = computed(() => userStore.errors);
+
+    const message = route.query.message || null;
+    const type = route.query.type || null;
+
+    if (message && type) {
+      toast[type](message);
+      window.history.replaceState({}, document.title, route.path);
+    }
 
     const togglePasswordVisibility = () => {
       showPassword.value = !showPassword.value;
