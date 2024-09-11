@@ -130,23 +130,33 @@ export default {
         cell: ({ row }) => {
           const active = row.original.is_active;
           const id = row.original.id;
-          return h('div', { class: 'form-check form-switch' }, [
-            h('input', {
-              class: 'form-check-input',
-              type: 'checkbox',
-              role: 'switch',
-              name: 'flexSwitchCheckDefault',
-              checked: active === 1,
-              onClick: (e) => {
-                toggleUserActiveStatus(e, id);
-              },
-            }),
-            h(
-              'label',
-              { class: 'form-check-label', for: 'flexSwitchCheckDefault' },
-              active === 1 ? 'Active' : 'Inactive',
-            ),
-          ]);
+          return h(
+            'div',
+            { class: 'form-check form-switch d-flex align-items-center gap-2' },
+            [
+              h('input', {
+                class: 'form-check-input',
+                type: 'checkbox',
+                role: 'switch',
+                name: 'flexSwitchCheckDefault',
+                checked: active === 1,
+                onClick: (e) => {
+                  toggleUserActiveStatus(e, id);
+                },
+              }),
+              h(
+                'label',
+                {
+                  class: [
+                    'form-check-label',
+                    active === 1 ? 'text-primary' : 'text-danger',
+                  ],
+                  for: 'flexSwitchCheckDefault',
+                },
+                active === 1 ? 'Active' : 'Inactive',
+              ),
+            ],
+          );
         },
       },
     ];
