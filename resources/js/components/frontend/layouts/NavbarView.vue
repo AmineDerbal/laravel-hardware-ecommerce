@@ -46,3 +46,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.navbar-toggler:focus {
+  box-shadow: none !important;
+}
+</style>
