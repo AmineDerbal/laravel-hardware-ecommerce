@@ -66,7 +66,10 @@
               @click="setShowLoginModal(true)"
               v-else
             ></i>
-            <div class="position-relative">
+            <div
+              class="position-relative cursor-pointer"
+              @click="setShowCartModal(true)"
+            >
               <i class="ri-clipboard-line fs-24"></i>
               <span
                 class="badge badge-danger position-absolute top-0 start-100 whb-top-bar translate-middle badge-rounded lh-1"
@@ -134,6 +137,11 @@
       :userStore="userStore"
       @setShowLoginModal="setShowLoginModal"
     />
+    <CartModal
+      v-if="showCartModal"
+      :key="setShowCartModal"
+      @setShowCartModal="setShowCartModal"
+    />
   </header>
 </template>
 <script>
@@ -144,10 +152,11 @@ import { useLayoutStore, useCategoryStore, useUserStore } from '@/state';
 import Navbar from './NavbarView.vue';
 import MobileMenu from './MobileMenu.vue';
 import LoginModal from '../modals/LoginModal.vue';
+import CartModal from '../modals/CartModal.vue';
 import { logoutUser } from '@/utils/authUtils';
 
 export default {
-  components: { Navbar, MobileMenu, LoginModal },
+  components: { Navbar, MobileMenu, LoginModal, CartModal },
 
   setup() {
     const router = useRouter();
@@ -159,6 +168,7 @@ export default {
     const isAuthenticated = computed(() => userStore.user.isAuthenticated);
     const showMenu = computed(() => layoutStore.layout.showMenu);
     const showLoginModal = computed(() => layoutStore.layout.showLoginModal);
+    const showCartModal = computed(() => layoutStore.layout.showCartModal);
     const isUserMenuVisible = ref(false);
 
     const toggleUserMenu = (value) => {
@@ -173,9 +183,12 @@ export default {
       layoutStore.setShowLoginModal(value);
     };
 
+    const setShowCartModal = (value) => {
+      layoutStore.setShowCartModal(value);
+    };
+
     const logout = async () => {
       const response = await logoutUser(userStore);
-
       if (response) {
         toast.success('Logout Successful');
         router.push({ name: 'home' });
@@ -204,6 +217,8 @@ export default {
       toggleUserMenu,
       isAuthenticated,
       logout,
+      showCartModal,
+      setShowCartModal,
     };
   },
 };
