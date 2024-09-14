@@ -10,6 +10,7 @@ const useLayoutStore = defineStore({
       sidebarTheme: 'light',
       showMenu: false,
       showLoginModal: false,
+      showCartModal: false,
     },
     persistPaths: ['layout.type', 'layout.themeMode', 'layout.sidebarTheme'],
   }),
@@ -26,6 +27,9 @@ const useLayoutStore = defineStore({
     },
     setShowLoginModal(showLoginModal) {
       this.layout.showLoginModal = showLoginModal;
+    },
+    setShowCartModal(showCartModal) {
+      this.layout.showCartModal = showCartModal;
     },
   },
 });
