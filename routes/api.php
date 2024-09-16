@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductImageController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CartItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('auth/login', 'login')->name('login');
     Route::post('auth/register', 'register')->name('register');
     Route::post('auth/logout', 'logout')->name('logout');
+});
+
+Route::middleware(['usePassportTokenFromCookie','auth:api'])->group(function () {
+    Route::controller(CartItemController::class)->group(function () {
+        Route::post('cart-items/store', 'store')->name('cart-items.store');
+    });
 });
 
 Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])->group(function () {
