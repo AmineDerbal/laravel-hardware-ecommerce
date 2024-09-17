@@ -14,16 +14,21 @@ class CartItemController extends Controller
     {
 
         $data = $request->validated();
-        $cart = Cart::firstOrCreate(['active' => 1,'cart_id' => $data['cart_id']], ['user_id' => $data['user_id']]);
-        $data->cart_id = $cart->id;
 
 
-        $cartItem = CartItem::create($data->toArray());
+        try {
+            $cart = Cart::firstOrCreate(
+                ['user_id' => $data['user_id'], 'active' => 1],
+                ['user_id' => $data['user_id']]
+            );
+            $data['cart_id'] = $cart->id;
 
-
-        return $cartItem ? response()->json(['message' => 'Cart item created successfully']) : response()->json(['message' => 'Error creating cart item'], 500);
-
-
+            CartItem::create($data);
+            return response()->json(['message' => 'Cart item created successfully']);
+        } catch (\Exception $e) {
+            \Log::error('Error creating cart item: ' . $e->getMessage());
+            return response()->json(['message' => 'Error creating cart item'], 500);
+        }
 
     }
 }
