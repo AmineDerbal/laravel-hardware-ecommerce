@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\Users\UserCollection;
 
@@ -19,8 +18,8 @@ class UserController extends Controller
 
     public function toggleIsActiveStatus($id)
     {
-        try {
 
+        try {
             $user = User::findOrFail($id);
 
             $is_active = $user->is_active == 1 ? 0 : 1;
@@ -31,5 +30,17 @@ class UserController extends Controller
             return response()->json(['message' => 'Error updating user'], 500);
         }
 
+    }
+
+    public function fetchUserActiveCartItems($id)
+    {
+        try {
+            $user = User::with(['cartItems'])->find($id);
+
+            return response()->json($user->cartItems);
+        } catch (\Exception $e) {
+            \Log::info('Error fetching cart items: ' . $e->getMessage());
+            return response()->json(['message' => 'Error fetching cart items'], 500);
+        }
     }
 }
