@@ -27,7 +27,6 @@ const apiAction = async (apiCall, store, OnSuccess = null, Loading = true) => {
   try {
     const response = await apiCall();
     if (OnSuccess) {
-      console.log(response.data);
       OnSuccess(response.data);
     }
     return response;
