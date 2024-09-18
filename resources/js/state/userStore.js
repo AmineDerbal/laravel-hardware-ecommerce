@@ -9,6 +9,7 @@ const useUserStore = defineStore({
       email: null,
       role: null,
       isAuthenticated: false,
+      cart_items: [],
     },
     users: {},
     errors: {},
@@ -25,6 +26,7 @@ const useUserStore = defineStore({
         email: null,
         role: null,
         isAuthenticated: false,
+        cart_items: [],
       };
     },
     async registerUser(data) {
@@ -70,6 +72,21 @@ const useUserStore = defineStore({
         null,
         false,
       );
+    },
+
+    async fetchUserActiveCartItems(id) {
+      return await apiAction(
+        () => apiRequest(`/api/users/${id}/cart-items`),
+        this,
+        (data) => (this.user.cart_items = data),
+        false,
+      );
+    },
+
+    // check if it exists in cart and return id of the cart item or null
+    checkIfItemIsInCart(id) {
+      const item = this.user.cart_items.find((item) => item.product_id === id);
+      return item ? { id: item.id, cart_id: item.cart_id } : null;
     },
   },
 });
