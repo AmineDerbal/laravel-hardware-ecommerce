@@ -27,6 +27,7 @@ class User extends Authenticatable
         'is_active'
     ];
 
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -47,9 +48,29 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+
     public function carts()
     {
 
         return $this->hasMany(Cart::class);
+    }
+
+    public function cartsItems()
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class)->where('active', 1);
+    }
+
+    // the items of the only active cart
+    public function cartItems()
+    {
+
+        return $this->hasManyThrough(CartItem::class, Cart::class, 'user_id', 'cart_id')
+        ->where('active', 1);
+
     }
 }
