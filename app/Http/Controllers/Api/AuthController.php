@@ -34,7 +34,9 @@ class AuthController extends Controller
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->accessToken;
 
-        return response()->json(['user' => $user])->cookie(
+        $userWithCartItems = User::with(['cartItems'])->find($user->id);
+
+        return response()->json(['user' => $userWithCartItems])->cookie(
             'access_token',
             $token,
             $tokenResult->token->expires_at->diffInMinutes(now()), // Default expiration time
