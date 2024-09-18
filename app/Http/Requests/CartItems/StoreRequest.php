@@ -23,7 +23,6 @@ class StoreRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'cart_id' => 'nullable|exists:carts,id',
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
         ];
