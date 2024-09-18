@@ -69,12 +69,13 @@
             <div
               class="position-relative cursor-pointer"
               @click="setShowCartModal(true)"
+              :key="cartItems"
             >
               <i class="ri-clipboard-line fs-24"></i>
               <span
                 class="badge badge-danger position-absolute top-0 start-100 whb-top-bar translate-middle badge-rounded lh-1"
               >
-                0
+                {{ cartItems.length || 0 }}
                 <!-- Replace this with your cart count variable -->
               </span>
             </div>
@@ -102,12 +103,15 @@
         </div>
         <div class="user-info">
           <div class="d-flex align-items-center gap-2">
-            <div class="position-relative mx-2">
+            <div
+              class="position-relative mx-2"
+              :key="cartItems"
+            >
               <i class="ri-clipboard-line fs-24"></i>
               <span
                 class="badge badge-danger position-absolute top-0 start-100 whb-top-bar translate-middle badge-rounded lh-1"
               >
-                0
+                {{ cartItems.length || 0 }}
               </span>
             </div>
           </div>
@@ -164,8 +168,10 @@ export default {
     const layoutStore = useLayoutStore();
     const categoryStore = useCategoryStore();
     const userStore = useUserStore();
+
     const items = computed(() => categoryStore.headerCategories);
     const isAuthenticated = computed(() => userStore.user.isAuthenticated);
+    const cartItems = computed(() => userStore.user.cart_items);
     const showMenu = computed(() => layoutStore.layout.showMenu);
     const showLoginModal = computed(() => layoutStore.layout.showLoginModal);
     const showCartModal = computed(() => layoutStore.layout.showCartModal);
@@ -219,6 +225,7 @@ export default {
       logout,
       showCartModal,
       setShowCartModal,
+      cartItems,
     };
   },
 };
