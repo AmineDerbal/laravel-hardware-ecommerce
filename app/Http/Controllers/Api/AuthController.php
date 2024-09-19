@@ -34,7 +34,7 @@ class AuthController extends Controller
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->accessToken;
 
-        $userWithCartItems = User::with(['cartItems'])->find($user->id);
+        $userWithCartItems = User::with(['cartItems.product'])->find($user->id);
 
         return response()->json(['user' => $userWithCartItems])->cookie(
             'access_token',

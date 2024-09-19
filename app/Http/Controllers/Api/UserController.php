@@ -35,7 +35,7 @@ class UserController extends Controller
     public function fetchUserActiveCartItems($id)
     {
         try {
-            $user = User::with(['cartItems'])->find($id);
+            $user = User::with(['cartItems.product'])->find($id);
 
             return response()->json($user->cartItems);
         } catch (\Exception $e) {
