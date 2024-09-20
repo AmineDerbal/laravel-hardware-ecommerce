@@ -3,6 +3,8 @@
     <button
       type="button"
       class="border border-2 border-gray bg-white fs-24 text-secondary w-25"
+      @click="updateQuantity(quantity - 1)"
+      :disabled="quantity <= 1"
     >
       -
     </button>
@@ -10,10 +12,12 @@
       type="number"
       class="border border-2 border-gray text-center w-50"
       :value="quantity"
+      readonly
     />
     <button
       type="button"
       class="border border-2 border-gray bg-white fs-24 text-secondary w-25"
+      @click="updateQuantity(quantity + 1)"
     >
       +
     </button>
@@ -23,12 +27,17 @@
 <script>
 export default {
   name: 'ProductQuantityControl',
-
   props: {
     quantity: {
       type: Number,
       required: true,
     },
+  },
+  setup(props, { emit }) {
+    const updateQuantity = (value) => {
+      emit('update', value);
+    };
+    return { updateQuantity };
   },
 };
 </script>
