@@ -18,13 +18,44 @@
           Close</span
         >
       </div>
+      <div class="w-100 gray-bottom-border mt-3"></div>
+      <div class="p-2 d-flex flex-column justify-content-between">
+        <div
+          v-for="item in items"
+          :key="item.id"
+          class="mt-3"
+        >
+          <CartItem :item="item" />
+        </div>
+        <div>
+          <div class="w-100 gray-bottom-border mt-3"></div>
+          <div>
+            <p class="fs-20 fw-bold d-flex justify-content-between">
+              Total Price: <span class="whb-red-text"> ${{ totalPrice }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { ProductQuantityControl, CartItem } from '@/components';
+
 export default {
   name: 'CartModal',
+  props: {
+    items: {
+      type: Array,
+      required: true,
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
+    },
+  },
+  components: { ProductQuantityControl, CartItem },
 
   setup(props, { emit }) {
     const SetShowModal = () => {
@@ -45,6 +76,6 @@ export default {
   z-index: 10;
 }
 .cart {
-  min-width: 150px;
+  min-width: 275px;
 }
 </style>
