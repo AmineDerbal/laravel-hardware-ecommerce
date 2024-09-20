@@ -1,3 +1,6 @@
+// utils
+import PaginationUtils from './utils/PaginationUtils.vue';
+
 // backend
 import AdminLayoutView from './backend/layouts/LayoutView.vue';
 import LoaderView from './LoaderView.vue';
@@ -10,14 +13,16 @@ import AdminProductForm from './backend/product/ProductForm.vue';
 import ConfirmAdminModalAction from './backend/modals/ConfirmActionModal.vue';
 
 // frontend
+import ProductQuantityControl from './frontend/products/ProductQuantityControl.vue';
+import CartItem from './frontend/carts/CartItem.vue';
 import LayoutView from './frontend/layouts/LayoutView.vue';
 import HomeContent from './frontend/home/HomeContent.vue';
 import ProductsGrid from './frontend/products/LatestList.vue';
 
-// utils
-import PaginationUtils from './utils/PaginationUtils.vue';
-
 export {
+  // utils
+  PaginationUtils,
+
   // backend
   AdminLayoutView,
   LoaderView,
@@ -30,10 +35,9 @@ export {
   ConfirmAdminModalAction,
 
   // frontend
+  ProductQuantityControl,
+  CartItem,
   LayoutView,
   HomeContent,
   ProductsGrid,
-
-  // utils
-  PaginationUtils,
 };
