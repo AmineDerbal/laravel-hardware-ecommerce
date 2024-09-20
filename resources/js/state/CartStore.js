@@ -25,6 +25,14 @@ const useCartStore = defineStore({
             false,
           );
     },
+    async updateItemCartQuantity(product) {
+      return await apiAction(
+        () => apiRequest('/api/cart-items/update', 'PUT', product),
+        this,
+        null,
+        false,
+      );
+    },
   },
 });
 
