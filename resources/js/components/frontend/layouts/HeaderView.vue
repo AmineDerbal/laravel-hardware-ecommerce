@@ -76,10 +76,9 @@
                 class="badge badge-danger position-absolute top-0 start-100 whb-top-bar translate-middle badge-rounded lh-1"
               >
                 {{ cartItems.length || 0 }}
-                <!-- Replace this with your cart count variable -->
               </span>
             </div>
-            <span class="ml-2">Hello, User!</span>
+            <span class="ml-2">$ {{ calculateCartTotalPrice }}</span>
           </div>
         </div>
       </div>
@@ -143,7 +142,9 @@
     />
     <CartModal
       v-if="showCartModal"
-      :key="setShowCartModal"
+      :key="cartItems"
+      :items="cartItems"
+      :totalPrice="calculateCartTotalPrice"
       @setShowCartModal="setShowCartModal"
     />
   </header>
@@ -176,6 +177,13 @@ export default {
     const showLoginModal = computed(() => layoutStore.layout.showLoginModal);
     const showCartModal = computed(() => layoutStore.layout.showCartModal);
     const isUserMenuVisible = ref(false);
+    const calculateCartTotalPrice = computed(() => {
+      let total = 0;
+      cartItems.value.forEach((item) => {
+        total += item.product.price * item.quantity;
+      });
+      return total || 0;
+    });
 
     const toggleUserMenu = (value) => {
       isUserMenuVisible.value = value ?? !isUserMenuVisible.value;
@@ -226,6 +234,7 @@ export default {
       showCartModal,
       setShowCartModal,
       cartItems,
+      calculateCartTotalPrice,
     };
   },
 };
