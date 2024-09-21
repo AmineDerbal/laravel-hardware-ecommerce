@@ -19,12 +19,21 @@
       />
     </div>
     <p class="w-75">{{ item.product.name }}</p>
+    <div>
+      <span
+        class="ms-1 d-flex align-items-center cursor-pointer"
+        style="cursor: pointer"
+        @click="emitDeleteItem"
+      >
+        <i class="ri-close-line fs-24"></i>
+      </span>
+    </div>
   </div>
 
   <div class="d-flex flex-column align-items-center gap-2">
     <ProductQuantityControl
       :quantity="item.quantity"
-      @update="updateItemQuantity"
+      @update="emitUpdateQuantity"
     />
     <p class="w-50 text-muted">
       {{ item.quantity }} x
@@ -34,9 +43,6 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useToast } from 'vue-toastification';
-import { useCartStore, useUserStore } from '@/state';
 import { ProductQuantityControl } from '@/components';
 
 export default {
@@ -46,46 +52,27 @@ export default {
       type: Object,
       required: true,
     },
+    isLoading: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   components: { ProductQuantityControl },
-  setup(props) {
-    const cartStore = useCartStore();
-    const userStore = useUserStore();
-    const toast = useToast();
-    const isLoading = ref(false);
-
-    const updateItemQuantity = async (newQuantity) => {
-      isLoading.value = true;
-      const itemData = {
-        id: props.item.id,
-        quantity: newQuantity,
-        cart_id: props.item.cart_id,
-        product_id: props.item.product_id,
-        user_id: userStore.user.id,
-      };
-      const result = await cartStore.updateItemCartQuantity(itemData);
-      if (result.status !== 200) {
-        toast.error(result.data.message);
-        isLoading.value = false;
-        return;
-      }
-      const response = await userStore.fetchUserActiveCartItems(
-        userStore.user.id,
-      );
-      if (response.status !== 200) {
-        toast.error(response.data.message);
-        isLoading.value = false;
-        return;
-      }
-
-      isLoading.value = false;
-      toast.success(result.data.message);
-    };
-
-    return {
-      updateItemQuantity,
-      isLoading,
-    };
+  emits: ['updateItemQuantity', 'deleteItem'],
+  methods: {
+    emitUpdateQuantity(quantity) {
+      const { id, cart_id, product_id } = this.item;
+      this.$emit('updateItemQuantity', {
+        id,
+        cart_id,
+        product_id,
+        quantity,
+      });
+    },
+    emitDeleteItem() {
+      this.$emit('deleteItem', this.item.id);
+    },
   },
 };
 </script>
