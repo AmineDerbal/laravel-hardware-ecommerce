@@ -10,50 +10,12 @@
       v-for="item in items"
       :key="item.id"
     >
-      <BCard
-        no-body
-        class="d-flex flex-column"
-      >
-        <img
-          class="card-img-top img-fluid w-100 h-75 object-fit cursor-pointer"
-          :src="item.image_url"
-          alt="Card image cap"
-          @click="viewProduct(item.slug)"
-        />
-        <BCardBody
-          class="d-flex flex-column flex-grow-1 justify-content-between h-100"
-        >
-          <BCardTitle
-            class="mb-2 text-start d-flex flex-column h-100 cursor-pointer"
-            @click="viewProduct(item.slug)"
-            >{{ item.name }}</BCardTitle
-          >
-          <p class="card-text whb-red-text fs-24 text-center">
-            $ {{ item.price }}
-          </p>
-          <div class="text-end">
-            <button
-              type="button"
-              class="btn btn-outline-danger btn-load whb-red-bg text-uppercase fs-16 text-white w-100"
-              @click="handleAddToCartBtnClick(item.id)"
-            >
-              <span class="d-flex align-items-center justify-content-center">
-                <span
-                  class="spinner-border flex-shrink-0"
-                  role="status"
-                  v-if="isLoading[item.id]"
-                >
-                </span>
-                <span
-                  class="flex-frow-1 ms-2"
-                  v-else
-                  >Add to cart
-                </span>
-              </span>
-            </button>
-          </div>
-        </BCardBody>
-      </BCard>
+      <ProductItem
+        :item="item"
+        :isLoading="isLoading[item.id]"
+        @viewProduct="viewProduct"
+        @handleAddToCartBtnClick="handleAddToCartBtnClick"
+      />
     </BCol>
   </BRow>
 </template>
@@ -63,6 +25,7 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useCartStore, useUserStore } from '@/state';
+import ProductItem from './ProductItem.vue';
 
 export default {
   props: {
@@ -71,6 +34,7 @@ export default {
       required: true,
     },
   },
+  components: { ProductItem },
 
   setup() {
     const router = useRouter();
@@ -80,6 +44,9 @@ export default {
 
     const user = computed(() => userStore.user);
     const isLoading = ref({});
+    const setLoadingValue = (id, value) => {
+      isLoading.value = { ...isLoading.value, [id]: value };
+    };
 
     const isUserLoggedIn = computed(() =>
       user.value.isAuthenticated && user.value.name && user.value.email
@@ -103,10 +70,10 @@ export default {
         cart_id,
       };
 
-      isLoading.value = { ...isLoading.value, [product_id]: true };
+      setLoadingValue(product_id, true);
       const result = await cartStore.addItemToCart(item);
       if (result.status !== 200) {
-        isLoading.value = { ...isLoading.value, [product_id]: false };
+        setLoadingValue(product_id, false);
         toast.error(result.data.message);
         return;
       }
@@ -117,8 +84,7 @@ export default {
       }
 
       toast.success(result.data.message);
-
-      isLoading.value = { ...isLoading.value, [product_id]: false };
+      setLoadingValue(product_id, false);
     };
 
     const viewProduct = (slug) => {
