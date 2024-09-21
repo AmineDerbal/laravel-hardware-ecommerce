@@ -33,6 +33,13 @@ const useCartStore = defineStore({
         false,
       );
     },
+
+    async deleteCartItem(id) {
+      return await apiAction(
+        () => apiRequest(`/api/cart-items/${id}`, 'DELETE'),
+        this,
+      );
+    },
   },
 });
 
