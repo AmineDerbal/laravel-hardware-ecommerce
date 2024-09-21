@@ -49,6 +49,7 @@ Route::middleware(['usePassportTokenFromCookie','auth:api'])->group(function () 
         Route::post('cart-items/store', 'store')->name('cart-items.store');
         Route::put('cart-items/increment-quantity', 'incrementQuantityByOne')->name('cart-items.increment-quantity');
         Route::put('cart-items/update', 'update')->name('cart-items.update');
+        Route::delete('cart-items/{id}', 'destroy')->name('cart-items.destroy');
     });
 
 });
