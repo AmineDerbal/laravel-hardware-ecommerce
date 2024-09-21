@@ -12,7 +12,7 @@
         <span
           class="fw-semibold ms-1 d-flex align-items-center cursor-pointer"
           style="cursor: pointer"
-          @click="SetShowModal"
+          @click="setShowModal"
         >
           <i class="ri-close-line fs-24"></i>
           Close</span
@@ -25,7 +25,12 @@
           :key="item.id"
           class="mt-3"
         >
-          <CartItem :item="item" />
+          <CartItem
+            :item="item"
+            :isLoading="isLoading[item.id]"
+            @updateItemQuantity="updateItemQuantity"
+            @deleteItem="deleteCartItem"
+          />
         </div>
         <div>
           <div class="w-100 gray-bottom-border mt-3"></div>
@@ -41,7 +46,10 @@
 </template>
 
 <script>
-import { ProductQuantityControl, CartItem } from '@/components';
+import { ref } from 'vue';
+import { useToast } from 'vue-toastification';
+import { useCartStore, useUserStore } from '@/state';
+import { CartItem } from '@/components';
 
 export default {
   name: 'CartModal',
@@ -55,16 +63,50 @@ export default {
       required: true,
     },
   },
-  components: { ProductQuantityControl, CartItem },
-
-  setup(props, { emit }) {
-    const SetShowModal = () => {
-      emit('setShowCartModal', false);
+  components: { CartItem },
+  methods: {
+    setShowModal() {
+      this.$emit('setShowCartModal', false);
+    },
+  },
+  setup() {
+    const cartStore = useCartStore();
+    const userStore = useUserStore();
+    const toast = useToast();
+    const isLoading = ref({});
+    const setLoadingValue = (id, value) => {
+      isLoading.value = { ...isLoading.value, [id]: value };
     };
 
-    return {
-      SetShowModal,
+    const updateItemQuantity = async (data) => {
+      setLoadingValue(data.id, true);
+      data.user_id = userStore.user.id;
+      const result = await cartStore.updateItemCartQuantity(data);
+      if (result.status === 200) {
+        const response = await userStore.fetchUserActiveCartItems(data.user_id);
+        if (response.status !== 200) toast.error(response.data.message);
+      }
+      setLoadingValue(data.id, false);
+      result.status !== 200
+        ? toast.error(result.data.message)
+        : toast.success(result.data.message);
     };
+
+    const deleteCartItem = async (id) => {
+      setLoadingValue(id, true);
+      const result = await cartStore.deleteCartItem(id);
+      if (result.status === 200) {
+        const response = await userStore.fetchUserActiveCartItems(
+          userStore.user.id,
+        );
+        if (response.status !== 200) toast.error(response.data.message);
+      }
+      setLoadingValue(id, false);
+      result.status !== 200
+        ? toast.error(result.data.message)
+        : toast.success(result.data.message);
+    };
+    return { isLoading, updateItemQuantity, deleteCartItem };
   },
 };
 </script>
