@@ -142,7 +142,6 @@
     />
     <CartModal
       v-if="showCartModal"
-      :key="cartItems"
       :items="cartItems"
       :totalPrice="calculateCartTotalPrice"
       @setShowCartModal="setShowCartModal"
