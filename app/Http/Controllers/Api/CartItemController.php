@@ -75,4 +75,17 @@ class CartItemController extends Controller
         }
 
     }
+
+    public function destroy($id)
+    {
+        \Log::info($id);
+        try {
+            $cartItem = CartItem::findOrFail($id);
+            $cartItem->delete();
+            return response()->json(['message' => 'Cart item deleted successfully']);
+        } catch (\Exception $e) {
+            \Log::error('Error updating cart item: ' . $e->getMessage());
+            return response()->json(['message' => 'Error on deleting cart item'], 500);
+        }
+    }
 }
