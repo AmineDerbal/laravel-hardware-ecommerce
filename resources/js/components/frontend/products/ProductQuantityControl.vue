@@ -33,11 +33,10 @@ export default {
       required: true,
     },
   },
-  setup(props, { emit }) {
-    const updateQuantity = (value) => {
-      emit('update', value);
-    };
-    return { updateQuantity };
+  methods: {
+    updateQuantity(value) {
+      this.$emit('update', value);
+    },
   },
 };
 </script>
