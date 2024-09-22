@@ -72,19 +72,16 @@ export default {
 
       setLoadingValue(product_id, true);
       const result = await cartStore.addItemToCart(item);
-      if (result.status !== 200) {
-        setLoadingValue(product_id, false);
-        toast.error(result.data.message);
-        return;
+      if (result.status === 200) {
+        const response = await userStore.fetchUserActiveCartItems(
+          user.value.id,
+        );
+        if (response.status !== 200) toast.error(response.data.message);
       }
-      const response = await userStore.fetchUserActiveCartItems(user.value.id);
-      if (response.status !== 200) {
-        toast.error(response.data.message);
-        return;
-      }
-
-      toast.success(result.data.message);
       setLoadingValue(product_id, false);
+      result.status !== 200
+        ? toast.error(result.data.message)
+        : toast.success(result.data.message);
     };
 
     const viewProduct = (slug) => {
