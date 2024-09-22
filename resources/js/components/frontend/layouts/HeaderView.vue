@@ -149,7 +149,7 @@
   </header>
 </template>
 <script>
-import { computed, onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref, onUpdated } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useLayoutStore, useCategoryStore, useUserStore } from '@/state';
@@ -176,6 +176,15 @@ export default {
     const showLoginModal = computed(() => layoutStore.layout.showLoginModal);
     const showCartModal = computed(() => layoutStore.layout.showCartModal);
     const isUserMenuVisible = ref(false);
+
+    const hideBodyOverflow = () => {
+      if (showMenu.value || showLoginModal.value || showCartModal.value) {
+        document.body.classList.add('overflow-hidden');
+        return;
+      }
+      document.body.classList.remove('overflow-hidden');
+    };
+
     const calculateCartTotalPrice = computed(() => {
       let total = 0;
       cartItems.value.forEach((item) => {
@@ -215,8 +224,13 @@ export default {
       await categoryStore.getHeaderCategories();
     };
 
+    onUpdated(() => {
+      hideBodyOverflow();
+    });
+
     onBeforeMount(async () => {
       await getHeaderCategories();
+      hideBodyOverflow();
     });
 
     return {
