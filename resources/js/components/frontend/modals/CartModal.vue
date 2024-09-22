@@ -1,7 +1,7 @@
 <template>
   <div
-    class="d-flex justify-content-end w-100 h-100 top-0 left-0 cart-modal position-fixed overflow-hidden"
-    @click="SetShowModal"
+    class="d-flex justify-content-end w-100 h-100 top-0 left-0 cart-modal position-fixed"
+    @click="setShowModal"
   >
     <div
       class="w-25 h-100 position-relative bg-white overflow-auto cart"
