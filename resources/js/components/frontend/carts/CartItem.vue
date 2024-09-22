@@ -13,7 +13,7 @@
       </div>
 
       <img
-        :src="item.product.image"
+        :src="item.product.image_url"
         :class="{ 'opacity-50': isLoading }"
         class="rounded w-100"
       />
