@@ -103,8 +103,9 @@
         <div class="user-info">
           <div class="d-flex align-items-center gap-2">
             <div
-              class="position-relative mx-2"
+              class="position-relative mx-2 cursor-pointer"
               :key="cartItems"
+              @click="setShowCartModal(true)"
             >
               <i class="ri-clipboard-line fs-24"></i>
               <span
@@ -128,24 +129,30 @@
       :items="items"
       :key="items"
     />
-    <MobileMenu
-      v-if="showMenu"
-      :items="items"
-      :key="items"
-      @setShowMenu="setShowMenu"
-    />
-    <LoginModal
-      v-if="showLoginModal"
-      :key="showLoginModal"
-      :userStore="userStore"
-      @setShowLoginModal="setShowLoginModal"
-    />
-    <CartModal
-      v-if="showCartModal"
-      :items="cartItems"
-      :totalPrice="calculateCartTotalPrice"
-      @setShowCartModal="setShowCartModal"
-    />
+    <Transition name="slide-fade-left">
+      <MobileMenu
+        v-if="showMenu"
+        :items="items"
+        :key="items"
+        @setShowMenu="setShowMenu"
+      />
+    </Transition>
+    <Transition name="slide-fade-right">
+      <LoginModal
+        v-if="showLoginModal"
+        :key="showLoginModal"
+        :userStore="userStore"
+        @setShowLoginModal="setShowLoginModal"
+      />
+    </Transition>
+    <Transition name="slide-fade-right">
+      <CartModal
+        v-if="showCartModal"
+        :items="cartItems"
+        :totalPrice="calculateCartTotalPrice"
+        @setShowCartModal="setShowCartModal"
+      />
+    </Transition>
   </header>
 </template>
 <script>
@@ -271,5 +278,37 @@ export default {
 
 .dropdown-toggle::after {
   display: none;
+}
+
+.slide-fade-left-enter-active,
+.slide-fade-left-leave-active,
+.slide-fade-right-enter-active,
+.slide-fade-right-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.slide-fade-left-enter-from {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.slide-fade-right-enter-from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.slide-fade-left-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.slide-fade-right-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.slide-fade-left-enter-to,
+.slide-fade-right-enter-to {
+  transform: translateX(0); /* End on-screen */
+  opacity: 1;
 }
 </style>
