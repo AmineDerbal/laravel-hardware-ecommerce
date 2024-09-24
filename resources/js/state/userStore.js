@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { apiRequest, apiAction } from '@/utils/apiUtils';
+import { notifyIfNotAuthenticated } from '@/utils/authUtils';
 
 const useUserStore = defineStore({
   id: 'user',
@@ -28,6 +29,10 @@ const useUserStore = defineStore({
         isAuthenticated: false,
         cart_items: [],
       };
+    },
+
+    notifyifNoUserAuthenticated(toast) {
+      return notifyIfNotAuthenticated(this.user, toast);
     },
     async registerUser(data) {
       return await apiAction(
