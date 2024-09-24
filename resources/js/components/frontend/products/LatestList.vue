@@ -21,10 +21,11 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useCartStore, useUserStore } from '@/state';
+import { addItemToCart } from '@/utils/cartUtils';
 import ProductItem from './ProductItem.vue';
 
 export default {
@@ -42,46 +43,14 @@ export default {
     const userStore = useUserStore();
     const toast = useToast();
 
-    const user = computed(() => userStore.user);
     const isLoading = ref({});
-    const setLoadingValue = (id, value) => {
-      isLoading.value = { ...isLoading.value, [id]: value };
-    };
-
-    const isUserLoggedIn = computed(() =>
-      user.value.isAuthenticated && user.value.name && user.value.email
-        ? true
-        : false,
-    );
 
     const handleAddToCartBtnClick = async (product_id) => {
-      if (!isUserLoggedIn.value) {
-        toast.error('Please login to add product to cart');
-        return;
-      }
-
-      const { id, cart_id } = userStore.checkIfItemIsInCart(product_id) || {};
-
-      const item = {
-        user_id: user.value.id,
+      const data = {
         product_id,
         quantity: 1,
-        id,
-        cart_id,
       };
-
-      setLoadingValue(product_id, true);
-      const result = await cartStore.addItemToCart(item);
-      if (result.status === 200) {
-        const response = await userStore.fetchUserActiveCartItems(
-          user.value.id,
-        );
-        if (response.status !== 200) toast.error(response.data.message);
-      }
-      setLoadingValue(product_id, false);
-      result.status !== 200
-        ? toast.error(result.data.message)
-        : toast.success(result.data.message);
+      await addItemToCart(cartStore, userStore, toast, data, isLoading, true);
     };
 
     const viewProduct = (slug) => {
@@ -90,7 +59,6 @@ export default {
 
     return {
       viewProduct,
-      isUserLoggedIn,
       isLoading,
       handleAddToCartBtnClick,
     };
