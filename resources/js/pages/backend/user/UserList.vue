@@ -71,6 +71,10 @@ export default {
 
     const getPage = () => route.query.page || 1;
 
+    // check is the authenticated user id is the same as the user id in the url
+    const isCurrentUser = (id) => {
+      return id === userStore.user.id;
+    };
     const onPageChange = (page) => {
       router.push({ name: 'admin-user-list', query: { page: page } });
     };
@@ -78,6 +82,10 @@ export default {
     const toggleUserActiveStatus = async (e, id) => {
       e.preventDefault();
 
+      if (isCurrentUser(id)) {
+        toast.error('You can not toggle your own status');
+        return;
+      }
       const response = await userStore.toggleUserAciveStatus(id);
       if (response.status === 200 || response.status === 201) {
         toast.success(response.data.message);
