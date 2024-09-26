@@ -5,7 +5,7 @@
       :key="product"
       v-if="product && product.id"
     >
-      <div class="d-flex w-100 px-5">
+      <div class="d-flex flex-lg-row flex-column w-100 px-5">
         <div class="w-75 d-flex gap-1">
           <div class="image-gallery w-25">
             <img
@@ -14,7 +14,7 @@
               alt="Product Image"
             />
           </div>
-          <div>
+          <div class="image-gallery w-75">
             <img
               :src="product.image_url"
               loading="lazy"
@@ -23,7 +23,7 @@
             />
           </div>
         </div>
-        <div class="w-25">
+        <div :class="screenSizeIsLarge ? 'w-25' : 'w-100'">
           <nav aria-label="breadcrumb">
             <BBreadcrumb>
               <BBreadcrumbItem>
@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import { computed, onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useProductStore, useUserStore, useCartStore } from '@/state';
@@ -119,6 +119,17 @@ export default {
     const route = useRoute();
     const toast = useToast();
     const isLoading = ref(false);
+    const screenWidth = ref(window.innerWidth);
+
+    const screenSizeIsLarge = computed(() => {
+      return screenWidth.value >= 992;
+    });
+
+    const updateScreenWidth = () => {
+      console.log('updateScreenWidth');
+      screenWidth.value = window.innerWidth;
+      console.log(screenWidth.value);
+    };
 
     const product = computed(() => store.product.product);
 
@@ -149,6 +160,11 @@ export default {
 
     onBeforeMount(async () => {
       await getProduct();
+      window.addEventListener('resize', updateScreenWidth);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', updateScreenWidth);
     });
 
     return {
@@ -158,6 +174,7 @@ export default {
       setProductNumber,
       addToCart,
       isLoading,
+      screenSizeIsLarge,
     };
   },
 };
