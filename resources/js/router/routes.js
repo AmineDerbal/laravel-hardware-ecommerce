@@ -4,6 +4,7 @@ import {
   RegisterView,
   CategoryProductsList,
   ProductShow,
+  UserCart,
   AdminUserList,
   AdminCategoryList,
   AdminCategoryCreate,
@@ -15,12 +16,21 @@ import {
   AdminDashboard,
 } from '../pages';
 import { useUserStore } from '@/state';
-import { redirectIfAuthenticated } from '@/utils/authUtils';
+import {
+  redirectIfAuthenticated,
+  allowIfAuthenticated,
+} from '@/utils/authUtils';
 
 const checkIfAuth = (to, from, next) => {
   const userStore = useUserStore();
 
   redirectIfAuthenticated(userStore.user, to, from, next);
+};
+
+const allowIfIsAuthenticated = (to, from, next) => {
+  const userStore = useUserStore();
+
+  allowIfAuthenticated(userStore.user, to, from, next);
 };
 
 const routes = [
@@ -55,6 +65,12 @@ const routes = [
         path: 'products/:slug',
         name: 'product-show',
         component: ProductShow,
+      },
+      {
+        path: 'my-cart',
+        name: 'user-cart',
+        component: UserCart,
+        beforeEnter: allowIfIsAuthenticated,
       },
     ],
   },
