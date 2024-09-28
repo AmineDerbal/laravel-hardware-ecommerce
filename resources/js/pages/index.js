@@ -4,6 +4,7 @@ const HomeView = () => import('./frontend/home/HomeView.vue');
 const CategoryProductsList = () =>
   import('./frontend/product/CategoryProductsList.vue');
 const ProductShow = () => import('./frontend/product/ProductShow.vue');
+const UserCart = () => import('./frontend/cart/UserCart.vue');
 
 const AdminDashboard = () => import('./backend/dashboard/DashboardView.vue');
 const AdminUserList = () => import('./backend/user/UserList.vue');
@@ -22,6 +23,7 @@ export {
   HomeView,
   CategoryProductsList,
   ProductShow,
+  UserCart,
   AdminUserList,
   AdminCategoryList,
   AdminCategoryCreate,
