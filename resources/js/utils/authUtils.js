@@ -28,6 +28,14 @@ const redirectIfAuthenticated = (user, to, from, next) => {
   }
 };
 
+const allowIfAuthenticated = (user, to, from, next) => {
+  if (checkIsAuthenticated(user)) {
+    next();
+  } else {
+    next({ name: 'login' });
+  }
+};
+
 const logoutUser = async (userStore) => {
   await userStore.logoutUser();
   return !checkIsAuthenticated(userStore.user);
@@ -40,4 +48,5 @@ export {
   handleRegisterSubmit,
   logoutUser,
   notifyIfNotAuthenticated,
+  allowIfAuthenticated,
 };
