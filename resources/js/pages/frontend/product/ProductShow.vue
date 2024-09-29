@@ -5,18 +5,49 @@
       :key="product"
       v-if="product && product.id"
     >
-      <div class="d-flex flex-lg-row flex-column w-100 px-5">
+      <div class="d-flex flex-lg-row flex-column w-100 px-5 vh-100">
         <div class="w-75 d-flex gap-1">
-          <div class="image-gallery w-25">
-            <img
-              :src="product.image_url"
-              class="img-fluid opacity-50"
-              alt="Product Image"
-            />
+          <div
+            class="w-25 d-lg-flex d-none flex-column justify-content-between gap-1"
+          >
+            <div
+              v-for="image in visibleGallery"
+              :key="image.index"
+              class="cursor-pointer h-25 thumbnail-container"
+            >
+              <img
+                :src="image.image"
+                class="img-fluid w-100 h-75 object-fit-cover"
+                loading="lazy"
+                :class="
+                  currentImageIndex === image.index
+                    ? 'opacity-50'
+                    : 'opacity-100'
+                "
+                alt="Product Image"
+                @click="changeImageIndex(image.index)"
+              />
+            </div>
+            <div
+              class="d-flex w-100 justify-content-center gap-1 align-items-center"
+            >
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+              >
+                <i class="ri-arrow-up-s-line"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+              >
+                <i class="ri-arrow-down-s-line"></i>
+              </button>
+            </div>
           </div>
           <div class="image-gallery w-75">
             <img
-              :src="product.image_url"
+              :src="imageGallery[currentImageIndex].image"
               loading="lazy"
               class="img-fluid"
               alt="Product Image"
@@ -63,7 +94,7 @@
 
             <button
               type="button"
-              class="btn btn-outline-danger btn-load whb-red-bg text-uppercase fs-16 text-white w-100"
+              class="btn btn-outline-danger btn-load whb-red-bg text-uppercase text-white"
               @click="addToCart"
             >
               <span class="d-flex align-items-center justify-content-center">
@@ -119,16 +150,38 @@ export default {
     const route = useRoute();
     const toast = useToast();
     const isLoading = ref(false);
+
     const screenWidth = ref(window.innerWidth);
 
+    const updateScreenWidth = () => {
+      screenWidth.value = window.innerWidth;
+    };
     const screenSizeIsLarge = computed(() => {
       return screenWidth.value >= 992;
     });
 
-    const updateScreenWidth = () => {
-      console.log('updateScreenWidth');
-      screenWidth.value = window.innerWidth;
-      console.log(screenWidth.value);
+    const imageGallery = ref([
+      {
+        image: '',
+        index: 0,
+      },
+    ]);
+    const gallerySize = ref(3);
+    const galleryIndex = ref(0);
+    const imageIndex = ref(0);
+    const currentImageIndex = computed(() => {
+      return imageIndex.value || 0;
+    });
+
+    const visibleGallery = computed(() => {
+      return imageGallery.value.slice(
+        galleryIndex.value,
+        galleryIndex.value + gallerySize.value,
+      );
+    });
+
+    const changeImageIndex = (value) => {
+      imageIndex.value = value;
     };
 
     const product = computed(() => store.product.product);
@@ -156,6 +209,13 @@ export default {
 
     const getProduct = async () => {
       await store.getClientProudct(getSlug());
+      imageGallery.value = [
+        { image: product.value.image_url, index: 0 },
+        ...product.value.images.map((img, index) => ({
+          image: img.image_url,
+          index: index + 1,
+        })),
+      ];
     };
 
     onBeforeMount(async () => {
@@ -175,7 +235,28 @@ export default {
       addToCart,
       isLoading,
       screenSizeIsLarge,
+      visibleGallery,
+      imageGallery,
+      currentImageIndex,
+      changeImageIndex,
     };
   },
 };
 </script>
+
+<style scoped>
+.image-gallery {
+  height: auto; /* Ensures it does not exceed the container's height */
+}
+
+.thumbnail-wrapper {
+  max-height: 100px; /* Set a height for the thumbnail to avoid overflow */
+  overflow: hidden;
+}
+
+.thumbnail-container {
+  flex-shrink: 0; /* Prevent shrinking */
+  height: 33%; /* Ensures each image container is 1/3 of the gallery height */
+  overflow: hidden; /* Hide any overflowing content */
+}
+</style>
