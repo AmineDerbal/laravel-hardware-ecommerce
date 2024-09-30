@@ -7,49 +7,64 @@
     >
       <div class="d-flex flex-lg-row flex-column w-100 px-5 vh-100">
         <div class="w-75 d-flex gap-1">
-          <div
-            class="w-25 d-lg-flex d-none flex-column justify-content-between gap-1"
-          >
+          <div class="image-slider d-lg-flex d-none flex-column gap-1">
             <div
-              v-for="image in visibleGallery"
-              :key="image.index"
-              class="cursor-pointer h-25 thumbnail-container"
+              class="w-100 d-flex flex-column justify-content-between gap-1 overflow-hidden"
             >
-              <img
-                :src="image.image"
-                class="img-fluid w-100 h-75 object-fit-cover"
-                loading="lazy"
-                :class="
-                  currentImageIndex === image.index
-                    ? 'opacity-50'
-                    : 'opacity-100'
-                "
-                alt="Product Image"
-                @click="changeImageIndex(image.index)"
-              />
+              <div
+                v-for="image in visibleGallery"
+                class="cursor-pointer h-25 thumbnail-container"
+              >
+                <Transition
+                  :name="
+                    imageSlideDirection === 'up'
+                      ? 'slide-fade-up'
+                      : imageSlideDirection === 'down'
+                      ? 'slide-fade-down'
+                      : ''
+                  "
+                >
+                  <img
+                    :src="image.image"
+                    :key="visibleGallery"
+                    class="img-fluid w-100 h-75 object-fit-cover"
+                    loading="lazy"
+                    :class="[
+                      image.index === currentImageIndex
+                        ? 'opacity-50'
+                        : 'opacity-100',
+                    ]"
+                    alt="Product Image"
+                    @click="changeImageIndex(image.index)"
+                  />
+                </Transition>
+              </div>
             </div>
+
             <div
               class="d-flex w-100 justify-content-center gap-1 align-items-center"
             >
               <button
                 type="button"
                 class="btn btn-outline-secondary"
+                @click="changeGalleryIndex(galleryIndex - 1)"
               >
                 <i class="ri-arrow-up-s-line"></i>
               </button>
               <button
                 type="button"
                 class="btn btn-outline-secondary"
+                @click="changeGalleryIndex(galleryIndex + 1)"
               >
                 <i class="ri-arrow-down-s-line"></i>
               </button>
             </div>
           </div>
-          <div class="image-gallery w-75">
+          <div class="image-gallery">
             <img
               :src="imageGallery[currentImageIndex].image"
               loading="lazy"
-              class="img-fluid"
+              class="img-fluid object-fit-cover w-100 h-100"
               alt="Product Image"
             />
           </div>
@@ -169,6 +184,7 @@ export default {
     const gallerySize = ref(3);
     const galleryIndex = ref(0);
     const imageIndex = ref(0);
+    const imageSlideDirection = ref(null);
     const currentImageIndex = computed(() => {
       return imageIndex.value || 0;
     });
@@ -180,7 +196,20 @@ export default {
       );
     });
 
+    const changeGalleryIndex = (value) => {
+      if (value < 0 || imageGallery.value.length - value < gallerySize.value) {
+        return;
+      }
+      value > galleryIndex.value
+        ? (imageSlideDirection.value = 'up')
+        : (imageSlideDirection.value = 'down');
+      galleryIndex.value = value;
+    };
+
     const changeImageIndex = (value) => {
+      if (value < 0 || value >= imageGallery.value.length) {
+        return;
+      }
       imageIndex.value = value;
     };
 
@@ -216,6 +245,8 @@ export default {
           index: index + 1,
         })),
       ];
+
+      console.log(visibleGallery.value);
     };
 
     onBeforeMount(async () => {
@@ -239,6 +270,9 @@ export default {
       imageGallery,
       currentImageIndex,
       changeImageIndex,
+      changeGalleryIndex,
+      galleryIndex,
+      imageSlideDirection,
     };
   },
 };
@@ -246,17 +280,40 @@ export default {
 
 <style scoped>
 .image-gallery {
-  height: auto; /* Ensures it does not exceed the container's height */
-}
-
-.thumbnail-wrapper {
-  max-height: 100px; /* Set a height for the thumbnail to avoid overflow */
-  overflow: hidden;
+  height: auto;
+  width: 80%; /* Ensures it does not exceed the container's height */
 }
 
 .thumbnail-container {
-  flex-shrink: 0; /* Prevent shrinking */
   height: 33%; /* Ensures each image container is 1/3 of the gallery height */
-  overflow: hidden; /* Hide any overflowing content */
 }
+.image-slider {
+  width: 20%;
+}
+
+/* .slide-fade-up-enter-active,
+.slide-fade-up-leave-active,
+.slide-fade-down-enter-active,
+.slide-fade-down-leave-active {
+  transition: opacity 0.1s ease, transform 0.1s ease;
+} */
+
+/*
+.slide-fade-up-leave-to {
+  transform: translateY(-100%);
+  opacity: 1;
+}
+
+.slide-fade-up-leave-from {
+  transform: translateY(50%);
+  opacity: 1;
+}
+
+.slide-fade-up-enter-to {
+  transform: translateY(50);
+}
+
+.slide-fade-up-enter-from {
+  transform: translateY(150%);
+} */
 </style>
