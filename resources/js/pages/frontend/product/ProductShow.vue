@@ -7,27 +7,27 @@
     >
       <div class="d-flex flex-lg-row flex-column w-100 px-5 vh-100">
         <div class="w-75 d-flex gap-1">
-          <div class="image-slider d-lg-flex d-none flex-column gap-1">
+          <div class="d-lg-flex w-25 d-none flex-column gap-1">
             <div
-              class="w-100 d-flex flex-column justify-content-between gap-1 overflow-hidden"
+              class="image-slider d-flex flex-column flex-nowrap justify-content-between gap-1"
             >
-              <div
-                v-for="image in visibleGallery"
-                class="cursor-pointer h-25 thumbnail-container"
+              <TransitionGroup
+                :name="
+                  imageSlideDirection === 'up'
+                    ? 'slide-fade-up'
+                    : imageSlideDirection === 'down'
+                    ? 'slide-fade-down'
+                    : ''
+                "
               >
-                <Transition
-                  :name="
-                    imageSlideDirection === 'up'
-                      ? 'slide-fade-up'
-                      : imageSlideDirection === 'down'
-                      ? 'slide-fade-down'
-                      : ''
-                  "
+                <div
+                  v-for="image in imageGallery"
+                  :key="imageSlideDirection"
+                  class="cursor-pointer thumbnail-container"
                 >
                   <img
                     :src="image.image"
-                    :key="visibleGallery"
-                    class="img-fluid w-100 h-75 object-fit-cover"
+                    class="h-100 w-25 object-fit-cover"
                     loading="lazy"
                     :class="[
                       image.index === currentImageIndex
@@ -37,13 +37,11 @@
                     alt="Product Image"
                     @click="changeImageIndex(image.index)"
                   />
-                </Transition>
-              </div>
+                </div>
+              </TransitionGroup>
             </div>
 
-            <div
-              class="d-flex w-100 justify-content-center gap-1 align-items-center"
-            >
+            <div class="d-flex gap-1 align-items-center">
               <button
                 type="button"
                 class="btn btn-outline-secondary"
@@ -190,20 +188,21 @@ export default {
     });
 
     const visibleGallery = computed(() => {
-      return imageGallery.value.slice(
-        galleryIndex.value,
-        galleryIndex.value + gallerySize.value,
-      );
+      return imageGallery.value
+        .slice(galleryIndex.value, galleryIndex.value + gallerySize.value)
+        .map((image) => image.index);
     });
 
-    const changeGalleryIndex = (value) => {
+    const changeGalleryIndex = async (value) => {
       if (value < 0 || imageGallery.value.length - value < gallerySize.value) {
         return;
       }
-      value > galleryIndex.value
+
+      const oldGalleryIndex = galleryIndex.value;
+      galleryIndex.value = value;
+      value > oldGalleryIndex
         ? (imageSlideDirection.value = 'up')
         : (imageSlideDirection.value = 'down');
-      galleryIndex.value = value;
     };
 
     const changeImageIndex = (value) => {
@@ -285,35 +284,49 @@ export default {
 }
 
 .thumbnail-container {
-  height: 33%; /* Ensures each image container is 1/3 of the gallery height */
+  min-height: 200px; /* Ensures each image container is 1/3 of the gallery height */
 }
 .image-slider {
-  width: 20%;
+  height: 600px;
+  overflow-y: hidden;
 }
 
-/* .slide-fade-up-enter-active,
+.slide-fade-up-enter-active,
 .slide-fade-up-leave-active,
 .slide-fade-down-enter-active,
 .slide-fade-down-leave-active {
-  transition: opacity 0.1s ease, transform 0.1s ease;
-} */
+  transition: opacity 0.1s ease, transform 1s ease;
+}
 
-/*
 .slide-fade-up-leave-to {
   transform: translateY(-100%);
-  opacity: 1;
 }
+/* .slide-fade-down-leave-to {
+  transform: translateY(100%);
+  opacity: 1;
+} */
 
 .slide-fade-up-leave-from {
-  transform: translateY(50%);
-  opacity: 1;
+  transform: translateY(0);
+  display: block;
 }
+
+/* .slide-fade-down-leave-from {
+  transform: translateY(-50%);
+  opacity: 1;
+} */
 
 .slide-fade-up-enter-to {
-  transform: translateY(50);
+  transform: translateY(0);
 }
+/* .slide-fade-down-enter-to {
+  transform: translateY(-50%);
+} */
 
 .slide-fade-up-enter-from {
-  transform: translateY(150%);
+  transform: translateY(100%);
+}
+/* .slide-fade-down-enter-from {
+  transform: translateY(-150%);
 } */
 </style>
