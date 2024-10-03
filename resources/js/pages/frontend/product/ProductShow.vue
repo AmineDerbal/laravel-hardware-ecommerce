@@ -8,57 +8,15 @@
       <div class="d-flex flex-lg-row flex-column w-100 px-5 vh-100">
         <div class="w-75 d-flex gap-1">
           <div class="d-lg-flex w-25 d-none flex-column gap-1">
-            <div
-              class="image-slider d-flex flex-column flex-nowrap justify-content-between gap-1"
-            >
-              <TransitionGroup
-                :name="
-                  imageSlideDirection === 'up'
-                    ? 'slide-fade-up'
-                    : imageSlideDirection === 'down'
-                    ? 'slide-fade-down'
-                    : ''
-                "
-              >
-                <div
-                  v-for="image in imageGallery"
-                  :key="imageSlideDirection"
-                  class="cursor-pointer thumbnail-container"
-                >
-                  <img
-                    :src="image.image"
-                    class="h-100 w-25 object-fit-cover"
-                    loading="lazy"
-                    :class="[
-                      image.index === currentImageIndex
-                        ? 'opacity-50'
-                        : 'opacity-100',
-                    ]"
-                    alt="Product Image"
-                    @click="changeImageIndex(image.index)"
-                  />
-                </div>
-              </TransitionGroup>
-            </div>
-
-            <div class="d-flex gap-1 align-items-center">
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                @click="changeGalleryIndex(galleryIndex - 1)"
-              >
-                <i class="ri-arrow-up-s-line"></i>
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                @click="changeGalleryIndex(galleryIndex + 1)"
-              >
-                <i class="ri-arrow-down-s-line"></i>
-              </button>
-            </div>
+            <SlideImage
+              :items="imageGallery"
+              :currentImageIndex="currentImageIndex"
+              @changeImageIndex="changeImageIndex"
+              :key="imageGallery"
+              v-if="imageGallery.length > 0 && screenSizeIsLarge"
+            />
           </div>
-          <div class="image-gallery">
+          <div class="image-gallery w-75">
             <img
               :src="imageGallery[currentImageIndex].image"
               loading="lazy"
@@ -151,10 +109,11 @@ import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useProductStore, useUserStore, useCartStore } from '@/state';
 import { LayoutView, ProductQuantityControl } from '@/components';
+import SlideImage from '@/components/frontend/products/SlideImage.vue';
 import { addItemToCart } from '@/utils/cartUtils';
 
 export default {
-  components: { LayoutView, ProductQuantityControl },
+  components: { LayoutView, ProductQuantityControl, SlideImage },
 
   setup() {
     const store = useProductStore();
@@ -179,31 +138,11 @@ export default {
         index: 0,
       },
     ]);
-    const gallerySize = ref(3);
-    const galleryIndex = ref(0);
+
     const imageIndex = ref(0);
-    const imageSlideDirection = ref(null);
     const currentImageIndex = computed(() => {
       return imageIndex.value || 0;
     });
-
-    const visibleGallery = computed(() => {
-      return imageGallery.value
-        .slice(galleryIndex.value, galleryIndex.value + gallerySize.value)
-        .map((image) => image.index);
-    });
-
-    const changeGalleryIndex = async (value) => {
-      if (value < 0 || imageGallery.value.length - value < gallerySize.value) {
-        return;
-      }
-
-      const oldGalleryIndex = galleryIndex.value;
-      galleryIndex.value = value;
-      value > oldGalleryIndex
-        ? (imageSlideDirection.value = 'up')
-        : (imageSlideDirection.value = 'down');
-    };
 
     const changeImageIndex = (value) => {
       if (value < 0 || value >= imageGallery.value.length) {
@@ -244,8 +183,6 @@ export default {
           index: index + 1,
         })),
       ];
-
-      console.log(visibleGallery.value);
     };
 
     onBeforeMount(async () => {
@@ -265,13 +202,9 @@ export default {
       addToCart,
       isLoading,
       screenSizeIsLarge,
-      visibleGallery,
       imageGallery,
       currentImageIndex,
       changeImageIndex,
-      changeGalleryIndex,
-      galleryIndex,
-      imageSlideDirection,
     };
   },
 };
@@ -280,7 +213,7 @@ export default {
 <style scoped>
 .image-gallery {
   height: auto;
-  width: 80%; /* Ensures it does not exceed the container's height */
+  /* Ensures it does not exceed the container's height */
 }
 
 .thumbnail-container {
@@ -290,43 +223,4 @@ export default {
   height: 600px;
   overflow-y: hidden;
 }
-
-.slide-fade-up-enter-active,
-.slide-fade-up-leave-active,
-.slide-fade-down-enter-active,
-.slide-fade-down-leave-active {
-  transition: opacity 0.1s ease, transform 1s ease;
-}
-
-.slide-fade-up-leave-to {
-  transform: translateY(-100%);
-}
-/* .slide-fade-down-leave-to {
-  transform: translateY(100%);
-  opacity: 1;
-} */
-
-.slide-fade-up-leave-from {
-  transform: translateY(0);
-  display: block;
-}
-
-/* .slide-fade-down-leave-from {
-  transform: translateY(-50%);
-  opacity: 1;
-} */
-
-.slide-fade-up-enter-to {
-  transform: translateY(0);
-}
-/* .slide-fade-down-enter-to {
-  transform: translateY(-50%);
-} */
-
-.slide-fade-up-enter-from {
-  transform: translateY(100%);
-}
-/* .slide-fade-down-enter-from {
-  transform: translateY(-150%);
-} */
 </style>

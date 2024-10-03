@@ -1,25 +1,32 @@
 <template>
-  <div class="d-lg-flex d-none flex-column gap-1">
-    <div
-      class="image-slider d-lg-flex d-none flex-column justify-content-between gap-1"
-    >
-      <div
-        v-for="image in items"
-        :key="slideDirection"
-        class="cursor-pointer thumbnail-container"
-        @click="changeImageIndex(image.index)"
-        v-show="image.show"
+  <div class="d-flexflex-column gap-1">
+    <div class="image-slider d-flex flex-column justify-content-between gap-1">
+      <TransitionGroup
+        :name="
+          getSlideDirection === 'up'
+            ? 'slide-fade-up'
+            : getSlideDirection === 'down'
+            ? 'slide-fade-down'
+            : 'slide'
+        "
       >
-        <img
-          :src="image.image"
-          class="h-100 object-fit-cover"
-          loading="lazy"
-          :class="[
-            image.index === currentImageIndex ? 'opacity-50' : 'opacity-100',
-          ]"
-          alt="Product Image"
-        />
-      </div>
+        <div
+          v-for="image in imageGallery"
+          :key="getSlideDirection"
+          class="cursor-pointer thumbnail-container"
+          @click="changeImageIndex(image.index)"
+        >
+          <img
+            :src="image.image"
+            class="h-100 object-fit-cover"
+            loading="lazy"
+            :class="[
+              image.index === currentImageIndex ? 'opacity-50' : 'opacity-100',
+            ]"
+            alt="Product Image"
+          />
+        </div>
+      </TransitionGroup>
     </div>
     <div class="d-flex gap-1 align-items-center">
       <button
@@ -41,6 +48,8 @@
 </template>
 
 <script>
+import { computed, ref, nextTick } from 'vue';
+
 export default {
   name: 'SlideImage',
 
@@ -53,25 +62,61 @@ export default {
       type: Number,
       required: true,
     },
-    galleryIndex: {
-      type: Number,
-      required: true,
-    },
-    slideDirection: {
-      type: String,
-      required: true,
-    },
+  },
+
+  computed() {
+    return {
+      getImageSlideDirection() {
+        return this.imageSlideDirection;
+      },
+
+      getGalleryIndex() {
+        return this.galleryIndex;
+      },
+    };
   },
   methods: {
     changeImageIndex(index) {
       this.$emit('changeImageIndex', index);
     },
+  },
 
-    changeGalleryIndex(index) {
-      // update the gallery index first
+  setup(props) {
+    const slideDirection = ref(null);
+    const galleryIndex = ref(0);
+    const gallery = ref([...props.items]);
+    const imageGallery = computed(() => gallery.value);
+    const getSlideDirection = computed(() => {
+      return slideDirection.value;
+    });
 
-      this.$emit('changeGalleryIndex', index);
-    },
+    const changeGalleryIndex = async (index) => {
+      if (index < 0 || gallery.value.length - index < 3) {
+        return;
+      }
+
+      slideDirection.value = null;
+      await nextTick();
+      const oldGalleryIndex = galleryIndex.value;
+      galleryIndex.value = index;
+
+      if (index > oldGalleryIndex) {
+        slideDirection.value = 'up';
+
+        gallery.value.push(gallery.value.shift());
+      } else {
+        slideDirection.value = 'down';
+        gallery.value.unshift(gallery.value.pop());
+      }
+    };
+
+    return {
+      imageGallery,
+      gallery,
+      galleryIndex,
+      getSlideDirection,
+      changeGalleryIndex,
+    };
   },
 };
 </script>
@@ -81,24 +126,26 @@ export default {
 }
 .image-slider {
   height: 600px;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
-.slide-fade-up-leave-active,
-.slide-fade-down-leave-active {
-  transition: transform 0.5s ease-in-out;
+.slide-fade-up-enter-active,
+.slide-fade-down-enter-active,
+.slide-fade-up-leave-active {
+  transition: transform 0.5s ease-in;
 }
 
 .slide-fade-up-leave-to {
   transform: translateY(-100%);
 }
-
-.slide-fade-down-leave-to {
-  transform: translateY(100%);
+.slide-fade-up-leave-from {
+  transform: translate(0);
 }
 
-.slide-fade-down-leave-from,
-.slide-fade-up-leave-from {
+.slide-fade-down-enter-from {
+  transform: translateY(-100%);
+}
+.slide-fade-down-enter-to {
   transform: translateY(0);
 }
 </style>
