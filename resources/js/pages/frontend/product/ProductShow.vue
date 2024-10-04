@@ -16,13 +16,30 @@
               v-if="imageGallery.length > 0 && screenSizeIsLarge"
             />
           </div>
-          <div class="image-gallery w-75">
+          <div
+            class="image-gallery w-75 position-relative"
+            @mouseenter="setImageGalleryHover(true)"
+            @mouseleave="setImageGalleryHover(false)"
+          >
+            <div
+              class="position-absolute top-50 start-0 arrow"
+              :class="{ 'd-none': !imageGalleryHover }"
+            >
+              <i class="ri-arrow-left-s-line"></i>
+            </div>
+
             <img
               :src="imageGallery[currentImageIndex].image"
               loading="lazy"
               class="img-fluid object-fit-cover w-100 h-100"
               alt="Product Image"
             />
+            <div
+              class="position-absolute top-50 end-0 arrow"
+              :class="{ 'd-none': !imageGalleryHover }"
+            >
+              <i class="ri-arrow-right-s-line"></i>
+            </div>
           </div>
         </div>
         <div :class="screenSizeIsLarge ? 'w-25' : 'w-100'">
@@ -122,6 +139,11 @@ export default {
     const route = useRoute();
     const toast = useToast();
     const isLoading = ref(false);
+    const imageGalleryHover = ref(false);
+
+    const setImageGalleryHover = (value) => {
+      imageGalleryHover.value = value;
+    };
 
     const screenWidth = ref(window.innerWidth);
 
@@ -205,6 +227,8 @@ export default {
       imageGallery,
       currentImageIndex,
       changeImageIndex,
+      imageGalleryHover,
+      setImageGalleryHover,
     };
   },
 };
@@ -216,11 +240,8 @@ export default {
   /* Ensures it does not exceed the container's height */
 }
 
-.thumbnail-container {
-  min-height: 200px; /* Ensures each image container is 1/3 of the gallery height */
-}
-.image-slider {
-  height: 600px;
-  overflow-y: hidden;
+.arrow {
+  cursor: pointer;
+  font-size: 3rem;
 }
 </style>
