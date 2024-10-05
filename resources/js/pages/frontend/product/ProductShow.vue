@@ -2,8 +2,7 @@
   <LayoutView>
     <div
       class="mt-5"
-      :key="product"
-      v-if="product && product.id"
+      v-if="product"
     >
       <div class="d-flex flex-lg-row flex-column w-100 px-5 vh-100">
         <div class="w-75 d-flex gap-1">
@@ -12,34 +11,40 @@
               :items="imageGallery"
               :currentImageIndex="currentImageIndex"
               @changeImageIndex="changeImageIndex"
-              :key="imageGallery"
               v-if="imageGallery.length > 0 && screenSizeIsLarge"
             />
           </div>
           <div
-            class="image-gallery w-75 position-relative"
+            class="w-75 position-relative"
             @mouseenter="setImageGalleryHover(true)"
             @mouseleave="setImageGalleryHover(false)"
           >
-            <div
-              class="position-absolute top-50 start-0 arrow"
-              :class="{ 'd-none': !imageGalleryHover }"
-            >
-              <i class="ri-arrow-left-s-line"></i>
-            </div>
+            <Transition name="arrow-fade-left">
+              <div
+                class="position-absolute top-50 start-0 arrow"
+                :class="{ 'd-none': !imageGalleryHover }"
+                :key="'left-' + imageGalleryHover"
+              >
+                <i class="ri-arrow-left-s-line"></i>
+              </div>
+            </Transition>
+            <Transition name="arrow-fade-right">
+              <div
+                class="position-absolute top-50 end-0 arrow"
+                :class="{ 'd-none': !imageGalleryHover }"
+                :key="'right-' + imageGalleryHover"
+              >
+                <i class="ri-arrow-right-s-line"></i>
+              </div>
+            </Transition>
 
             <img
+              v-if="imageGallery.length > 0"
               :src="imageGallery[currentImageIndex].image"
               loading="lazy"
               class="img-fluid object-fit-cover w-100 h-100"
               alt="Product Image"
             />
-            <div
-              class="position-absolute top-50 end-0 arrow"
-              :class="{ 'd-none': !imageGalleryHover }"
-            >
-              <i class="ri-arrow-right-s-line"></i>
-            </div>
           </div>
         </div>
         <div :class="screenSizeIsLarge ? 'w-25' : 'w-100'">
@@ -121,7 +126,13 @@
 </template>
 
 <script>
-import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue';
+import {
+  computed,
+  onBeforeMount,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  ref,
+} from 'vue';
 import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useProductStore, useUserStore, useCartStore } from '@/state';
@@ -138,6 +149,7 @@ export default {
     const cartStore = useCartStore();
     const route = useRoute();
     const toast = useToast();
+    const product = computed(() => store.product.product);
     const isLoading = ref(false);
     const imageGalleryHover = ref(false);
 
@@ -154,12 +166,7 @@ export default {
       return screenWidth.value >= 992;
     });
 
-    const imageGallery = ref([
-      {
-        image: '',
-        index: 0,
-      },
-    ]);
+    const imageGallery = ref([]);
 
     const imageIndex = ref(0);
     const currentImageIndex = computed(() => {
@@ -172,8 +179,6 @@ export default {
       }
       imageIndex.value = value;
     };
-
-    const product = computed(() => store.product.product);
 
     const categoryParentPath = computed(
       () => store.product.category_parent_path,
@@ -235,13 +240,35 @@ export default {
 </script>
 
 <style scoped>
-.image-gallery {
-  height: auto;
-  /* Ensures it does not exceed the container's height */
-}
-
 .arrow {
   cursor: pointer;
   font-size: 3rem;
+}
+
+.arrow-fade-left-enter-active,
+.arrow-fade-left-leave-active,
+.arrow-fade-right-enter-active,
+.arrow-fade-right-leave-active {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.arrow-fade-left-enter-from,
+.arrow-fade-left-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.arrow-fade-right-enter-from,
+.arrow-fade-right-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.arrow-fade-left-enter-to,
+.arrow-fade-left-leave-from,
+.arrow-fade-right-enter-to,
+.arrow-fade-right-leave-from {
+  transform: translateX(0);
+  opacity: 1;
 }
 </style>
