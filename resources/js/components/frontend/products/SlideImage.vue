@@ -1,24 +1,27 @@
 <template>
-  <div class="d-flexflex-column gap-1">
-    <div class="image-slider d-flex flex-column justify-content-between gap-1">
+  <div
+    class="d-flexflex-column gap-1"
+    lazyload
+  >
+    <div class="image-slider d-flex flex-column justify-content-between">
       <TransitionGroup
         :name="
-          getSlideDirection === 'up'
+          slideDirection === 'up'
             ? 'slide-fade-up'
-            : getSlideDirection === 'down'
+            : slideDirection === 'down'
             ? 'slide-fade-down'
-            : 'slide'
+            : null
         "
       >
         <div
-          v-for="image in imageGallery"
-          :key="getSlideDirection"
-          class="cursor-pointer thumbnail-container"
+          v-for="image in gallery"
+          :key="`${image.index}-${slideDirection}`"
+          class="cursor-pointer thumbnail-container d-flex justify-content-center align-items-center"
           @click="changeImageIndex(image.index)"
         >
           <img
             :src="image.image"
-            class="h-100 object-fit-cover"
+            class="h-100 object-fit-contain overflow-hidden"
             loading="lazy"
             :class="[
               image.index === currentImageIndex ? 'opacity-50' : 'opacity-100',
@@ -28,7 +31,9 @@
         </div>
       </TransitionGroup>
     </div>
-    <div class="d-flex gap-1 align-items-center">
+    <div
+      class="d-flex gap-1 align-items-center justify-content-center gallery-control"
+    >
       <button
         type="button"
         class="btn btn-outline-secondary"
@@ -48,7 +53,7 @@
 </template>
 
 <script>
-import { computed, ref, nextTick } from 'vue';
+import { ref, nextTick, shallowRef } from 'vue';
 
 export default {
   name: 'SlideImage',
@@ -64,17 +69,6 @@ export default {
     },
   },
 
-  computed() {
-    return {
-      getImageSlideDirection() {
-        return this.imageSlideDirection;
-      },
-
-      getGalleryIndex() {
-        return this.galleryIndex;
-      },
-    };
-  },
   methods: {
     changeImageIndex(index) {
       this.$emit('changeImageIndex', index);
@@ -84,17 +78,26 @@ export default {
   setup(props) {
     const slideDirection = ref(null);
     const galleryIndex = ref(0);
-    const gallery = ref([...props.items]);
-    const imageGallery = computed(() => gallery.value);
-    const getSlideDirection = computed(() => {
-      return slideDirection.value;
-    });
+    const gallery = shallowRef([...props.items]);
+
+    const lockScroll = () => {
+      scrollPosition.value = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollPosition.value}px`;
+      document.body.style.width = '100%';
+    };
+
+    const unlockScroll = () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      window.scrollTo(0, scrollPosition.value);
+    };
 
     const changeGalleryIndex = async (index) => {
       if (index < 0 || gallery.value.length - index < 3) {
         return;
       }
-
+      //lockScroll();
       slideDirection.value = null;
       await nextTick();
       const oldGalleryIndex = galleryIndex.value;
@@ -106,46 +109,53 @@ export default {
         gallery.value.push(gallery.value.shift());
       } else {
         slideDirection.value = 'down';
+
         gallery.value.unshift(gallery.value.pop());
       }
+
+      //await nextTick(); // Wait for the transition to complete
+      // unlockScroll(); // Unlock scroll after transition
     };
 
     return {
-      imageGallery,
       gallery,
       galleryIndex,
-      getSlideDirection,
       changeGalleryIndex,
+      slideDirection,
     };
   },
 };
 </script>
 <style scoped>
 .thumbnail-container {
-  min-height: 200px; /* Ensures each image container is 1/3 of the gallery height */
+  height: 200px;
+  min-height: 200px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.gallery-control,
+.image-slider {
+  width: 150px;
 }
 .image-slider {
   height: 600px;
+  scroll-behavior: smooth;
   overflow: hidden;
 }
 
 .slide-fade-up-enter-active,
 .slide-fade-down-enter-active,
 .slide-fade-up-leave-active {
-  transition: transform 0.5s ease-in;
+  transition: transform 0.5s ease-in-out;
 }
 
-.slide-fade-up-leave-to {
-  transform: translateY(-100%);
-}
-.slide-fade-up-leave-from {
-  transform: translate(0);
-}
-
+.slide-fade-up-leave-to,
 .slide-fade-down-enter-from {
   transform: translateY(-100%);
 }
+.slide-fade-up-leave-from,
 .slide-fade-down-enter-to {
-  transform: translateY(0);
+  transform: translate(0);
 }
 </style>
