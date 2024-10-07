@@ -12,9 +12,10 @@
             ? 'slide-fade-down'
             : null
         "
+        appear
       >
         <div
-          v-for="image in gallery"
+          v-for="image in items"
           :key="`${image.index}-${slideDirection}`"
           class="cursor-pointer thumbnail-container d-flex justify-content-center align-items-center"
           @click="changeImageIndex(image.index)"
@@ -37,14 +38,14 @@
       <button
         type="button"
         class="btn btn-outline-secondary"
-        @click="changeGalleryIndex(galleryIndex - 1)"
+        @click="changeGalleryIndex(galleryIndex - 1, items)"
       >
         <i class="ri-arrow-up-s-line"></i>
       </button>
       <button
         type="button"
         class="btn btn-outline-secondary"
-        @click="changeGalleryIndex(galleryIndex + 1)"
+        @click="changeGalleryIndex(galleryIndex + 1, items)"
       >
         <i class="ri-arrow-down-s-line"></i>
       </button>
@@ -53,8 +54,6 @@
 </template>
 
 <script>
-import { ref, nextTick, shallowRef } from 'vue';
-
 export default {
   name: 'SlideImage',
 
@@ -67,62 +66,25 @@ export default {
       type: Number,
       required: true,
     },
+    slideDirection: {
+      type: String,
+      required: true,
+      default: null,
+    },
+    galleryIndex: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
   },
 
   methods: {
     changeImageIndex(index) {
       this.$emit('changeImageIndex', index);
     },
-  },
-
-  setup(props) {
-    const slideDirection = ref(null);
-    const galleryIndex = ref(0);
-    const gallery = shallowRef([...props.items]);
-
-    const lockScroll = () => {
-      scrollPosition.value = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollPosition.value}px`;
-      document.body.style.width = '100%';
-    };
-
-    const unlockScroll = () => {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      window.scrollTo(0, scrollPosition.value);
-    };
-
-    const changeGalleryIndex = async (index) => {
-      if (index < 0 || gallery.value.length - index < 3) {
-        return;
-      }
-      //lockScroll();
-      slideDirection.value = null;
-      await nextTick();
-      const oldGalleryIndex = galleryIndex.value;
-      galleryIndex.value = index;
-
-      if (index > oldGalleryIndex) {
-        slideDirection.value = 'up';
-
-        gallery.value.push(gallery.value.shift());
-      } else {
-        slideDirection.value = 'down';
-
-        gallery.value.unshift(gallery.value.pop());
-      }
-
-      //await nextTick(); // Wait for the transition to complete
-      // unlockScroll(); // Unlock scroll after transition
-    };
-
-    return {
-      gallery,
-      galleryIndex,
-      changeGalleryIndex,
-      slideDirection,
-    };
+    changeGalleryIndex(index, items) {
+      this.$emit('changeGalleryIndex', index, items);
+    },
   },
 };
 </script>
@@ -131,7 +93,6 @@ export default {
   height: 200px;
   min-height: 200px;
   width: 100%;
-  overflow: hidden;
 }
 
 .gallery-control,
@@ -145,9 +106,16 @@ export default {
 }
 
 .slide-fade-up-enter-active,
-.slide-fade-down-enter-active,
-.slide-fade-up-leave-active {
+.slide-fade-down-enter-active {
   transition: transform 0.5s ease-in-out;
+}
+
+.slide-fade-up-enter-from {
+  transform: translateY(100%);
+}
+
+.slide-fade-up-enter-to {
+  transform: translate(0);
 }
 
 .slide-fade-up-leave-to,
