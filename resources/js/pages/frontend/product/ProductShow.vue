@@ -8,44 +8,19 @@
         <div class="w-75 d-flex gap-1">
           <div class="d-lg-flex w-25 d-none flex-column gap-1">
             <SlideImage
-              :items="imageGallery"
+              :items="gallery"
+              :slideDirection="slideDirection"
               :currentImageIndex="currentImageIndex"
+              :galleryIndex="galleryIndex"
               @changeImageIndex="changeImageIndex"
-              v-if="imageGallery.length > 0 && screenSizeIsLarge"
+              @changeGalleryIndex="changeGalleryIndex"
+              :key="gallery"
             />
           </div>
-          <div
-            class="w-75 position-relative"
-            @mouseenter="setImageGalleryHover(true)"
-            @mouseleave="setImageGalleryHover(false)"
-          >
-            <Transition name="arrow-fade-left">
-              <div
-                class="position-absolute top-50 start-0 arrow"
-                :class="{ 'd-none': !imageGalleryHover }"
-                :key="'left-' + imageGalleryHover"
-              >
-                <i class="ri-arrow-left-s-line"></i>
-              </div>
-            </Transition>
-            <Transition name="arrow-fade-right">
-              <div
-                class="position-absolute top-50 end-0 arrow"
-                :class="{ 'd-none': !imageGalleryHover }"
-                :key="'right-' + imageGalleryHover"
-              >
-                <i class="ri-arrow-right-s-line"></i>
-              </div>
-            </Transition>
-
-            <img
-              v-if="imageGallery.length > 0"
-              :src="imageGallery[currentImageIndex].image"
-              loading="lazy"
-              class="img-fluid object-fit-cover w-100 h-100"
-              alt="Product Image"
-            />
-          </div>
+          <ImageGallery
+            :items="imageGallery"
+            :currentImageIndex="currentImageIndex"
+          />
         </div>
         <div :class="screenSizeIsLarge ? 'w-25' : 'w-100'">
           <nav aria-label="breadcrumb">
@@ -126,22 +101,17 @@
 </template>
 
 <script>
-import {
-  computed,
-  onBeforeMount,
-  onBeforeUnmount,
-  onBeforeUpdate,
-  ref,
-} from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { useProductStore, useUserStore, useCartStore } from '@/state';
 import { LayoutView, ProductQuantityControl } from '@/components';
 import SlideImage from '@/components/frontend/products/SlideImage.vue';
+import ImageGallery from '@/components/frontend/products/ImageGallery.vue';
 import { addItemToCart } from '@/utils/cartUtils';
 
 export default {
-  components: { LayoutView, ProductQuantityControl, SlideImage },
+  components: { LayoutView, ProductQuantityControl, SlideImage, ImageGallery },
 
   setup() {
     const store = useProductStore();
@@ -151,13 +121,12 @@ export default {
     const toast = useToast();
     const product = computed(() => store.product.product);
     const isLoading = ref(false);
-    const imageGalleryHover = ref(false);
-
-    const setImageGalleryHover = (value) => {
-      imageGalleryHover.value = value;
-    };
-
     const screenWidth = ref(window.innerWidth);
+    const imageGallery = ref([]);
+    const imageIndex = ref(0);
+    const galleryIndex = ref(0);
+    const slideDirection = ref(null);
+    const gallery = ref([]);
 
     const updateScreenWidth = () => {
       screenWidth.value = window.innerWidth;
@@ -166,9 +135,6 @@ export default {
       return screenWidth.value >= 992;
     });
 
-    const imageGallery = ref([]);
-
-    const imageIndex = ref(0);
     const currentImageIndex = computed(() => {
       return imageIndex.value || 0;
     });
@@ -178,6 +144,23 @@ export default {
         return;
       }
       imageIndex.value = value;
+    };
+
+    const changeGalleryIndex = (index, items) => {
+      if (index < 0 || gallery.value.length - index < 3) {
+        return;
+      }
+      const oldGalleryIndex = galleryIndex.value;
+      galleryIndex.value = index;
+
+      if (index > oldGalleryIndex) {
+        slideDirection.value = 'up';
+        items.push(items.shift());
+      } else {
+        slideDirection.value = 'down';
+        items.unshift(items.pop());
+      }
+      gallery.value = [...items];
     };
 
     const categoryParentPath = computed(
@@ -210,6 +193,7 @@ export default {
           index: index + 1,
         })),
       ];
+      gallery.value = [...imageGallery.value];
     };
 
     onBeforeMount(async () => {
@@ -230,10 +214,12 @@ export default {
       isLoading,
       screenSizeIsLarge,
       imageGallery,
+      gallery,
+      galleryIndex,
       currentImageIndex,
       changeImageIndex,
-      imageGalleryHover,
-      setImageGalleryHover,
+      slideDirection,
+      changeGalleryIndex,
     };
   },
 };
