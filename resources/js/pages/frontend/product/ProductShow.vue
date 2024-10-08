@@ -9,17 +9,20 @@
           <div class="d-lg-flex w-25 d-none flex-column gap-1">
             <SlideImage
               :items="gallery"
-              :slideDirection="slideDirection"
+              :slideDirection="slideImageSliderDirection || 'null'"
               :currentImageIndex="currentImageIndex"
               :galleryIndex="galleryIndex"
               @changeImageIndex="changeImageIndex"
               @changeGalleryIndex="changeGalleryIndex"
-              :key="gallery"
+              :key="`${JSON.stringify(gallery)}-${currentImageIndex}`"
             />
           </div>
           <ImageGallery
-            :items="imageGallery"
-            :currentImageIndex="currentImageIndex"
+            :items="imagesList"
+            :index="currentImageIndex"
+            :slideDirection="ImageGallerySliderDirection || 'null'"
+            @transitionImageGallery="transitionImageGallery"
+            :key="`${JSON.stringify(imagesList)}-${currentImageIndex}`"
           />
         </div>
         <div :class="screenSizeIsLarge ? 'w-25' : 'w-100'">
@@ -123,10 +126,12 @@ export default {
     const isLoading = ref(false);
     const screenWidth = ref(window.innerWidth);
     const imageGallery = ref([]);
+    const gallery = ref([]);
+    const imagesList = ref([]);
     const imageIndex = ref(0);
     const galleryIndex = ref(0);
-    const slideDirection = ref(null);
-    const gallery = ref([]);
+    const slideImageSliderDirection = ref(null);
+    const ImageGallerySliderDirection = ref(null);
 
     const updateScreenWidth = () => {
       screenWidth.value = window.innerWidth;
@@ -143,24 +148,57 @@ export default {
       if (value < 0 || value >= imageGallery.value.length) {
         return;
       }
+      slideImageSliderDirection.value = null;
       imageIndex.value = value;
+      const newList = [...imageGallery.value];
+      while (newList[0].index !== value) {
+        newList.push(newList.shift());
+      }
+      imagesList.value = [...newList];
     };
 
-    const changeGalleryIndex = (index, items) => {
+    const transitionImageGallery = (index, items) => {
+      if (index < 0 || index >= items.length) {
+        return;
+      }
+      const oldIndex = imageIndex.value;
+      ImageGallerySliderDirection.value = null;
+      imageIndex.value = index;
+      if (index > oldIndex) {
+        ImageGallerySliderDirection.value = 'left';
+        setTimeout(() => {
+          ImageGallerySliderDirection.value = null;
+          items.push(items.shift());
+          imagesList.value = [...items];
+        }, 300);
+      } else {
+        ImageGallerySliderDirection.value = 'right';
+        items.unshift(items.pop());
+        imagesList.value = [...items];
+      }
+    };
+
+    const changeGalleryIndex = async (index, items) => {
       if (index < 0 || gallery.value.length - index < 3) {
         return;
       }
       const oldGalleryIndex = galleryIndex.value;
-      galleryIndex.value = index;
+      slideImageSliderDirection.value = null;
 
       if (index > oldGalleryIndex) {
-        slideDirection.value = 'up';
-        items.push(items.shift());
+        slideImageSliderDirection.value = 'up';
+        galleryIndex.value = index;
+        setTimeout(() => {
+          items.push(items.shift());
+          slideImageSliderDirection.value = null;
+          gallery.value = [...items];
+        }, 300);
       } else {
-        slideDirection.value = 'down';
+        galleryIndex.value = index;
+        slideImageSliderDirection.value = 'down';
         items.unshift(items.pop());
+        gallery.value = [...items];
       }
-      gallery.value = [...items];
     };
 
     const categoryParentPath = computed(
@@ -194,6 +232,7 @@ export default {
         })),
       ];
       gallery.value = [...imageGallery.value];
+      imagesList.value = [...imageGallery.value];
     };
 
     onBeforeMount(async () => {
@@ -214,12 +253,15 @@ export default {
       isLoading,
       screenSizeIsLarge,
       imageGallery,
+      imagesList,
       gallery,
       galleryIndex,
       currentImageIndex,
       changeImageIndex,
-      slideDirection,
       changeGalleryIndex,
+      slideImageSliderDirection,
+      ImageGallerySliderDirection,
+      transitionImageGallery,
     };
   },
 };
