@@ -39,6 +39,7 @@
         type="button"
         class="btn btn-outline-secondary"
         @click="changeGalleryIndex(galleryIndex - 1, items)"
+        :disabled="isAnimating"
       >
         <i class="ri-arrow-up-s-line"></i>
       </button>
@@ -46,6 +47,7 @@
         type="button"
         class="btn btn-outline-secondary"
         @click="changeGalleryIndex(galleryIndex + 1, items)"
+        :disabled="isAnimating"
       >
         <i class="ri-arrow-down-s-line"></i>
       </button>
@@ -54,6 +56,7 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 export default {
   name: 'SlideImage',
 
@@ -77,13 +80,24 @@ export default {
       default: 0,
     },
   },
+  setup() {
+    const isAnimating = ref(false); // Add the state for animation
+
+    return {
+      isAnimating,
+    };
+  },
 
   methods: {
     changeImageIndex(index) {
       this.$emit('changeImageIndex', index);
     },
     changeGalleryIndex(index, items) {
+      this.isAnimating = true;
       this.$emit('changeGalleryIndex', index, items);
+      setTimeout(() => {
+        this.isAnimating = false; // Re-enable buttons after animation
+      }, 300);
     },
   },
 };
@@ -105,17 +119,9 @@ export default {
   overflow: hidden;
 }
 
-.slide-fade-up-enter-active,
-.slide-fade-down-enter-active {
-  transition: transform 0.5s ease-in-out;
-}
-
-.slide-fade-up-enter-from {
-  transform: translateY(100%);
-}
-
-.slide-fade-up-enter-to {
-  transform: translate(0);
+.slide-fade-down-enter-active,
+.slide-fade-up-leave-active {
+  transition: transform 0.3s ease-in-out;
 }
 
 .slide-fade-up-leave-to,
