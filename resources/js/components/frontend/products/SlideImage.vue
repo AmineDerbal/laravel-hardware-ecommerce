@@ -79,6 +79,16 @@ export default {
       required: true,
       default: 0,
     },
+    animationDuration: {
+      type: Number,
+      required: true,
+      default: 0.3,
+    },
+  },
+  data() {
+    return {
+      transistionDuration: this.animationDuration + 's',
+    };
   },
   setup() {
     const isAnimating = ref(false); // Add the state for animation
@@ -97,7 +107,7 @@ export default {
       this.$emit('changeGalleryIndex', index, items);
       setTimeout(() => {
         this.isAnimating = false; // Re-enable buttons after animation
-      }, 300);
+      }, this.animationDuration * 1000);
     },
   },
 };
@@ -121,7 +131,7 @@ export default {
 
 .slide-fade-down-enter-active,
 .slide-fade-up-leave-active {
-  transition: transform 0.3s ease-in-out;
+  transition: transform v-bind(transistionDuration) ease-in-out;
 }
 
 .slide-fade-up-leave-to,
