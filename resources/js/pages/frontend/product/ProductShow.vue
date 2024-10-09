@@ -12,9 +12,10 @@
               :slideDirection="slideImageSliderDirection || 'null'"
               :currentImageIndex="currentImageIndex"
               :galleryIndex="galleryIndex"
+              :animationDuration="animationDuration"
               @changeImageIndex="changeImageIndex"
               @changeGalleryIndex="changeGalleryIndex"
-              :key="`${JSON.stringify(gallery)}-${currentImageIndex}`"
+              :key="`${JSON.stringify(gallery)}`"
             />
           </div>
           <ImageGallery
@@ -122,6 +123,7 @@ export default {
     const cartStore = useCartStore();
     const route = useRoute();
     const toast = useToast();
+
     const product = computed(() => store.product.product);
     const isLoading = ref(false);
     const screenWidth = ref(window.innerWidth);
@@ -132,10 +134,9 @@ export default {
     const galleryIndex = ref(0);
     const slideImageSliderDirection = ref(null);
     const ImageGallerySliderDirection = ref(null);
+    const animationDuration = ref(0.3);
+    const productNumber = ref(1);
 
-    const updateScreenWidth = () => {
-      screenWidth.value = window.innerWidth;
-    };
     const screenSizeIsLarge = computed(() => {
       return screenWidth.value >= 992;
     });
@@ -144,67 +145,105 @@ export default {
       return imageIndex.value || 0;
     });
 
-    const changeImageIndex = (value) => {
-      if (value < 0 || value >= imageGallery.value.length) {
-        return;
-      }
-      slideImageSliderDirection.value = null;
-      imageIndex.value = value;
+    const updateScreenWidth = () => (screenWidth.value = window.innerWidth);
+
+    const updateImageList = (value) => {
       const newList = [...imageGallery.value];
       while (newList[0].index !== value) {
         newList.push(newList.shift());
       }
       imagesList.value = [...newList];
     };
-
-    const transitionImageGallery = (index, items) => {
-      if (index < 0 || index >= items.length) {
+    const changeImageIndex = (value) => {
+      if (value < 0 || value >= imageGallery.value.length) {
         return;
       }
-      const oldIndex = imageIndex.value;
-      ImageGallerySliderDirection.value = null;
-      imageIndex.value = index;
+      slideImageSliderDirection.value = null;
+      imageIndex.value = value;
+      updateImageList(value);
+    };
+
+    const resetSliderDirection = () => {
+      slideImageSliderDirection.value = null;
+    };
+
+    const delayedresetSliderFunction = () => {
+      setTimeout(() => {
+        resetSliderDirection();
+      }, animationDuration.value * 1000);
+    };
+
+    const animateGallery = async (items) => {
+      setTimeout(() => {
+        items.push(items.shift());
+        gallery.value = [...items];
+        resetSliderDirection();
+      }, animationDuration.value * 1000);
+    };
+
+    const handleGalleryChange = async (index, items) => {
+      const oldGalleryIndex = galleryIndex.value;
+      slideImageSliderDirection.value = null;
+      if (index > oldGalleryIndex) {
+        slideImageSliderDirection.value = 'up';
+        galleryIndex.value = index;
+        await animateGallery(items);
+      } else {
+        galleryIndex.value = index;
+        slideImageSliderDirection.value = 'down';
+        items.unshift(items.pop());
+        gallery.value = [...items];
+        delayedresetSliderFunction();
+      }
+    };
+
+    const changeGalleryIndex = async (index, items) => {
+      index >= 0 &&
+        gallery.value.length - index >= 3 &&
+        handleGalleryChange(index, items);
+    };
+
+    const updateGalleryPosition = async () => {
+      if (galleryIndex.value - imageIndex.value >= 1) {
+        await changeGalleryIndex(galleryIndex.value - 1, gallery.value);
+      } else if (imageIndex.value - galleryIndex.value > 2) {
+        await changeGalleryIndex(galleryIndex.value + 1, gallery.value);
+      }
+    };
+
+    const updateImageGallery = async (index, oldIndex, items) => {
       if (index > oldIndex) {
         ImageGallerySliderDirection.value = 'left';
         setTimeout(() => {
           ImageGallerySliderDirection.value = null;
           items.push(items.shift());
           imagesList.value = [...items];
-        }, 300);
+        }, animationDuration.value * 1000);
       } else {
         ImageGallerySliderDirection.value = 'right';
         items.unshift(items.pop());
         imagesList.value = [...items];
       }
+      await updateGalleryPosition();
     };
 
-    const changeGalleryIndex = async (index, items) => {
-      if (index < 0 || gallery.value.length - index < 3) {
+    const handleImageTransition = async (index, items) => {
+      const oldIndex = imageIndex.value;
+      ImageGallerySliderDirection.value = null;
+      imageIndex.value = index;
+      await updateImageGallery(index, oldIndex, items);
+    };
+
+    const transitionImageGallery = async (index, items) => {
+      if (index < 0 || index >= items.length) {
         return;
       }
-      const oldGalleryIndex = galleryIndex.value;
-      slideImageSliderDirection.value = null;
-
-      if (index > oldGalleryIndex) {
-        slideImageSliderDirection.value = 'up';
-        galleryIndex.value = index;
-        setTimeout(() => {
-          items.push(items.shift());
-          slideImageSliderDirection.value = null;
-          gallery.value = [...items];
-        }, 300);
-      } else {
-        galleryIndex.value = index;
-        slideImageSliderDirection.value = 'down';
-        items.unshift(items.pop());
-        gallery.value = [...items];
-      }
+      handleImageTransition(index, items);
     };
 
     const categoryParentPath = computed(
       () => store.product.category_parent_path,
     );
-    const productNumber = ref(1);
 
     const setProductNumber = (value) => {
       if (value < 1) {
@@ -262,41 +301,8 @@ export default {
       slideImageSliderDirection,
       ImageGallerySliderDirection,
       transitionImageGallery,
+      animationDuration,
     };
   },
 };
 </script>
-
-<style scoped>
-.arrow {
-  cursor: pointer;
-  font-size: 3rem;
-}
-
-.arrow-fade-left-enter-active,
-.arrow-fade-left-leave-active,
-.arrow-fade-right-enter-active,
-.arrow-fade-right-leave-active {
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.arrow-fade-left-enter-from,
-.arrow-fade-left-leave-to {
-  transform: translateX(-100%);
-  opacity: 0;
-}
-
-.arrow-fade-right-enter-from,
-.arrow-fade-right-leave-to {
-  transform: translateX(100%);
-  opacity: 0;
-}
-
-.arrow-fade-left-enter-to,
-.arrow-fade-left-leave-from,
-.arrow-fade-right-enter-to,
-.arrow-fade-right-leave-from {
-  transform: translateX(0);
-  opacity: 1;
-}
-</style>
