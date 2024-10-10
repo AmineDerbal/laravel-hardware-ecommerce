@@ -4,7 +4,9 @@
       class="mt-5"
       v-if="product"
     >
-      <div class="d-flex flex-lg-row flex-column w-100 px-5 vh-100">
+      <div
+        class="d-flex flex-lg-row flex-column align-items-lg-start align-items-center w-100 px-5"
+      >
         <div class="w-75 d-flex gap-1">
           <div class="d-lg-flex w-25 d-none flex-column gap-1">
             <SlideImage
@@ -16,6 +18,7 @@
               @changeImageIndex="changeImageIndex"
               @changeGalleryIndex="changeGalleryIndex"
               :key="`${JSON.stringify(gallery)}`"
+              v-if="screenSizeIsLarge"
             />
           </div>
           <ImageGallery
@@ -26,7 +29,10 @@
             :key="`${JSON.stringify(imagesList)}-${currentImageIndex}`"
           />
         </div>
-        <div :class="screenSizeIsLarge ? 'w-25' : 'w-100'">
+        <div
+          :class="screenSizeIsLarge ? 'w-25' : 'w-100'"
+          class="px-3"
+        >
           <nav aria-label="breadcrumb">
             <BBreadcrumb>
               <BBreadcrumbItem>
