@@ -1,6 +1,6 @@
 <template>
   <div
-    class="position-relative d-flex w-100 image-slider-container"
+    class="position-relative d-flex vh-lg-100 w-100 image-slider-container"
     @mouseenter="setImageGalleryHover(true)"
     @mouseleave="setImageGalleryHover(false)"
   >
@@ -66,6 +66,16 @@ export default {
       required: true,
       default: null,
     },
+    animationDuration: {
+      type: Number,
+      required: true,
+      default: 0.3,
+    },
+  },
+  data() {
+    return {
+      transistionDuration: this.animationDuration + 's',
+    };
   },
 
   methods: {
@@ -91,6 +101,7 @@ export default {
 <style scoped>
 .image-slider-container {
   width: 100%;
+
   overflow: hidden;
 }
 
@@ -133,7 +144,7 @@ export default {
 
 .slide-fade-right-enter-active,
 .slide-fade-left-enter-active {
-  transition: transform 0.3s ease-in-out;
+  transition: transform v-bind(transistionDuration) ease-in-out;
 }
 
 .slide-fade-right-enter-from,
