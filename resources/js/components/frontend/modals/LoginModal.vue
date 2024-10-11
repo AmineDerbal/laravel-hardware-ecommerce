@@ -152,7 +152,6 @@ export default {
     };
 
     const goToRegisterPage = () => {
-      console.log('clicked');
       setShowLoginModal();
       router.push({ name: 'register' });
     };
