@@ -15,9 +15,6 @@
   color: var(--whb-red-bg);
 }
 
-.cursor-pointer {
-  cursor: pointer;
-}
 .gray-border {
   border: 1px solid rgba(0, 0, 0, 0.105);
 }
