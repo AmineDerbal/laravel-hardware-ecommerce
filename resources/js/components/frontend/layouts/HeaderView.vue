@@ -59,6 +59,9 @@
                 >
                   Logout
                 </li>
+                <li class="dropdown-item">
+                  <router-link :to="{ name: 'my-cart' }">My Cart</router-link>
+                </li>
               </ul>
             </div>
             <i
@@ -260,6 +263,10 @@ export default {
 };
 </script>
 <style scoped>
+li a {
+  color: inherit !important;
+}
+
 .badge-rounded {
   border-radius: 50%;
 }

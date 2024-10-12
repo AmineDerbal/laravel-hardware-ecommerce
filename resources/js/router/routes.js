@@ -68,7 +68,7 @@ const routes = [
       },
       {
         path: 'my-cart',
-        name: 'user-cart',
+        name: 'my-cart',
         component: UserCart,
         beforeEnter: allowIfIsAuthenticated,
       },
