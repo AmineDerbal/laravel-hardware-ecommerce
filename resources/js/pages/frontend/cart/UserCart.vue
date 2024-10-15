@@ -25,12 +25,13 @@
               <tr
                 v-for="item in userCartItems"
                 :key="item.id"
+                class="align-middle"
               >
-                <td>Ok</td>
+                <td><i class="ri-close-line fs-24 cursor-pointer"></i></td>
                 <td>
                   <img
                     :src="item.product.image_url"
-                    class="img-fluid w-25"
+                    class="rounded object-fit-cover"
                   />
                 </td>
                 <td>{{ item.product.name }}</td>
@@ -64,3 +65,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+td img {
+  width: 75px;
+  height: 75px;
+}
+</style>
