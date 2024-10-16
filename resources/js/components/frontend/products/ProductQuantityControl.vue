@@ -1,8 +1,8 @@
 <template>
-  <div class="w-50 d-flex align-self-center">
+  <div class="product-quantity-control d-flex">
     <button
       type="button"
-      class="border border-2 border-gray bg-white fs-24 text-secondary w-25"
+      class="border border-2 border-gray bg-white fs-20 text-secondary w-25"
       @click="updateQuantity(quantity - 1)"
       :disabled="quantity <= 1"
     >
@@ -10,13 +10,13 @@
     </button>
     <input
       type="number"
-      class="border border-2 border-gray text-center w-50"
+      class="border border-2 border-gray text-center fs-20 w-50"
       :value="quantity"
       readonly
     />
     <button
       type="button"
-      class="border border-2 border-gray bg-white fs-24 text-secondary w-25"
+      class="border border-2 border-gray bg-white fs-20 text-secondary w-25"
       @click="updateQuantity(quantity + 1)"
     >
       +
@@ -42,6 +42,9 @@ export default {
 </script>
 
 <style scoped>
+.product-quantity-control {
+  width: 120px;
+}
 input:focus {
   outline: none;
 }
