@@ -32,10 +32,17 @@ export default {
       type: Number,
       required: true,
     },
+    index: {
+      type: Number,
+      required: false,
+      default: null,
+    },
   },
   methods: {
     updateQuantity(value) {
-      this.$emit('update', value);
+      this.index !== null
+        ? this.$emit('update', { index: this.index, quantity: value })
+        : this.$emit('update', value);
     },
   },
 };
