@@ -41,7 +41,7 @@ export default {
   methods: {
     updateQuantity(value) {
       this.index !== null
-        ? this.$emit('update', { index: this.index, quantity: value })
+        ? this.$emit('update', this.index, value)
         : this.$emit('update', value);
     },
   },

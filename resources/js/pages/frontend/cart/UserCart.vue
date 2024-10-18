@@ -23,7 +23,7 @@
             </thead>
             <tbody>
               <tr
-                v-for="item in userCartItems"
+                v-for="(item, index) in userCartItems"
                 :key="item.id"
                 class="align-middle"
               >
@@ -36,7 +36,13 @@
                 </td>
                 <td>{{ item.product.name }}</td>
                 <td>{{ item.product.price }}</td>
-                <td>{{ item.quantity }}</td>
+                <td>
+                  <ProductQuantityControl
+                    :quantity="item.quantity"
+                    :index="index"
+                    @update="updateQuantity"
+                  />
+                </td>
                 <td>{{ item.product.price }}</td>
               </tr>
             </tbody>
@@ -48,20 +54,29 @@
 </template>
 
 <script>
-import { computed } from 'vue';
+import { ref } from 'vue';
 import { LayoutView } from '@/components';
 import { useUserStore } from '@/state';
 import { ProductQuantityControl } from '@/components';
 
 export default {
   name: 'UserCart',
-  components: { LayoutView },
+  components: { LayoutView, ProductQuantityControl },
 
   setup() {
     const userStore = useUserStore();
-    const userCartItems = computed(() => userStore.user.cart_items);
-    console.log(userCartItems.value);
-    return { userCartItems };
+    const userCartItems = ref([...(userStore.user.cart_items || [])]);
+    const cartIsUpdated = ref(false);
+
+    const updateQuantity = (index, value) => {
+      if (value < 1) {
+        return;
+      }
+      userCartItems.value[index].quantity = value;
+      cartIsUpdated.value = true;
+    };
+
+    return { userCartItems, updateQuantity };
   },
 };
 </script>
