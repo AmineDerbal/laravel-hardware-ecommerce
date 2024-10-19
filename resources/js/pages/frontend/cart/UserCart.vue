@@ -35,7 +35,7 @@
                   />
                 </td>
                 <td>{{ item.product.name }}</td>
-                <td>{{ item.product.price }}</td>
+                <td>$ {{ item.product.price }}</td>
                 <td>
                   <ProductQuantityControl
                     :quantity="item.quantity"
@@ -43,10 +43,18 @@
                     @update="updateQuantity"
                   />
                 </td>
-                <td>{{ item.product.price }}</td>
+                <td>$ {{ item.product.price * item.quantity }}</td>
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="d-flex w-100">
+          <button
+            :disabled="!isUpdated"
+            type="button"
+          >
+            Click
+          </button>
         </div>
       </BCol>
     </BCol>
@@ -54,7 +62,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { LayoutView } from '@/components';
 import { useUserStore } from '@/state';
 import { ProductQuantityControl } from '@/components';
@@ -67,16 +75,17 @@ export default {
     const userStore = useUserStore();
     const userCartItems = ref([...(userStore.user.cart_items || [])]);
     const cartIsUpdated = ref(false);
+    const isUpdated = computed(() => cartIsUpdated.value);
 
     const updateQuantity = (index, value) => {
       if (value < 1) {
         return;
       }
       userCartItems.value[index].quantity = value;
-      cartIsUpdated.value = true;
+      if (!cartIsUpdated.value) cartIsUpdated.value = true;
     };
 
-    return { userCartItems, updateQuantity };
+    return { userCartItems, updateQuantity, isUpdated };
   },
 };
 </script>
