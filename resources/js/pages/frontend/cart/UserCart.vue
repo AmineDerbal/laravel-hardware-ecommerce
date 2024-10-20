@@ -7,54 +7,60 @@
     >
       <BCol
         lg="12"
-        class="mb-2 mt-4"
+        class="mb-2 mt-4 mx-5 d-flex"
       >
-        <div class="table-responsive table-card mb-2">
-          <table class="table table-nowrap">
-            <thead>
-              <tr>
-                <th></th>
-                <th></th>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(item, index) in userCartItems"
-                :key="item.id"
-                class="align-middle"
-              >
-                <td><i class="ri-close-line fs-24 cursor-pointer"></i></td>
-                <td>
-                  <img
-                    :src="item.product.image_url"
-                    class="rounded object-fit-cover"
-                  />
-                </td>
-                <td>{{ item.product.name }}</td>
-                <td>$ {{ item.product.price }}</td>
-                <td>
-                  <ProductQuantityControl
-                    :quantity="item.quantity"
-                    :index="index"
-                    @update="updateQuantity"
-                  />
-                </td>
-                <td>$ {{ item.product.price * item.quantity }}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="mx-5">
+          <div class="table-responsive table-card mb-2">
+            <table class="table table-nowrap">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(item, index) in userCartItems"
+                  :key="item.id"
+                  class="align-middle"
+                >
+                  <td><i class="ri-close-line fs-24 cursor-pointer"></i></td>
+                  <td>
+                    <img
+                      :src="item.product.image_url"
+                      class="rounded object-fit-cover"
+                    />
+                  </td>
+                  <td>{{ item.product.name }}</td>
+                  <td>$ {{ item.product.price }}</td>
+                  <td>
+                    <ProductQuantityControl
+                      :quantity="item.quantity"
+                      :index="index"
+                      @update="updateQuantity"
+                    />
+                  </td>
+                  <td>$ {{ item.product.price * item.quantity }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex justify-content-end w-100">
+            <button
+              :disabled="!isUpdated"
+              type="button"
+            >
+              Update Cart
+            </button>
+          </div>
         </div>
-        <div class="d-flex w-100">
-          <button
-            :disabled="!isUpdated"
-            type="button"
-          >
-            Click
-          </button>
+
+        <div class="gray-border w-75 p-3">
+          <p>Cart Total</p>
         </div>
       </BCol>
     </BCol>
