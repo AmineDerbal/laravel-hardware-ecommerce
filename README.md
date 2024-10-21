@@ -1,66 +1,152 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<a name="readme-top"></a>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# 📗 Table of Contents
 
-## About Laravel
+- [📗 Table of Contents](#-table-of-contents)
+- [📖 Hardware-ecommerce](#-Hardware-ecommerce-)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+  - [🛠 Built With ](#-built-with-)
+    - [Tech Stack ](#tech-stack-)
+    - [Key Features ](#key-features-)
+  - [💻 Getting Started ](#-getting-started-)
+    - [Prerequisites](#prerequisites)
+    - [Setup](#setup)
+    - [Install](#install)
+    - [Usage ](#usage-)
+    - [Deployment](#deployment)
+  - [👥 Author ](#-author-)
+  - [🔭 Future Features ](#-future-features-)
+  - [⭐️ Show your support ](#️-show-your-support-)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<!-- PROJECT DESCRIPTION -->
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+# 📖 Hardware-ecommerce <a name="about-the-project"></a>
 
-## Learning Laravel
+<div align="center">
+<img src='' alt="Hafid-Transport" width="500">
+</div>
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+An ecommerce website project that allows to display add and order electronic pc
+hardware , built with Laravel and VueJS (Still in development).
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🛠 Built With <a name="built-with"></a>
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Tech Stack <a name="tech-stack"></a>
 
-## Laravel Sponsors
+<details>
+  <summary>Client</summary>
+  <ul>
+    <li><a href="https://vuejs.org/">VueJS</a></li>
+  </ul>
+</details>
+<details>
+  <summary>Server</summary>
+  <ul>
+    <li><a href="https://laravel.com/">Laravel</a></li>
+  </ul>
+</details>
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+<details>
+<summary>Database</summary>
+  <ul>
+    <li><a href="https://www.mysql.com/">Mysql</a></li>
+  </ul>
+</details>
 
-### Premium Partners
+<!-- Features -->
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Key Features <a name="key-features"></a>
 
-## Contributing
+- Use Laravel in the backend As Api.
+- Save the data in your database.
+- Create, edit, and delete drivers and trailers.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Code of Conduct
+<!-- GETTING STARTED -->
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 💻 Getting Started <a name="getting-started"></a>
 
-## Security Vulnerabilities
+### Prerequisites
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+In order to run this project you need:
 
-## License
+- [NodeJS](https://nodejs.org/en) installed and running. To get more
+  information, read the [installation guide](https://nodejs.org/en/docs).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- [php](https://www.php.net/) installed and running.
+
+- [composer](https://getcomposer.org/) installed and running.
+
+### Setup
+
+Clone this repository to your desired folder:
+
+```
+  git clone https://gitlab.com/AmineDerbal/hafid-transport.git
+  cd hafid-transport
+```
+
+### Install
+
+Install the project dependencies with:
+
+```
+  composer install
+
+  npm install
+```
+
+### Usage <a name="usage"></a>
+
+To run the project, execute the following command:
+
+```
+install passport: php artisan passport:install
+create passport key:   php artisan passport:client --personal
+create database in env file and migrate : php artisan migrate
+link storage to the public  disk : php artisan storage:link
+php artisan serve
+npm run dev
+
+```
+
+### Deployment
+
+You can deploy this project using:
+
+```
+  N/A
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- AUTHORS -->
+
+## 👥 Authors <a name="authors"></a>
+
+👤 **Derbal Mohammed El Amine**
+
+- GitHub: [@githubhandle](https://github.com/AmineDerbal)
+- Gitlab: [@gitlabhandle](https://gitlab.com/AmineDerbal)
+- LinkedIn:
+  [LinkedIn](https://www.linkedin.com/in/mohammed-el-amine-derbal-4038541b6/)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- FUTURE FEATURES -->
+
+## 🔭 Future Features <a name="future-features"></a>
+
+- Add Missions order feature
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- SUPPORT -->
+
+## ⭐️ Show your support <a name="support"></a>
+
+If you like this project and want to support me make cooler projects Give this
+project a Star.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
