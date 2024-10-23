@@ -23,7 +23,7 @@
 # 📖 Hardware-ecommerce <a name="about-the-project"></a>
 
 <div align="center">
-<img src='' alt="Hafid-Transport" width="500">
+<img src='./hardware screenshot.png' alt="Hardware Ecommerce" width="500">
 </div>
 
 An ecommerce website project that allows to display add and order electronic pc
