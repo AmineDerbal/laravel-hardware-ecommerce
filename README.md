@@ -59,7 +59,7 @@ hardware , built with Laravel and VueJS (Still in development).
 
 - Use Laravel in the backend As Api.
 - Save the data in your database.
-- Create, edit, and delete drivers and trailers.
+- Create, edit, and delete products and categories.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -83,8 +83,8 @@ In order to run this project you need:
 Clone this repository to your desired folder:
 
 ```
-  git clone https://gitlab.com/AmineDerbal/hafid-transport.git
-  cd hafid-transport
+  git clone https://github.com/AmineDerbal/laravel-hardware-ecommerce.git
+  cd laravel-hardware-ecommerce
 ```
 
 ### Install
