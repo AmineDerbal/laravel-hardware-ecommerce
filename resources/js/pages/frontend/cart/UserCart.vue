@@ -9,17 +9,17 @@
         lg="12"
         class="mb-2 mt-4 mx-5 d-flex"
       >
-        <div class="mx-5">
+        <div class="mx-5 w-75">
           <div class="table-responsive table-card mb-2">
             <table class="table table-nowrap">
               <thead>
-                <tr>
+                <tr class="text-uppercase">
                   <th></th>
                   <th></th>
-                  <th>Product</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Total Price</th>
+                  <th class="fw-bold">Product</th>
+                  <th class="fw-bold">Price</th>
+                  <th class="fw-bold">Quantity</th>
+                  <th class="fw-bold">Total Price</th>
                 </tr>
               </thead>
               <tbody>
@@ -53,13 +53,14 @@
             <button
               :disabled="!isUpdated"
               type="button"
+              @click="updateCart"
             >
               Update Cart
             </button>
           </div>
         </div>
 
-        <div class="gray-border w-75 p-3">
+        <div class="gray-border w-25 p-3">
           <p>Cart Total</p>
         </div>
       </BCol>
@@ -68,10 +69,10 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
-import { LayoutView } from '@/components';
-import { useUserStore } from '@/state';
-import { ProductQuantityControl } from '@/components';
+import { ref, computed, onBeforeMount } from 'vue';
+import { useToast } from 'vue-toastification';
+import { useUserStore, useCartStore } from '@/state';
+import { LayoutView, ProductQuantityControl } from '@/components';
 
 export default {
   name: 'UserCart',
@@ -79,7 +80,17 @@ export default {
 
   setup() {
     const userStore = useUserStore();
-    const userCartItems = ref([...(userStore.user.cart_items || [])]);
+    const cartStore = useCartStore();
+    const toast = useToast();
+    const originalUserCartItems = computed(() => userStore.user.cart_items);
+    const userCartItems = ref([]);
+
+    const setUserCartItems = () => {
+      userCartItems.value = JSON.parse(
+        JSON.stringify(originalUserCartItems.value),
+      );
+    };
+
     const cartIsUpdated = ref(false);
     const isUpdated = computed(() => cartIsUpdated.value);
 
@@ -91,7 +102,40 @@ export default {
       if (!cartIsUpdated.value) cartIsUpdated.value = true;
     };
 
-    return { userCartItems, updateQuantity, isUpdated };
+    const updateCart = async () => {
+      for (let i = 0; i < userCartItems.value.length; i++) {
+        if (
+          userCartItems.value[i].quantity !==
+          userStore.user.cart_items[i].quantity
+        ) {
+          const data = {
+            id: userCartItems.value[i].id,
+            quantity: userCartItems.value[i].quantity,
+            product_id: userCartItems.value[i].product_id,
+            cart_id: userCartItems.value[i].cart_id,
+            user_id: userStore.user.id,
+          };
+
+          const result = await cartStore.updateItemCartQuantity(data);
+          if (result.status === 200) {
+            const response = await userStore.fetchUserActiveCartItems(
+              data.user_id,
+            );
+            if (response.status !== 200) toast.error(response.data.message);
+          }
+          result.status !== 200
+            ? toast.error(result.data.message)
+            : toast.success(result.data.message);
+        }
+      }
+    };
+
+    onBeforeMount(() => {
+      setUserCartItems();
+      console.log(userCartItems.value);
+    });
+
+    return { userCartItems, updateQuantity, isUpdated, updateCart };
   },
 };
 </script>
