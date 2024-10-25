@@ -28,7 +28,9 @@
                   :key="item.id"
                   class="align-middle"
                 >
-                  <td><i class="ri-close-line fs-24 cursor-pointer"></i></td>
+                  <td @click="deleteCartItem(item.id)">
+                    <i class="ri-close-line fs-24 cursor-pointer"></i>
+                  </td>
                   <td>
                     <img
                       :src="item.product.image_url"
@@ -130,12 +132,32 @@ export default {
       }
     };
 
+    const deleteCartItem = async (id) => {
+      const result = await cartStore.deleteCartItem(id);
+      if (result.status === 200) {
+        const response = await userStore.fetchUserActiveCartItems(
+          userStore.user.id,
+        );
+        setUserCartItems();
+        if (response.status !== 200) toast.error(response.data.message);
+      }
+      result.status !== 200
+        ? toast.error(result.data.message)
+        : toast.success(result.data.message);
+    };
+
     onBeforeMount(() => {
       setUserCartItems();
       console.log(userCartItems.value);
     });
 
-    return { userCartItems, updateQuantity, isUpdated, updateCart };
+    return {
+      userCartItems,
+      updateQuantity,
+      isUpdated,
+      updateCart,
+      deleteCartItem,
+    };
   },
 };
 </script>
