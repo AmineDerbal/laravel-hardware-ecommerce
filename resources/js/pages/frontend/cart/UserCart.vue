@@ -1,9 +1,11 @@
 <template>
   <LayoutView>
+    <LoaderView v-if="isLoading" />
     <BCol
       xxl="5"
       sm="6"
       class="w-100 p-5"
+      v-else
     >
       <BCol
         lg="12"
@@ -55,9 +57,10 @@
             <button
               :disabled="!isUpdated"
               type="button"
+              class="text-uppercase"
               @click="updateCart"
             >
-              Update Cart
+              Update my Cart
             </button>
           </div>
         </div>
@@ -74,15 +77,16 @@
 import { ref, computed, onBeforeMount } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useUserStore, useCartStore } from '@/state';
-import { LayoutView, ProductQuantityControl } from '@/components';
+import { LayoutView, ProductQuantityControl, LoaderView } from '@/components';
 
 export default {
   name: 'UserCart',
-  components: { LayoutView, ProductQuantityControl },
+  components: { LayoutView, ProductQuantityControl, LoaderView },
 
   setup() {
     const userStore = useUserStore();
     const cartStore = useCartStore();
+    const isLoading = ref(false);
     const toast = useToast();
     const originalUserCartItems = computed(() => userStore.user.cart_items);
     const userCartItems = ref([]);
@@ -118,6 +122,7 @@ export default {
             user_id: userStore.user.id,
           };
 
+          isLoading.value = true;
           const result = await cartStore.updateItemCartQuantity(data);
           if (result.status === 200) {
             const response = await userStore.fetchUserActiveCartItems(
@@ -128,6 +133,7 @@ export default {
           result.status !== 200
             ? toast.error(result.data.message)
             : toast.success(result.data.message);
+          isLoading.value = false;
         }
       }
     };
@@ -147,8 +153,9 @@ export default {
     };
 
     onBeforeMount(() => {
+      isLoading.value = true;
       setUserCartItems();
-      console.log(userCartItems.value);
+      isLoading.value = false;
     });
 
     return {
@@ -157,6 +164,7 @@ export default {
       isUpdated,
       updateCart,
       deleteCartItem,
+      isLoading,
     };
   },
 };
