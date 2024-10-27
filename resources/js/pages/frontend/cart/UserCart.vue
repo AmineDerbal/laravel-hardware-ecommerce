@@ -66,7 +66,7 @@
         </div>
 
         <div class="gray-border w-25 p-3">
-          <p>Cart Total</p>
+          <h2 class="fw-bold">Cart Total</h2>
         </div>
       </BCol>
     </BCol>
