@@ -84,6 +84,7 @@ export default {
       const result = await cartStore.updateItemCartQuantity(data);
       if (result.status === 200) {
         const response = await userStore.fetchUserActiveCartItems(data.user_id);
+        await userStore.calculateTotalPrice();
         if (response.status !== 200) toast.error(response.data.message);
       }
       setLoadingValue(data.id, false);
@@ -99,6 +100,7 @@ export default {
         const response = await userStore.fetchUserActiveCartItems(
           userStore.user.id,
         );
+        await userStore.calculateTotalPrice();
         if (response.status !== 200) toast.error(response.data.message);
       }
       setLoadingValue(id, false);

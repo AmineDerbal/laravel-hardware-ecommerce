@@ -36,6 +36,7 @@ const addItemToCart = async (
     const response = await userStore.fetchUserActiveCartItems(
       userStore.user.id,
     );
+    await userStore.calculateTotalPrice();
     if (response.status !== 200) toast.error(response.data.message);
   }
 

@@ -81,7 +81,7 @@
                 {{ cartItems.length || 0 }}
               </span>
             </div>
-            <span class="ml-2">$ {{ calculateCartTotalPrice }}</span>
+            <span class="ml-2">$ {{ totalPrice }}</span>
           </div>
         </div>
       </div>
@@ -152,7 +152,7 @@
       <CartModal
         v-if="showCartModal"
         :items="cartItems"
-        :totalPrice="calculateCartTotalPrice"
+        :totalPrice="totalPrice"
         @setShowCartModal="setShowCartModal"
       />
     </Transition>
@@ -186,14 +186,7 @@ export default {
     const showLoginModal = computed(() => layoutStore.layout.showLoginModal);
     const showCartModal = computed(() => layoutStore.layout.showCartModal);
     const isUserMenuVisible = ref(false);
-
-    const calculateCartTotalPrice = computed(() => {
-      let total = 0;
-      cartItems.value.forEach((item) => {
-        total += item.product.price * item.quantity;
-      });
-      return total || 0;
-    });
+    const totalPrice = computed(() => userStore.user.total_price);
 
     const toggleUserMenu = (value) => {
       isUserMenuVisible.value = value ?? !isUserMenuVisible.value;
@@ -257,7 +250,7 @@ export default {
       showCartModal,
       setShowCartModal,
       cartItems,
-      calculateCartTotalPrice,
+      totalPrice,
     };
   },
 };
