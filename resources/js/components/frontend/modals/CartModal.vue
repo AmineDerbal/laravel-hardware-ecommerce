@@ -19,7 +19,10 @@
         >
       </div>
       <div class="w-100 gray-bottom-border mt-3"></div>
-      <div class="p-2 d-flex flex-column justify-content-between">
+      <div
+        class="p-2 d-flex flex-column justify-content-between"
+        v-if="items.length > 0"
+      >
         <div
           v-for="item in items"
           :key="item.id"
@@ -38,6 +41,12 @@
             <p class="fs-20 fw-bold d-flex justify-content-between">
               Total Price: <span class="whb-red-text"> ${{ totalPrice }}</span>
             </p>
+            <button
+              type="button"
+              class="btn btn-outline-danger w-100 btn-load whb-red-bg text-uppercase text-white"
+            >
+              Checkout
+            </button>
           </div>
         </div>
       </div>
