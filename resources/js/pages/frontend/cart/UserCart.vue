@@ -65,8 +65,20 @@
           </div>
         </div>
 
-        <div class="gray-border w-25 p-3">
+        <div class="gray-border w-25 p-3 mx-5">
           <h2 class="fw-bold">Cart Total</h2>
+          <div class="d-flex justify-content-between">
+            <p class="fw-bold">Total Price</p>
+            <p class="fw-bold">
+              $
+              {{
+                userCartItems.reduce(
+                  (acc, item) => acc + item.product.price * item.quantity,
+                  0,
+                )
+              }}
+            </p>
+          </div>
         </div>
       </BCol>
     </BCol>
@@ -128,6 +140,7 @@ export default {
             const response = await userStore.fetchUserActiveCartItems(
               data.user_id,
             );
+            await userStore.calculateTotalPrice();
             if (response.status !== 200) toast.error(response.data.message);
           }
           result.status !== 200
@@ -144,6 +157,7 @@ export default {
         const response = await userStore.fetchUserActiveCartItems(
           userStore.user.id,
         );
+        await userStore.calculateTotalPrice();
         setUserCartItems();
         if (response.status !== 200) toast.error(response.data.message);
       }
