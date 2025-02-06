@@ -57,7 +57,7 @@
             <button
               :disabled="!isUpdated"
               type="button"
-              class="text-uppercase"
+              class="text-uppercase btn btn-outline-secondary"
               @click="updateCart"
             >
               Update my Cart
@@ -143,6 +143,7 @@ export default {
             await userStore.calculateTotalPrice();
             if (response.status !== 200) toast.error(response.data.message);
           }
+          cartIsUpdated.value = false;
           result.status !== 200
             ? toast.error(result.data.message)
             : toast.success(result.data.message);

@@ -43,6 +43,12 @@
             </p>
             <button
               type="button"
+              class="btn btn-outline-secondary btn-load w-100 text-uppercase mb-2"
+            >
+              Go to Cart
+            </button>
+            <button
+              type="button"
               class="btn btn-outline-danger w-100 btn-load whb-red-bg text-uppercase text-white"
             >
               Checkout
