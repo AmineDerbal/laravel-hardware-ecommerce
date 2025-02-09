@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductImageController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CartItemController;
+use App\Http\Controllers\Api\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,10 @@ Route::middleware(['usePassportTokenFromCookie','auth:api'])->group(function () 
         Route::put('cart-items/increment-quantity', 'incrementQuantityByOne')->name('cart-items.increment-quantity');
         Route::put('cart-items/update', 'update')->name('cart-items.update');
         Route::delete('cart-items/{id}', 'destroy')->name('cart-items.destroy');
+    });
+
+    Route::controller(OrderController::class)->group(function () {
+        Route::post('orders/store', 'store')->name('orders.store');
     });
 
 });
