@@ -8,7 +8,7 @@
   >
     <BLink
       class="text-danger d-inline-block remove-item-btn"
-      @click="handleDelete(id)"
+      @click.prevent="handleDelete(id)"
     >
       <i class="ri-delete-bin-5-fill fs-16"></i>
     </BLink>
