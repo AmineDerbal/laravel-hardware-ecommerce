@@ -13,7 +13,11 @@ const notifyIfNotAuthenticated = (user, toast) => {
 
 const handleLoginSubmit = async (userStore, userData) => {
   await userStore.loginUser(userData);
-  return checkIsAuthenticated(userStore.user);
+  const userIsAuthenticated = checkIsAuthenticated(userStore.user);
+  if (userIsAuthenticated) {
+    userStore.calculateTotalPrice();
+  }
+  return userIsAuthenticated;
 };
 
 const handleRegisterSubmit = async (userStore, userData) => {
