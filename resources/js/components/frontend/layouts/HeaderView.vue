@@ -81,11 +81,7 @@
                 {{ cartItems.length || 0 }}
               </span>
             </div>
-            <span
-              class="ml-2"
-              v-if="totalPrice > 0"
-              >$ {{ totalPrice }}</span
-            >
+            <span class="ml-2">$ {{ totalPrice || 0 }}</span>
           </div>
         </div>
       </div>
