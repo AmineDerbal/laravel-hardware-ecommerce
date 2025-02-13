@@ -44,6 +44,7 @@
             <button
               type="button"
               class="btn btn-outline-secondary btn-load w-100 text-uppercase mb-2"
+              @click="goToCart"
             >
               Go to Cart
             </button>
@@ -82,6 +83,11 @@ export default {
   methods: {
     setShowModal() {
       this.$emit('setShowCartModal', false);
+    },
+
+    goToCart() {
+      this.$router.push({ name: 'my-cart' });
+      this.setShowModal();
     },
   },
   setup() {
