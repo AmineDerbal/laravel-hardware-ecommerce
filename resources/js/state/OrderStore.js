@@ -18,3 +18,5 @@ const useOrderStore = defineStore({
     },
   },
 });
+
+export default useOrderStore;
