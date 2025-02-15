@@ -186,7 +186,7 @@ export default {
     const showLoginModal = computed(() => layoutStore.layout.showLoginModal);
     const showCartModal = computed(() => layoutStore.layout.showCartModal);
     const isUserMenuVisible = ref(false);
-    const totalPrice = computed(() => userStore.user.total_price);
+    const totalPrice = computed(() => userStore.user.cart_items_price);
 
     const toggleUserMenu = (value) => {
       isUserMenuVisible.value = value ?? !isUserMenuVisible.value;
