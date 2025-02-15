@@ -10,7 +10,7 @@ const useUserStore = defineStore({
       email: null,
       role: null,
       isAuthenticated: false,
-      total_price: 0,
+      cart_items_price: 0,
       cart_items: [],
     },
     users: {},
@@ -23,7 +23,7 @@ const useUserStore = defineStore({
   },
   actions: {
     async calculateTotalPrice() {
-      this.user.total_price =
+      this.user.cart_items_price =
         this.user.cart_items.reduce((acc, item) => {
           return acc + item.product.price * item.quantity;
         }, 0) || 0;
