@@ -68,16 +68,32 @@
         <div class="gray-border w-25 p-3 mx-5">
           <h2 class="fw-bold">Cart Total</h2>
           <div class="d-flex justify-content-between">
-            <p class="fw-bold">Total Price</p>
+            <p class="fw-bold">Products</p>
             <p class="fw-bold">
               $
-              {{
-                userCartItems.reduce(
-                  (acc, item) => acc + item.product.price * item.quantity,
-                  0,
-                )
-              }}
+              {{ cartItemsTotal }}
             </p>
+          </div>
+          <div class="d-flex justify-content-between">
+            <p class="fw-bold">tax</p>
+            <p class="fw-bold">${{ tax }}</p>
+          </div>
+          <div class="d-flex justify-content-between">
+            <p class="fw-bold">shipping</p>
+            <p class="fw-bold">${{ shippingCost }}</p>
+          </div>
+          <div class="d-flex justify-content-between">
+            <p class="fw-bold">Total</p>
+            <p class="fw-bold">${{ cartItemsTotal + tax + shippingCost }}</p>
+          </div>
+          <div>
+            <button
+              type="button"
+              class="text-uppercase btn btn-danger w-100"
+              @click="checkout"
+            >
+              checkout
+            </button>
           </div>
         </div>
       </BCol>
@@ -102,6 +118,9 @@ export default {
     const toast = useToast();
     const originalUserCartItems = computed(() => userStore.user.cart_items);
     const userCartItems = ref([]);
+    const tax = ref(10);
+    const shippingCost = ref(50);
+    const cartItemsTotal = computed(() => userStore.user.cart_items_price);
 
     const setUserCartItems = () => {
       userCartItems.value = JSON.parse(
@@ -180,6 +199,9 @@ export default {
       updateCart,
       deleteCartItem,
       isLoading,
+      tax,
+      shippingCost,
+      cartItemsTotal,
     };
   },
 };
