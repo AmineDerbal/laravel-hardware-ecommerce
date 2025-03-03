@@ -2,7 +2,7 @@
   <BModal
     title="Check Out"
     class="v-modal-custom"
-    v-model="showModal"
+    v-model="show"
   >
   </BModal>
   <BRow class="g-3">
