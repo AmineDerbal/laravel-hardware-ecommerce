@@ -10,7 +10,7 @@ const useOrderStore = defineStore({
   }),
 
   actions: {
-    async createOrder(order) {
+    async storeOrder(order) {
       return await apiAction(
         () => apiRequest('/api/orders/store', 'POST', order),
         this,
