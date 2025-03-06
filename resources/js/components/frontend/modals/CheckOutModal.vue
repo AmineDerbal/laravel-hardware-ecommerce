@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { computed } from 'vue';
 export default {
   name: 'CheckOutModal',
 
@@ -53,9 +54,19 @@ export default {
       emit('update:confirmAction', () => {});
     };
 
+    const onConfirm = async () => {
+      try {
+        await props.confirmAction();
+        closeShowModal();
+      } catch (error) {
+        return;
+      }
+    };
+
     return {
       show,
       closeShowModal,
+      onConfirm,
     };
   },
 };
