@@ -90,7 +90,7 @@
             <button
               type="button"
               class="text-uppercase btn btn-danger w-100"
-              @click="checkout"
+              @click="toggleCheckoutModal"
             >
               checkout
             </button>
@@ -98,22 +98,32 @@
         </div>
       </BCol>
     </BCol>
+    <CheckOutModal
+      v-model:showModal="show"
+      v-model:confirmAction="storeOrder"
+    />
   </LayoutView>
 </template>
 
 <script>
 import { ref, computed, onBeforeMount } from 'vue';
 import { useToast } from 'vue-toastification';
-import { useUserStore, useCartStore } from '@/state';
-import { LayoutView, ProductQuantityControl, LoaderView } from '@/components';
+import { useUserStore, useCartStore, useOrderStore } from '@/state';
+import {
+  LayoutView,
+  ProductQuantityControl,
+  LoaderView,
+  CheckOutModal,
+} from '@/components';
 
 export default {
   name: 'UserCart',
-  components: { LayoutView, ProductQuantityControl, LoaderView },
+  components: { LayoutView, ProductQuantityControl, LoaderView, CheckOutModal },
 
   setup() {
     const userStore = useUserStore();
     const cartStore = useCartStore();
+    const orderStore = useOrderStore();
     const isLoading = ref(false);
     const toast = useToast();
     const originalUserCartItems = computed(() => userStore.user.cart_items);
@@ -121,6 +131,27 @@ export default {
     const tax = ref(10);
     const shippingCost = ref(50);
     const cartItemsTotal = computed(() => userStore.user.cart_items_price);
+    const showCheckoutModal = ref(false);
+    const show = computed(() => showCheckoutModal.value);
+
+    const toggleCheckoutModal = () => {
+      showCheckoutModal.value = !showCheckoutModal.value;
+    };
+
+    const storeOrder = async () => {
+      const response = await orderStore.storeOrder({
+        user_id: userStore.user.id,
+        products: userCartItems.value,
+        shipping_fee: shippingCost.value,
+        tax: tax.value,
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    };
 
     const setUserCartItems = () => {
       userCartItems.value = JSON.parse(
@@ -202,6 +233,9 @@ export default {
       tax,
       shippingCost,
       cartItemsTotal,
+      storeOrder,
+      toggleCheckoutModal,
+      show,
     };
   },
 };
