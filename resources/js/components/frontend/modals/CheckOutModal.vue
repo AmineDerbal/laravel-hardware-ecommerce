@@ -3,29 +3,32 @@
     title="Check Out"
     class="v-modal-custom"
     v-model="show"
+    @hide="closeShowModal"
+    :key="show"
+    hide-footer
   >
+    <BRow class="g-3">
+      <BCol xxl="12">
+        <p class="text-muted">Are you sure you want to checkout?</p>
+      </BCol>
+      <BCol lg="12">
+        <div class="hstack gap-2 justify-content-end">
+          <BButton
+            type="button"
+            variant="danger"
+            @click="closeShowModal"
+            >Cancel</BButton
+          >
+          <BButton
+            type="button"
+            variant="primary"
+            @click="onConfirm"
+            >Confirm</BButton
+          >
+        </div>
+      </BCol>
+    </BRow>
   </BModal>
-  <BRow class="g-3">
-    <BCol xxl="12">
-      <p class="text-muted">Are you sure you want to checkout?</p>
-    </BCol>
-    <BCol lg="12">
-      <div class="hstack gap-2 justify-content-end">
-        <BButton
-          type="button"
-          variant="danger"
-          @click="closeShowModal"
-          >Cancel</BButton
-        >
-        <BButton
-          type="button"
-          variant="primary"
-          @click="onConfirm"
-          >Confirm</BButton
-        >
-      </div>
-    </BCol>
-  </BRow>
 </template>
 
 <script>
