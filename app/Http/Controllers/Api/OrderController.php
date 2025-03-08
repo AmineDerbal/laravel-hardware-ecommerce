@@ -22,15 +22,22 @@ class OrderController extends Controller
                 'tax' => $data['tax'],
                 'total' => 0,
             ]);
+            if (!$order) {
+                return response()->json(['message' => 'Error creating order'], 500);
+            }
 
             $total = $data['shipping_fee'] + $data['tax'];
             foreach ($data['products'] as $product) {
-                OrderItem::create([
+                $order_item = OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $product['product_id'],
                     'quantity' => $product['quantity'],
                     'price' => $product['price'],
                 ]);
+                if (!$order_item) {
+                    Order::where('id', $order->id)->delete();
+                    return response()->json(['message' => 'Error creating order item'], 500);
+                }
 
                 $total += $product['quantity'] * $product['price'];
             }
