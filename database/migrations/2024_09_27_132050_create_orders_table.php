@@ -12,7 +12,7 @@ return new class () extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('slug');
+            $table->string('code');
             $table->foreignId('user_id')->constrained();
             $table->string('status');
             $table->decimal('shipping_fee', 10, 2);
