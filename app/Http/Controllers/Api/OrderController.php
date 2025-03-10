@@ -16,11 +16,11 @@ class OrderController extends Controller
         try {
             $order = Order::create([
                 'user_id' => $data['user_id'],
-                'slug' => idGenerate('orders', 'ORD-'),
+                'code' => idGenerate('orders', 'ORD-'),
                 'status' => 'pending',
                 'shipping_fee' => $data['shipping_fee'],
                 'tax' => $data['tax'],
-                'total' => 0,
+                'total_amount' => 0,
             ]);
             if (!$order) {
                 return response()->json(['message' => 'Error creating order'], 500);
@@ -28,6 +28,7 @@ class OrderController extends Controller
 
             $total = $data['shipping_fee'] + $data['tax'];
             foreach ($data['products'] as $product) {
+
                 $order_item = OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $product['product_id'],
@@ -42,7 +43,7 @@ class OrderController extends Controller
                 $total += $product['quantity'] * $product['price'];
             }
 
-            $order->update(['total' => $total]);
+            $order->update(['total_amount' => $total]);
 
             return response()->json(['message' => 'Order created successfully']);
         } catch (\Exception $e) {
