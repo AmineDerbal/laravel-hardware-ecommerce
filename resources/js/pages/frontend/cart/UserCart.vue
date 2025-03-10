@@ -99,7 +99,7 @@
       </BCol>
     </BCol>
     <CheckOutModal
-      v-model:showModal="show"
+      v-model:showModal="showCheckoutModal"
       v-model:confirmAction="storeOrder"
     />
   </LayoutView>
@@ -115,6 +115,8 @@ import {
   LoaderView,
   CheckOutModal,
 } from '@/components';
+
+import { openConfirmModal } from '@/utils/pagesUtils';
 
 export default {
   name: 'UserCart',
@@ -132,16 +134,38 @@ export default {
     const shippingCost = ref(50);
     const cartItemsTotal = computed(() => userStore.user.cart_items_price);
     const showCheckoutModal = ref(false);
-    const show = computed(() => showCheckoutModal.value);
 
     const toggleCheckoutModal = () => {
-      showCheckoutModal.value = !showCheckoutModal.value;
+      showCheckoutModal.value = true;
+    };
+
+    const deleteCartItem = async (id) => {
+      const result = await cartStore.deleteCartItem(id);
+      if (result.status === 200) {
+        const response = await userStore.fetchUserActiveCartItems(
+          userStore.user.id,
+        );
+        await userStore.calculateTotalPrice();
+        setUserCartItems();
+        if (response.status !== 200) toast.error(response.data.message);
+      }
+      result.status !== 200
+        ? toast.error(result.data.message)
+        : toast.success(result.data.message);
     };
 
     const storeOrder = async () => {
+      const products = userCartItems.value.map((item) => {
+        return {
+          product_id: item.product_id,
+          quantity: item.quantity,
+          price: item.product.price,
+        };
+      });
+
       const response = await orderStore.storeOrder({
         user_id: userStore.user.id,
-        products: userCartItems.value,
+        products,
         shipping_fee: shippingCost.value,
         tax: tax.value,
       });
@@ -202,21 +226,6 @@ export default {
       }
     };
 
-    const deleteCartItem = async (id) => {
-      const result = await cartStore.deleteCartItem(id);
-      if (result.status === 200) {
-        const response = await userStore.fetchUserActiveCartItems(
-          userStore.user.id,
-        );
-        await userStore.calculateTotalPrice();
-        setUserCartItems();
-        if (response.status !== 200) toast.error(response.data.message);
-      }
-      result.status !== 200
-        ? toast.error(result.data.message)
-        : toast.success(result.data.message);
-    };
-
     onBeforeMount(() => {
       isLoading.value = true;
       setUserCartItems();
@@ -235,7 +244,8 @@ export default {
       cartItemsTotal,
       storeOrder,
       toggleCheckoutModal,
-      show,
+      showCheckoutModal,
+      openConfirmModal,
     };
   },
 };
