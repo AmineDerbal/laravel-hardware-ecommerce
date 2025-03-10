@@ -18,6 +18,7 @@ import CartItem from './frontend/carts/CartItem.vue';
 import LayoutView from './frontend/layouts/LayoutView.vue';
 import HomeContent from './frontend/home/HomeContent.vue';
 import ProductsGrid from './frontend/products/LatestList.vue';
+import CheckOutModal from './frontend/modals/CheckOutModal.vue';
 
 export {
   // utils
@@ -40,4 +41,5 @@ export {
   LayoutView,
   HomeContent,
   ProductsGrid,
+  CheckOutModal,
 };
