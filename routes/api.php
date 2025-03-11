@@ -45,6 +45,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware(['usePassportTokenFromCookie','auth:api'])->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('users/{id}/cart-items', 'fetchUserActiveCartItems')->name('cart-items');
+        Route::patch('users/{user_id}/carts/{id}', 'toggleUserActiveCart')->name('cart.toggle');
     });
     Route::controller(CartItemController::class)->group(function () {
         Route::post('cart-items/store', 'store')->name('cart-items.store');
