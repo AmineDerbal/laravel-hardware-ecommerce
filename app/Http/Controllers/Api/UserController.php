@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Http\Resources\Users\UserCollection;
+use App\Models\Cart;
 
 class UserController extends Controller
 {
@@ -42,5 +43,18 @@ class UserController extends Controller
             \Log::info('Error fetching cart items: ' . $e->getMessage());
             return response()->json(['message' => 'Error fetching cart items'], 500);
         }
+    }
+
+    public function toggleUserActiveCart($user_id, $id)
+    {
+        try {
+            $cart = Cart::where(['id' => $id, 'user_id' => $user_id, 'active' => 1])->first();
+            $cart->update(['active' => 0]);
+            return response()->json(['message' => 'Cart deleted successfully']);
+        } catch (\Exception $e) {
+            \Log::info('Error deleting cart: ' . $e->getMessage());
+            return response()->json(['message' => 'Error deleting cart'], 500);
+        }
+
     }
 }
