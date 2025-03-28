@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Cart;
 use App\Http\Requests\Order\StoreRequest;
 
 class OrderController extends Controller
@@ -13,7 +14,12 @@ class OrderController extends Controller
     {
         $data = $request->validated();
 
+
         try {
+            $cart = Cart::find($data['cart_id']);
+            if (!$cart) {
+                return response()->json(['message' => 'Cart not found'], 404);
+            }
             $order = Order::create([
                 'user_id' => $data['user_id'],
                 'code' => idGenerate('orders', 'ORD-'),
@@ -43,7 +49,9 @@ class OrderController extends Controller
                 $total += $product['quantity'] * $product['price'];
             }
 
+
             $order->update(['total_amount' => $total]);
+            $cart->items()->delete();
 
             return response()->json(['message' => 'Order created successfully']);
         } catch (\Exception $e) {
