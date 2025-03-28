@@ -9,11 +9,12 @@
     >
       <BCol
         lg="12"
-        class="mb-2 mt-4 mx-5 d-flex"
+        class="mb-2 mt-4 mx-5 d-flex flex-column flex-xl-row"
+        v-if="userCartItems.length > 0"
       >
         <div class="mx-5 w-75">
           <div class="table-responsive table-card mb-2">
-            <table class="table table-nowrap">
+            <table class="table table-wrap">
               <thead>
                 <tr class="text-uppercase">
                   <th></th>
@@ -65,7 +66,7 @@
           </div>
         </div>
 
-        <div class="gray-border w-25 p-3 mx-5">
+        <div class="gray-border p-3 mx-5 w-50 mx-xl-auto">
           <h2 class="fw-bold">Cart Total</h2>
           <div class="d-flex justify-content-between">
             <p class="fw-bold">Products</p>
@@ -95,6 +96,17 @@
               checkout
             </button>
           </div>
+        </div>
+      </BCol>
+      <BCol
+        lg="12"
+        class="mb-2 mt-4 mx-5 d-flex"
+        v-else
+      >
+        <div class="w-100 d-flex justify-content-center">
+          <span class="text-uppercase fs-16 fw-bold red-top-border"
+            >Your Cart is empty.</span
+          >
         </div>
       </BCol>
     </BCol>
@@ -128,12 +140,29 @@ export default {
     const orderStore = useOrderStore();
     const isLoading = ref(false);
     const toast = useToast();
-    const originalUserCartItems = computed(() => userStore.user.cart_items);
+    const storeUserCartItems = computed(() => userStore.user.cart_items);
     const userCartItems = ref([]);
     const tax = ref(10);
     const shippingCost = ref(50);
     const cartItemsTotal = computed(() => userStore.user.cart_items_price);
     const showCheckoutModal = ref(false);
+    const cartIsUpdated = ref(false);
+    const isUpdated = computed(() => cartIsUpdated.value);
+
+    const setUserCartItems = () => {
+      userCartItems.value = JSON.parse(
+        JSON.stringify(storeUserCartItems.value),
+      );
+    };
+
+    const fetchUserCartData = async () => {
+      isLoading.value = true;
+      await userStore.fetchUserActiveCartItems(userStore.user.id);
+      await userStore.calculateTotalPrice();
+      setUserCartItems();
+
+      isLoading.value = false;
+    };
 
     const toggleCheckoutModal = () => {
       showCheckoutModal.value = true;
@@ -162,6 +191,7 @@ export default {
           price: item.product.price,
         };
       });
+      const cart_id = userCartItems.value[0].cart_id;
 
       const response = await orderStore.storeOrder({
         user_id: userStore.user.id,
@@ -171,20 +201,16 @@ export default {
       });
 
       if (response.status === 200 || response.status === 201) {
+        console.log('que');
         toast.success(response.data.message);
+        //await userStore.toggleUserCart(userStore.user.id, cart_id);
+        // await fetchUserActiveCartItems(userStore.user.id);
+        //await userStore.calculateTotalPrice();
+        setUserCartItems();
       } else {
         toast.error(response.data.message);
       }
     };
-
-    const setUserCartItems = () => {
-      userCartItems.value = JSON.parse(
-        JSON.stringify(originalUserCartItems.value),
-      );
-    };
-
-    const cartIsUpdated = ref(false);
-    const isUpdated = computed(() => cartIsUpdated.value);
 
     const updateQuantity = (index, value) => {
       if (value < 1) {
@@ -226,10 +252,8 @@ export default {
       }
     };
 
-    onBeforeMount(() => {
-      isLoading.value = true;
-      setUserCartItems();
-      isLoading.value = false;
+    onBeforeMount(async () => {
+      await fetchUserCartData();
     });
 
     return {
