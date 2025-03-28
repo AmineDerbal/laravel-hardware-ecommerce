@@ -195,18 +195,15 @@ export default {
 
       const response = await orderStore.storeOrder({
         user_id: userStore.user.id,
+        cart_id,
         products,
         shipping_fee: shippingCost.value,
         tax: tax.value,
       });
 
       if (response.status === 200 || response.status === 201) {
-        console.log('que');
         toast.success(response.data.message);
-        //await userStore.toggleUserCart(userStore.user.id, cart_id);
-        // await fetchUserActiveCartItems(userStore.user.id);
-        //await userStore.calculateTotalPrice();
-        setUserCartItems();
+        await fetchUserCartData();
       } else {
         toast.error(response.data.message);
       }
