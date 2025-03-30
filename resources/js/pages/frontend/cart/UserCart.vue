@@ -9,12 +9,12 @@
     >
       <BCol
         lg="12"
-        class="mb-2 mt-4 mx-5 d-flex flex-column flex-xl-row"
+        class="mb-2 mt-4 d-flex flex-column flex-xl-row gap-3"
         v-if="userCartItems.length > 0"
       >
-        <div class="mx-5 w-75">
+        <div class="w-100 table-container">
           <div class="table-responsive table-card mb-2">
-            <table class="table table-wrap">
+            <table class="table table-nowrap">
               <thead>
                 <tr class="text-uppercase">
                   <th></th>
@@ -54,7 +54,7 @@
               </tbody>
             </table>
           </div>
-          <div class="d-flex justify-content-end w-100">
+          <div class="d-flex justify-content-end w-100 mb-2">
             <button
               :disabled="!isUpdated"
               type="button"
@@ -66,7 +66,7 @@
           </div>
         </div>
 
-        <div class="gray-border p-3 mx-5 w-50 mx-xl-auto">
+        <div class="gray-border p-3 mx-auto w-100 cart-total-container">
           <h2 class="fw-bold">Cart Total</h2>
           <div class="d-flex justify-content-between">
             <p class="fw-bold">Products</p>
@@ -276,5 +276,16 @@ export default {
 td img {
   width: 75px;
   height: 75px;
+}
+@media (min-width: 1200px) {
+  table {
+    white-space: nowrap !important;
+  }
+  .table-container {
+    max-width: 75% !important;
+  }
+  .cart-total-container {
+    max-width: 25% !important;
+  }
 }
 </style>
