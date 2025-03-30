@@ -17,7 +17,7 @@
     </div>
     <div class="midlle-bar py-3">
       <div
-        class="container d-none d-lg-flex justify-content-between align-items-center gap-2"
+        class="container d-none d-lg-flex justify-content-between align-items-center w-75 gap-2"
       >
         <div class="logo">
           <router-link to="/">
@@ -36,7 +36,7 @@
           />
         </div>
         <div class="user-info">
-          <div class="d-flex align-items-center gap-2">
+          <div class="d-flex align-items-center">
             <div
               class="position-relative cursor-pointer dropdown"
               aria-expanded="false"
@@ -81,7 +81,7 @@
                 {{ cartItems.length || 0 }}
               </span>
             </div>
-            <span class="ml-2">$ {{ totalPrice || 0 }}</span>
+            <span class="ml-1 fw-bold">$ {{ totalPrice || 0 }}</span>
           </div>
         </div>
       </div>
