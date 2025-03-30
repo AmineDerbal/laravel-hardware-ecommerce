@@ -41,16 +41,11 @@
             <p class="fs-20 fw-bold d-flex justify-content-between">
               Total Price: <span class="whb-red-text"> ${{ totalPrice }}</span>
             </p>
-            <button
-              type="button"
-              class="btn btn-outline-secondary btn-load w-100 text-uppercase mb-2"
-              @click="goToCart"
-            >
-              Go to Cart
-            </button>
+
             <button
               type="button"
               class="btn btn-outline-danger w-100 btn-load whb-red-bg text-uppercase text-white"
+              @click="goToCart"
             >
               Checkout
             </button>
