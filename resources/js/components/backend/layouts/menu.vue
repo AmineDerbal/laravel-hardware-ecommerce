@@ -1,11 +1,17 @@
 <script>
-import { HomeIcon, BoxIcon, UserIcon } from '@zhuowenli/vue-feather-icons';
+import {
+  HomeIcon,
+  BoxIcon,
+  UserIcon,
+  ShoppingBagIcon,
+} from '@zhuowenli/vue-feather-icons';
 
 export default {
   components: {
     HomeIcon,
     BoxIcon,
     UserIcon,
+    ShoppingBagIcon,
   },
 
   data() {
@@ -151,6 +157,28 @@ export default {
               >
             </li>
           </ul>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link menu-link"
+          href="#sidebarOrders"
+          data-bs-toggle="collapse"
+          role="button"
+          aria-expanded="false"
+          aria-controls="sidebarOrders"
+        >
+          <ShoppingBagIcon
+            width="24"
+            height="24"
+          ></ShoppingBagIcon>
+          <span data-key="category">Orders</span>
+        </a>
+        <div
+          class="collapse menu-dropdown"
+          id="sidebarOrders"
+        >
+          <ul class="nav nav-sm flex-column"></ul>
         </div>
       </li>
     </ul>
