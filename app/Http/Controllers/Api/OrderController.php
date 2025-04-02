@@ -7,9 +7,15 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Cart;
 use App\Http\Requests\Order\StoreRequest;
+use App\Http\Resources\Orders\OrdersCollection;
 
 class OrderController extends Controller
 {
+    public function index()
+    {
+        $orders = Order::with('user')->paginate(10);
+        return response()->json(new OrdersCollection($orders));
+    }
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
