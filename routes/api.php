@@ -89,4 +89,8 @@ Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])-
         Route::post('admin/products/update/images', 'update')->name('products.admin.update.images');
         Route::delete('admin/products/images/{id}', 'destroy')->name('products.admin.images.destroy');
     });
+
+    Route::controller(OrderController::class)->group(function () {
+        Route::get('admin/orders', 'index')->name('orders.admin');
+    });
 });
