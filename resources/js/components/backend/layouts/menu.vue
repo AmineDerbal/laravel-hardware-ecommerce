@@ -178,7 +178,16 @@ export default {
           class="collapse menu-dropdown"
           id="sidebarOrders"
         >
-          <ul class="nav nav-sm flex-column"></ul>
+          <ul class="nav nav-sm flex-column">
+            <li class="nav-item">
+              <router-link
+                :to="{ name: 'admin-order-list' }"
+                class="nav-link custom-abc"
+                data-key="orders"
+                >All Orders</router-link
+              >
+            </li>
+          </ul>
         </div>
       </li>
     </ul>
