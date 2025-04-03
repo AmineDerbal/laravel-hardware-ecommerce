@@ -29,7 +29,6 @@ class OrderController extends Controller
             $order = Order::create([
                 'user_id' => $data['user_id'],
                 'code' => idGenerate('orders', 'ORD-'),
-                'status' => 'pending',
                 'shipping_fee' => $data['shipping_fee'],
                 'tax' => $data['tax'],
                 'total_amount' => 0,
