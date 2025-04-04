@@ -8,6 +8,7 @@ use App\Models\OrderItem;
 use App\Models\Cart;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Resources\Orders\OrdersCollection;
+use App\Http\Resources\Orders\OrderResource;
 
 class OrderController extends Controller
 {
@@ -15,6 +16,12 @@ class OrderController extends Controller
     {
         $orders = Order::with('user')->paginate(10);
         return response()->json(new OrdersCollection($orders));
+    }
+
+    public function show($id)
+    {
+        $order = Order::with('user', 'items')->findOrFail($id);
+        return response()->json(new OrderResource($order));
     }
     public function store(StoreRequest $request)
     {
