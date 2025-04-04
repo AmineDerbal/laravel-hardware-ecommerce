@@ -18,6 +18,7 @@ class BasicOrderResource extends JsonResource
             'id' => $this->id,
             'code' => $this->code,
             'status' => $this->status,
+            'status_label' => $this->status_label,
             'total_amount' => $this->total_amount,
             'shipping_fee' => $this->shipping_fee,
             'tax' => $this->tax,
