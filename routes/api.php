@@ -92,5 +92,6 @@ Route::middleware(['usePassportTokenFromCookie','auth:api','checkAdminAccess'])-
 
     Route::controller(OrderController::class)->group(function () {
         Route::get('admin/orders', 'index')->name('orders.admin');
+        Route::get('admin/orders/{id}', 'show')->name('orders.admin.show');
     });
 });
