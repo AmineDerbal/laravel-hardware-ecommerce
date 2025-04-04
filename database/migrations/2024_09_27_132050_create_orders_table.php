@@ -14,7 +14,9 @@ return new class () extends Migration {
             $table->id();
             $table->string('code');
             $table->foreignId('user_id')->constrained();
-            $table->enum('status', ['processing', 'shipped', 'delivered', 'completed', 'returned'])->default('processing');
+            $table->tinyInteger('status')
+            ->default(0)
+            ->check('status IN (0, 1, 2, 3, 4)');
             $table->decimal('shipping_fee', 10, 2);
             $table->decimal('tax', 10, 2);
             $table->decimal('total_amount', 10, 2);
