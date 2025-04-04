@@ -10,6 +10,12 @@ class OrderItem extends Model
     use HasFactory;
 
     protected $fillable = ['order_id', 'product_id', 'quantity', 'price'];
+    protected $appends = ['total'];
+
+    public function getTotalAttribute()
+    {
+        return number_format($this->quantity * $this->price, 2);
+    }
 
     public function order()
     {
