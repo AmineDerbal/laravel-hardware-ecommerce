@@ -26,6 +26,13 @@ const useOrderStore = defineStore({
       }
       return response;
     },
+    async getOrder(id) {
+      return await apiAction(
+        () => apiRequest(`/api/orders/${id}`),
+        this,
+        (data) => (this.order = data),
+      );
+    },
     async storeOrder(order) {
       return await apiAction(
         () => apiRequest('/api/orders/store', 'POST', order),
