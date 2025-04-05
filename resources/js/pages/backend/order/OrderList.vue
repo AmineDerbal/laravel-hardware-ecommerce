@@ -65,36 +65,32 @@ export default {
         header: 'Total Price',
       },
       {
-        accessorKey: 'status',
         header: 'status',
         cell: ({ row }) => {
           const status = row.original.status;
+          const status_label = row.original.status_label;
           return h(
             'span',
             {
               class: `badge badge-label text-bg-${
-                status === 'processing'
+                status === 0
                   ? 'warning'
-                  : status === 'shipped'
+                  : status === 1
                   ? 'success'
-                  : status === 'delivered'
+                  : status === 2
                   ? 'primary'
-                  : status === 'completed'
+                  : status === 3
                   ? 'info'
                   : 'danger'
               }`,
             },
-            [h('i', { class: 'mdi mdi-circle-medium' }), status],
+            [h('i', { class: 'mdi mdi-circle-medium' }), status_label],
           );
         },
       },
       {
-        accessorKey: 'created_at',
+        accessorFn: (row) => new Date(row.created_at).toLocaleString(),
         header: 'Created At',
-        cell: ({ row }) => {
-          const createdAt = row.original.created_at;
-          return new Date(createdAt).toLocaleString();
-        },
       },
     ];
 
