@@ -33,14 +33,7 @@
                     <code>{{ product.stock }} Unit</code>
                   </td>
                 </tr>
-                <tr>
-                  <td>Description</td>
-                  <td>
-                    <code>{{
-                      product.description ? product.description : ''
-                    }}</code>
-                  </td>
-                </tr>
+
                 <tr>
                   <td>Category</td>
                   <td>
@@ -71,6 +64,12 @@
                         alt="Product Image"
                       />
                     </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Description</td>
+                  <td>
+                    <div v-html="product.description"></div>
                   </td>
                 </tr>
               </tbody>
