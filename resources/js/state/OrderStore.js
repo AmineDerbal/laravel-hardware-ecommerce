@@ -28,7 +28,7 @@ const useOrderStore = defineStore({
     },
     async getOrder(id) {
       return await apiAction(
-        () => apiRequest(`/api/orders/${id}`),
+        () => apiRequest(`/api/admin/orders/${id}`),
         this,
         (data) => (this.order = data),
       );
