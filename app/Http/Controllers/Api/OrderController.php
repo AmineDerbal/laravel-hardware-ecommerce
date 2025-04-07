@@ -20,7 +20,7 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = Order::with('user', 'items')->findOrFail($id);
+        $order = Order::with('user', 'items.product')->findOrFail($id);
         return response()->json(new OrderResource($order));
     }
     public function store(StoreRequest $request)
