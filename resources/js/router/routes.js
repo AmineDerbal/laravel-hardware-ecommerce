@@ -15,6 +15,7 @@ import {
   AdminProductEdit,
   AdminDashboard,
   AdminOrdersList,
+  AdminOrderShow,
 } from '../pages';
 import { useUserStore } from '@/state';
 import {
@@ -117,7 +118,7 @@ const routes = [
             component: AdminProductCreate,
           },
           {
-            path: 'show/:id',
+            path: ':id',
             name: 'admin-product-show',
             component: AdminProductShow,
           },
@@ -156,6 +157,11 @@ const routes = [
             path: '',
             name: 'admin-order-list',
             component: AdminOrdersList,
+          },
+          {
+            path: ':id',
+            name: 'admin-order-show',
+            component: AdminOrderShow,
           },
         ],
       },

@@ -17,6 +17,7 @@ const AdminProductCreate = () => import('./backend/product/ProductCreate.vue');
 const AdminProductShow = () => import('./backend/product/ProductShow.vue');
 const AdminProductEdit = () => import('./backend/product/ProductEdit.vue');
 const AdminOrdersList = () => import('./backend/order/OrderList.vue');
+const AdminOrderShow = () => import('./backend/order/OrderShow.vue');
 
 export {
   LoginView,
@@ -35,4 +36,5 @@ export {
   AdminProductEdit,
   AdminDashboard,
   AdminOrdersList,
+  AdminOrderShow,
 };
