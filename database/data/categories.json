@@ -1,0 +1,85 @@
+[
+  {
+    "id": 6,
+    "name": "Pc",
+    "code": "CAT-000006",
+    "parent_id": null,
+    "created_at": "2024-08-17 13:17:57",
+    "updated_at": "2024-08-17 13:17:57",
+    "slug": "pc"
+  },
+  {
+    "id": 9,
+    "name": "Components",
+    "code": "CAT-000008",
+    "parent_id": null,
+    "created_at": "2024-08-24 11:56:50",
+    "updated_at": "2024-08-24 11:56:50",
+    "slug": "components"
+  },
+  {
+    "id": 1,
+    "name": "Gpu",
+    "code": "CAT-000001",
+    "parent_id": 9,
+    "created_at": "2024-08-07 13:29:54",
+    "updated_at": "2024-08-24 11:57:08",
+    "slug": "gpu"
+  },
+  {
+    "id": 2,
+    "name": "Periph\u00e9rique",
+    "code": "CAT-000002",
+    "parent_id": null,
+    "created_at": "2024-08-14 08:31:52",
+    "updated_at": "2024-08-14 08:31:52",
+    "slug": "peripherique"
+  },
+  {
+    "id": 4,
+    "name": "Desktop",
+    "code": "CAT-000004",
+    "parent_id": 6,
+    "created_at": "2024-08-16 13:45:33",
+    "updated_at": "2024-08-17 13:18:12",
+    "slug": "desktop"
+  },
+  {
+    "id": 5,
+    "name": "Printers",
+    "code": "CAT-000005",
+    "parent_id": null,
+    "created_at": "2024-08-16 13:45:51",
+    "updated_at": "2024-08-16 13:45:51",
+    "slug": "printers"
+  },
+
+  {
+    "id": 8,
+    "name": "Laptop",
+    "code": "CAT-000007",
+    "parent_id": 6,
+    "created_at": "2024-08-23 13:58:16",
+    "updated_at": "2024-08-23 13:58:16",
+    "slug": "laptop"
+  },
+
+  {
+    "id": 10,
+    "name": "Cpu",
+    "code": "CAT-000009",
+    "parent_id": 9,
+    "created_at": "2024-08-24 11:57:26",
+    "updated_at": "2024-08-24 11:57:26",
+    "slug": "cpu"
+  },
+  {
+    "id": 11,
+    "name": "Motherboard",
+    "code": "CAT-000010",
+    "parent_id": 9,
+    "created_at": "2024-08-24 11:58:07",
+    "updated_at": "2024-08-24 11:58:07",
+    "slug": "motherboard"
+  }
+]
