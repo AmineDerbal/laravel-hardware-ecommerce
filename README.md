@@ -106,6 +106,7 @@ install passport: php artisan passport:install
 create passport key:   php artisan passport:client --personal
 create database in env file and migrate : php artisan migrate
 link storage to the public  disk : php artisan storage:link
+php artisan db:seed --class=DataSeeder
 php artisan serve
 npm run dev
 
